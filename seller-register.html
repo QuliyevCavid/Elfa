@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ELFA — Satıcı ol</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f7f6f3;--text:#171717;--muted:#777;--line:#e8e6e1;--red:#d22;--sand:#f3ece3}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+a{text-decoration:none;color:inherit;cursor:pointer}
+.topbar{background:#171717;color:#fff;text-align:center;padding:9px 20px;font-size:12px;letter-spacing:.4px}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+.nav{width:min(1240px,94%);height:70px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nl{display:flex;align-items:center;gap:18px}
+.logo{font-size:26px;font-weight:400;letter-spacing:8px}
+.back{display:inline-flex;align-items:center;gap:8px;font-size:14px;background:none;color:#171717}
+.back:hover{color:#777}
+.burger{display:none;background:none;width:38px;height:38px;border-radius:10px;align-items:center;justify-content:center}
+.burger:hover{background:#f3f2ee}
+.burger svg{width:22px;height:22px;stroke:#171717;fill:none;stroke-width:1.7;stroke-linecap:round}
+.hu{display:none;align-items:center;gap:10px;font-size:14px;font-weight:700;max-width:260px}
+.hu span.nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wrap{width:min(1100px,94%);margin:34px auto 60px;display:grid;grid-template-columns:1fr 1.2fr;gap:28px;align-items:start}
+.intro{background:#171717;color:#fff;border-radius:22px;padding:42px;position:sticky;top:96px}
+.intro .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.7;margin-bottom:16px}
+.intro h1{font-size:40px;line-height:1.08;letter-spacing:-1.5px;margin-bottom:16px}
+.intro p{color:#ddd;line-height:1.7;font-size:14px}
+.intro ul{list-style:none;margin-top:24px;display:grid;gap:14px}
+.intro li{display:flex;gap:12px;font-size:14px;color:#eee;line-height:1.5}
+.intro li b{flex:none;width:26px;height:26px;border-radius:50%;background:#fff;color:#171717;display:flex;align-items:center;justify-content:center;font-size:12px}
+.panel{background:#fff;border-radius:22px;padding:30px;border:1px solid var(--line)}
+.tabs{display:flex;gap:6px;background:#f3f2ee;border-radius:24px;padding:5px;margin-bottom:24px}
+.tab{flex:1;padding:11px;border-radius:20px;background:none;font-size:14px;font-weight:700;color:#777}
+.tab.on{background:#171717;color:#fff}
+h2{font-size:24px;letter-spacing:-.5px;margin-bottom:6px}
+.sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+label{display:block;font-size:12px;font-weight:700;margin:0 0 6px;color:#444}
+label i.rq{color:var(--red);font-style:normal}
+.f{margin-bottom:14px}
+input,select,textarea{width:100%;border:1px solid #ddd;border-radius:10px;padding:12px 14px;background:#fff;color:#171717;outline:none;font-size:14px}
+input,select{height:46px}
+textarea{min-height:100px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:#171717}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.phone-box{display:flex;align-items:center;border:1px solid #ddd;border-radius:10px;background:#fff;overflow:hidden}
+.phone-box:focus-within{border-color:#171717}
+.phone-box span{padding:0 12px;height:44px;display:flex;align-items:center;background:#f3f3f3;border-right:1px solid #ddd;font-size:14px;color:#444}
+.phone-box input{border:0;border-radius:0;height:44px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#444;line-height:1.5;margin:6px 0 4px}
+.chk input{width:18px;height:18px;margin-top:2px;flex:none}
+.btn{width:100%;margin-top:16px;background:#171717;color:#fff;padding:14px;border-radius:24px;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:#333}
+.btn.alt{background:#eee;color:#171717}
+.btn.alt:hover{background:#e3e3e3}
+.btn.fit{width:auto;margin-top:0;padding:12px 22px}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hint{font-size:11px;color:#888;margin-top:5px;line-height:1.5}
+.note{background:#fdf0e6;color:#8a4b12;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;margin-bottom:16px}
+.editbar{background:#e8f0fe;color:#1a3d8a;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;margin-bottom:14px}
+.ok{text-align:center;padding:20px 6px}
+.ok .big{font-size:46px;margin-bottom:10px}
+.hide{display:none!important}
+.badge{display:inline-block;border-radius:12px;padding:3px 10px;font-size:12px;background:#eee;white-space:nowrap}
+.badge.green{background:#e3f6e8;color:#1a7a35}
+.badge.wait{background:#fff3d6;color:#8a6200}
+.badge.red{background:#fde4e4;color:#b42323}
+.bar{height:8px;border-radius:6px;background:#eee;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;width:0;background:#171717;transition:width .15s}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{display:flex;align-items:center;gap:6px;border:1px solid #ddd;border-radius:18px;padding:6px 12px;font-size:12px;font-weight:700;margin:0;cursor:pointer;background:#fff}
+.chips label:has(input:checked){background:#171717;color:#fff;border-color:#171717}
+.chips input{position:absolute;opacity:0;width:0;height:0}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#171717;color:#fff;padding:11px 20px;border-radius:24px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:80;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+footer{background:#171717;color:#aaa;padding:30px 0;text-align:center;font-size:12px}
+
+/* ikonlu sahələr */
+.ic{position:relative}
+.ic>svg{position:absolute;left:13px;top:23px;transform:translateY(-50%);width:18px;height:18px;stroke:#555;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.ic input,.ic select{padding-left:42px}
+.ic.ta>svg{top:20px}
+.ic.ta textarea{padding-left:42px;padding-bottom:26px}
+.ic .cnt{position:absolute;right:12px;bottom:8px;font-size:11px;color:#999;pointer-events:none}
+.ic.nm input{padding-right:54px}
+.ic.nm .cnt{bottom:auto;top:50%;transform:translateY(-50%)}
+.oth{margin-top:8px}
+.drop.dis{opacity:.55;cursor:not-allowed}
+.drop.dis input{pointer-events:none}
+
+/* ---- Satıcı paneli (giriş sonrası) ---- */
+body.dash .topbar,body.dash .intro,body.dash .tabs{display:none}
+body.dash .nav{width:min(1360px,96%)}
+body.dash .burger{display:inline-flex}
+body.dash .hu{display:flex}
+body.dash .wrap{display:block;width:min(1360px,96%);margin:24px auto 50px}
+body.dash .panel{background:none;border:0;padding:0;border-radius:0}
+body.dash footer{display:none}
+.dg{display:grid;grid-template-columns:250px 1fr;gap:28px;align-items:start}
+body.noside .dg{grid-template-columns:1fr}
+body.noside .side{display:none}
+.side{position:sticky;top:94px;display:grid;gap:18px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 14px}
+.scard{display:flex;gap:12px;align-items:center;padding:0 6px}
+.av{width:48px;height:48px;border-radius:50%;background:#e4dfd7 center/cover;flex:none;display:flex;align-items:center;justify-content:center;font-weight:700;color:#6b6358;border:1px solid var(--line)}
+.av.sm{width:36px;height:36px;font-size:14px}
+.scard h3{font-size:15px;margin-bottom:5px;word-break:break-word}
+.menu{display:grid;gap:4px}
+.menu button{display:flex;align-items:center;gap:12px;background:none;text-align:left;padding:12px 14px;border-radius:12px;font-size:14px;color:#333}
+.menu button.on{background:var(--sand);font-weight:700}
+.menu button:hover{background:#efebe4}
+.menu svg{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.side .out{background:none;text-align:left;padding:10px 14px;font-size:13px;color:#777;text-decoration:underline;border-top:1px solid var(--line);border-radius:0;padding-top:16px}
+.sec{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:20px}
+.sec.flat{background:none;border:0;padding:0}
+.sec h2{font-size:20px;margin:0}
+.shead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.welcome{font-size:26px;letter-spacing:-.6px;margin-bottom:4px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 20px}
+.stat{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;font-size:12px;color:#777}
+.stat i{width:44px;height:44px;border-radius:12px;background:var(--sand);display:flex;align-items:center;justify-content:center;flex:none}
+.stat i svg{width:22px;height:22px;stroke:#171717;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.stat b{display:block;font-size:22px;color:#171717;margin-top:2px}
+.drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;border:1.5px dashed #cfc9bf;border-radius:14px;background:#faf9f6;padding:18px 12px;cursor:pointer;font-size:13px;font-weight:700;color:#333;position:relative;margin:0}
+.drop small{font-weight:400;color:#888;font-size:11px;line-height:1.4}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;height:100%;padding:0}
+.drop svg{width:26px;height:26px;stroke:#555;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.logoRow{display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:start}
+
+/* məhsul sıraları */
+.plist{display:grid;gap:10px}
+.pi{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff}
+.pi .im{width:60px;height:60px;border-radius:10px;background:#ece9e4;flex:none;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:11px;color:#888}
+.pi .im img{width:100%;height:100%;object-fit:cover}
+.pi .mid{flex:1;min-width:0}
+.pi .mid b{display:block;font-size:14px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pi .mid small{color:#888;font-size:12px}
+.pact{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.del{background:none;color:var(--red);font-size:12px;padding:7px 12px;border-radius:16px;border:1px solid #f1c9c9;font-weight:700}
+.del:hover{background:#fdf2f2}
+.del.g{color:#1a7a35;border-color:#c9e8d2}.del.g:hover{background:#f1faf3}
+.del.b{color:#1a3d8a;border-color:#cbd8f6}.del.b:hover{background:#f1f5fd}
+.empty{text-align:center;padding:40px 10px;color:#777;font-size:13px;line-height:1.6}
+.empty svg{width:44px;height:44px;stroke:#888;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;margin-bottom:10px}
+.empty b{display:block;color:#444;font-size:14px;margin-bottom:4px}
+
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(23,23,23,.5);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:max(16px,4vh) 16px;overflow:auto}
+.md{background:#fff;border-radius:22px;width:min(1080px,100%);padding:26px;position:relative}
+.mh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.mt{display:flex;gap:14px;align-items:center}
+.mt .pl{width:44px;height:44px;border-radius:50%;background:#171717;display:flex;align-items:center;justify-content:center;flex:none}
+.mt .pl svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.mh h2{font-size:20px;margin:0 0 2px}
+.mx{background:#f3f2ee;width:36px;height:36px;border-radius:50%;font-size:18px;flex:none}
+.mb{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start}
+.gal{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:12px}
+.main-img{aspect-ratio:1;border-radius:12px;background:#ece9e4;display:flex;align-items:center;justify-content:center;color:#999;font-size:13px;overflow:hidden;position:relative}
+.main-img img{width:100%;height:100%;object-fit:cover}
+.main-img span.tg{position:absolute;left:10px;top:10px;background:rgba(23,23,23,.75);color:#fff;font-size:11px;padding:4px 9px;border-radius:12px;z-index:2}
+.trash{position:absolute;right:10px;top:10px;width:32px;height:32px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.trash svg{width:16px;height:16px;stroke:#444;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.th{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:#ece9e4;border:2px solid transparent;cursor:pointer}
+.th.on{border-color:#171717}
+.th.ph{border:1.5px dashed #cfc9bf;background:#faf9f6;cursor:default}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.th .rm{position:absolute;right:2px;top:2px;width:18px;height:18px;border-radius:50%;background:rgba(23,23,23,.8);color:#fff;font-size:10px;line-height:18px;padding:0}
+.sizes{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.sg+.sg{border-left:1px solid var(--line);padding-left:18px}
+.sgt{font-size:12px;color:#555;margin-bottom:8px}
+.mfoot{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.sizes:empty{display:none}
+
+@media(max-width:860px){.wrap{grid-template-columns:1fr}.intro{position:static;padding:30px}.intro h1{font-size:32px}
+.dg{grid-template-columns:1fr}.side{position:static}.menu{grid-auto-flow:column;overflow-x:auto}.menu button{white-space:nowrap}
+.mb{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.logoRow{grid-template-columns:1fr}.hu .nm{display:none}.logo{letter-spacing:6px}}
+@media(max-width:560px){.two,.three{grid-template-columns:1fr}.panel{padding:20px}.md{padding:18px}.sec{padding:18px}.pi{flex-wrap:wrap}.pact{justify-content:flex-start}.sg+.sg{border-left:0;padding-left:0}.welcome{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="topbar">ELFA-DA SATICI OL · MƏHSULLARINI MİNLƏRLƏ ALICIYA GÖSTƏR</div>
+<header>
+  <div class="nav">
+    <div class="nl">
+      <a class="logo" href="/elfa.html">ELFA</a>
+      <button class="burger" id="burger" aria-label="Menyu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <button class="back" id="backBtn">← Geri</button>
+    </div>
+    <div class="hu" id="hUser"><div class="av sm" id="hAv">E</div><span class="nm" id="hName">Mağaza</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <aside class="intro">
+    <div class="eyebrow">ELFA · SATICI PROQRAMI</div>
+    <h1>Mağazanı aç.<br>Satışa başla.</h1>
+    <p>Məhsullarını şəkil və video ilə təqdim et, alıcıların diqqətini çək və ELFA-da böyü.</p>
+    <ul>
+      <li><b>1</b><span>Qeydiyyatdan keç və mağaza məlumatlarını doldur.</span></li>
+      <li><b>2</b><span>ELFA komandası müraciətini yoxlayıb təsdiqləyir.</span></li>
+      <li><b>3</b><span>Təsdiqdən sonra məhsulların ictimai saytda görünür. Alıcılar sənə WhatsApp və ya zəng ilə birbaşa yazacaq.</span></li>
+    </ul>
+  </aside>
+
+  <section class="panel">
+    <div class="tabs">
+      <button class="tab on" id="tabReg">Qeydiyyat</button>
+      <button class="tab" id="tabLogin">Satıcı paneli</button>
+    </div>
+
+    <div id="regView">
+      <h2>Satıcı qeydiyyatı</h2>
+      <p class="sub">Məlumatlar yoxlanıldıqdan sonra mağazan aktiv olacaq.</p>
+      <form id="regForm" novalidate>
+        <div class="f"><label for="storeName">Mağaza adı *</label><input id="storeName" maxlength="40" placeholder="Məs: ELFA STORE"></div>
+        <div class="f"><label for="ownerName">Ad və soyad *</label><input id="ownerName" placeholder="Ad Soyad" autocomplete="name"></div>
+        <div class="f"><label for="phone">Telefon *</label>
+          <div class="phone-box"><span>+994</span><input id="phone" type="tel" inputmode="numeric" maxlength="12" placeholder="50 123 45 67" autocomplete="tel-national"></div>
+        </div>
+        <div class="f"><label for="email">E-poçt *</label><input id="email" type="email" placeholder="ad@mail.com" autocomplete="email"></div>
+        <div class="two">
+          <div class="f"><label for="pw">Şifrə *</label><input id="pw" type="password" maxlength="11" placeholder="11 simvol" autocomplete="new-password"></div>
+          <div class="f"><label for="pw2">Şifrənin təkrarı *</label><input id="pw2" type="password" maxlength="11" placeholder="Təkrar yazın" autocomplete="new-password"></div>
+        </div>
+        <div class="hint" id="pwHint" style="margin:-6px 0 14px">Şifrə düz <b>11 simvol</b> olmalıdır: <b>8 rəqəm</b>, <b>1 böyük hərf</b>, <b>1 kiçik hərf</b> və <b>1 simvol</b> (məs: <b>12345678Aa!</b>).</div>
+        <div class="f"><label for="city">Şəhər və obyektin ünvanı</label><input id="city" maxlength="120" placeholder="Məs: Bakı, Nizami küçəsi 12"></div>
+        <div class="f"><label for="about">Mağaza haqqında</label><textarea id="about" maxlength="500" placeholder="Nə satırsınız? Qısa məlumat yazın..."></textarea></div>
+        <label class="chk"><input type="checkbox" id="agree"><span>ELFA satıcı qaydaları ilə tanış oldum və razıyam.</span></label>
+        <button class="btn" id="regBtn" type="submit">Müraciət göndər</button>
+      </form>
+    </div>
+
+    <div id="doneView" class="hide ok">
+      <div class="big">🎉</div>
+      <h2>Müraciətiniz qəbul olundu</h2>
+      <p class="sub" style="margin-top:10px">Müraciətiniz yoxlanılır. Təsdiqdən sonra məhsullarınız ictimai saytda görünəcək. Bu müddətdə satıcı panelinə daxil olub məhsullarınızı hazırlaya bilərsiniz.</p>
+      <button class="btn" id="goLogin">Satıcı panelinə keç</button>
+      <button class="btn alt" id="goHome">Ana səhifəyə qayıt</button>
+    </div>
+
+    <div id="loginView" class="hide">
+      <h2>Satıcı girişi</h2>
+      <p class="sub">Qeydiyyatda istifadə etdiyiniz e-poçt və şifrə ilə daxil olun.</p>
+      <div class="f"><label for="lem">E-poçt</label><input id="lem" type="email" placeholder="ad@mail.com" autocomplete="email"></div>
+      <div class="f"><label for="lpw">Şifrə</label><input id="lpw" type="password" placeholder="Şifrə" autocomplete="current-password"></div>
+      <button class="btn" id="loginBtn">Daxil ol</button>
+      <p class="hint" style="margin-top:12px">Şifrəni unutmusunuzsa, ELFA ilə əlaqə saxlayın.</p>
+    </div>
+
+    <!-- PANEL -->
+    <div id="dashView" class="hide">
+      <div class="dg">
+        <aside class="side">
+          <div class="scard">
+            <div class="av" id="dAv">E</div>
+            <div><h3 id="dStore">Mağaza</h3><span class="badge wait" id="dStatus">Yoxlanılır</span></div>
+          </div>
+          <nav class="menu">
+            <button class="on" data-nav="secHome"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/></svg>Ana səhifə</button>
+            <button data-nav="secProd"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>Məhsullarım</button>
+            <button data-nav="secProf"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Mağaza profili</button>
+          </nav>
+          <button class="out" id="logout">Çıxış</button>
+        </aside>
+
+        <div>
+          <!-- ANA SƏHİFƏ -->
+          <div id="secHome" class="sec flat">
+            <h2 class="welcome">Xoş gəlmisiniz, <span id="wName">Mağaza</span> 👋</h2>
+            <p class="sub" style="margin-bottom:0">Mağaza məlumatlarınızı və məhsullarınızı buradan idarə edin.</p>
+            <div class="stats">
+              <div class="stat"><i><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></i><div>Məhsullar<b id="sCount">0</b></div></div>
+              <div class="stat"><i><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></i><div>Ümumi stok<b id="sStock">0</b></div></div>
+              <div class="stat"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9c-.5-1-1.5-1.5-2.5-1.5-1.4 0-2.5.8-2.5 2s1 1.6 2.5 2 2.5.8 2.5 2-1.1 2-2.5 2c-1 0-2-.5-2.5-1.5M12 6v1.5M12 16.5V18"/></svg></i><div>Stok dəyəri<b id="sValue">0.00 AZN</b></div></div>
+            </div>
+            <p class="sub" id="homeInfo" style="margin-bottom:14px"></p>
+            <div class="note hide" id="pendingNote">Mağazanız hələ təsdiqlənməyib. Məhsul əlavə edə bilərsiniz, amma onlar yalnız təsdiqdən sonra saytda görünəcək. Video yükləmə təsdiqdən sonra açılır.</div>
+            <div class="note hide" id="rejectedNote">Mağazanız rədd edilib. Məlumat üçün ELFA ilə əlaqə saxlayın.</div>
+            <div class="sec" style="margin-bottom:0">
+              <div class="shead"><h2>Son əlavə edilən məhsullar</h2><button class="btn fit" id="newP2"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Məhsul əlavə et</button></div>
+              <div class="plist" id="rlist"></div>
+            </div>
+          </div>
+
+          <!-- MƏHSULLARIM -->
+          <div id="secProd" class="sec hide">
+            <div class="shead"><h2>Məhsullarım</h2><button class="btn fit" id="newP"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Məhsul əlavə et</button></div>
+            <div class="plist" id="plist"></div>
+          </div>
+
+          <!-- PROFİL -->
+          <div id="secProf" class="sec hide">
+            <h2 style="margin-bottom:16px">Mağaza profili</h2>
+            <div class="logoRow">
+              <div class="f">
+                <label>Mağaza loqosu</label>
+                <label class="drop" for="lgFile">
+                  <img id="lgPrev" alt="" class="hide" style="width:84px;height:84px;object-fit:cover;border-radius:50%;border:1px solid var(--line)">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 16l-5-5-9 9"/></svg>
+                  Loqonu seçin
+                  <small>JPG, PNG, WEBP</small>
+                  <input id="lgFile" type="file" accept="image/*">
+                </label>
+              </div>
+              <div>
+                <div class="two">
+                  <div class="f"><label for="prWa">WhatsApp nömrəsi</label>
+                    <div class="phone-box"><span>+994</span><input id="prWa" type="tel" inputmode="numeric" maxlength="9" placeholder="501234567" autocomplete="off"></div>
+                    <div class="hint">Yalnız 9 rəqəm yazın (məs: 501234567). Boş qalsa, qeydiyyat telefonunuz WhatsApp üçün istifadə olunur.</div></div>
+                  <div class="f"><label for="prCity">Şəhər</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><input id="prCity" maxlength="120" placeholder="Bakı"></div></div>
+                </div>
+                <div class="two">
+                  <div class="f"><label for="prIg">Instagram</label><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg><input id="prIg" placeholder="@ad və ya link"></div></div>
+                  <div class="f"><label for="prTk">TikTok</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.4 2.4 2 4 4.5 4.2"/></svg><input id="prTk" placeholder="@ad və ya link"></div></div>
+                </div>
+                <div class="f"><label for="prAddr">Ünvan</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><input id="prAddr" maxlength="200" placeholder="Məsələn: Nizami küçəsi 12, Bakı"></div></div>
+              </div>
+            </div>
+            <div class="f"><label for="prAbout">Mağaza haqqında</label><textarea id="prAbout" maxlength="500" placeholder="Mağazanız haqqında qısa məlumat..."></textarea></div>
+            <button class="btn fit" id="saveProf">Profili yadda saxla</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MƏHSUL MODALI -->
+      <div class="ov hide" id="ov">
+        <div class="md" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+          <div class="mh">
+            <div class="mt">
+              <div class="pl"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+              <div><h2 id="formTitle">Yeni məhsul əlavə et</h2><p class="sub" style="margin:0">Məhsul məlumatlarını doldurun və mağazanızda paylaşın.</p></div>
+            </div>
+            <button class="mx" id="mClose" aria-label="Bağla">✕</button>
+          </div>
+          <div class="editbar hide" id="editBar">Redaktə rejimi: dəyişiklikləri edin və “Dəyişiklikləri saxla” düyməsinə basın. Yeni video seçməsəniz, köhnə video qalır.</div>
+          <div class="mb">
+            <div class="gal">
+              <div class="main-img">
+                <span class="tg">Əsas şəkil</span>
+                <button class="trash hide" id="pClear" type="button" aria-label="Şəkli sil"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+                <div id="pNone">Şəkil seçilməyib</div><img id="pPrev" alt="" class="hide">
+              </div>
+              <div class="thumbs" id="thumbs"></div>
+              <label class="drop" for="pFile">
+                <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>
+                Şəkil əlavə et (<span id="imgCnt">0/5</span>)
+                <small>Ən çox 5 şəkil seçə bilərsiniz (JPG, PNG, WEBP). Şəkillər avtomatik optimallaşdırılır. Birinci şəkil əsas şəkildir, başqa şəkli əsas etmək üçün üzərinə basın. iPhone HEIC şəkli oxunmursa, ayarlarda “Ən uyğun” formatını seçin.</small>
+                <input id="pFile" type="file" accept="image/*" multiple>
+              </label>
+              <div id="videoField">
+                <label class="drop" for="vFile" id="vDrop">
+                  <svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg>
+                  Məhsul videosu əlavə et (1 ədəd)
+                  <small id="vHint"></small>
+                  <input id="vFile" type="file" accept="video/mp4,video/quicktime,video/webm,video/x-m4v,.mp4,.mov,.webm,.m4v">
+                </label>
+                <div class="bar hide" id="vBar"><i></i></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="two" style="grid-template-columns:2fr 1fr 1fr">
+                <div class="f"><label for="pName">Məhsul adı <i class="rq">*</i></label><div class="ic nm"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/></svg><input id="pName" maxlength="80" placeholder="Məhsulun adını daxil edin"><span class="cnt" id="cName">0/80</span></div></div>
+                <div class="f"><label for="pPrice">Qiymət (AZN) <i class="rq">*</i></label><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg><input id="pPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div></div>
+                <div class="f"><label for="pStock">Stok sayı <i class="rq">*</i></label><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg><input id="pStock" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div></div>
+              </div>
+              <div class="three">
+                <div class="f"><label for="pCat">Kateqoriya</label><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><select id="pCat"><option value="">Seçin</option></select></div><input class="oth hide" id="pCatO" maxlength="60" placeholder="Kateqoriyanı özünüz yazın"></div>
+                <div class="f"><label for="pBrand">Marka</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg><input id="pBrand" maxlength="60" placeholder="Məs: Nike"></div></div>
+                <div class="f"><label for="pGender">Cinsiyyət</label><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><select id="pGender"><option value="">Seçin</option></select></div></div>
+              </div>
+              <div class="f hide" id="ageWrap"><label for="pAge">Yaş aralığı</label><select id="pAge"><option value="">Seçin</option></select></div>
+              <div class="f" id="sizeWrap"><label>Ölçülər</label><div class="sizes" id="pSizes"></div>
+                <input class="oth" id="pSizeO" maxlength="80" placeholder="Başqa ölçünü özünüz yazın (vergüllə ayırın): 3XL, 48, 52"></div>
+              <div class="two">
+                <div class="f"><label for="pColor">Rəng</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2s0-2 1.5-2h2a3 3 0 0 0 3-3c0-6-3.6-11-8-11z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16" cy="11" r="1"/></svg><select id="pColor"><option value="">Seçin</option></select></div><input class="oth hide" id="pColorO" maxlength="40" placeholder="Rəngi özünüz yazın"></div>
+                <div class="f"><label for="pSizeClass">Boyut</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg><select id="pSizeClass"><option value="">Seçin</option></select></div><input class="oth hide" id="pSizeClassO" maxlength="40" placeholder="Boyutu özünüz yazın"></div>
+              </div>
+              <div class="two">
+                <div class="f"><label for="pDim">Ölçülər (sm)</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><input id="pDim" maxlength="60" placeholder="Məsələn: 10 x 20 x 5"></div></div>
+                <div class="f"><label for="pMat">Material</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5M3 17.5l9 5 9-5" opacity=".6"/></svg><input id="pMat" maxlength="60" placeholder="Məsələn: Pambıq, dəri, metal"></div></div>
+              </div>
+              <div class="f"><label for="pDesc">Təsvir</label><div class="ic ta"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/></svg><textarea id="pDesc" maxlength="600" placeholder="Məhsul haqqında ətraflı məlumat yazın..."></textarea><span class="cnt" id="cDesc">0/600</span></div></div>
+              <div class="mfoot">
+                <button class="btn alt fit hide" id="cancelEdit">Redaktəni ləğv et</button>
+                <button class="btn fit" id="addP"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span id="addTxt">Məhsulu əlavə et</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© ELFA — Alış-verişin yeni üzü.</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const LS={g(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const session=()=>LS.g('elfa_seller_session',null);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>(+n||0).toFixed(2)+' AZN';
+const VHINT='MP4, MOV və ya WEBM. Ölçü və müddət limiti yoxdur, böyük video yüklənməsi bir az çəkə bilər.';
+const MAXIMG=5,OTHER='__other';
+/* Brauzerin köhnə yadda saxladığı (səhv) şəkilləri keçmək üçün: serverdəki şəkil linklərinə səhifə açılış vaxtı əlavə olunur */
+const BUST=Date.now();
+const bu=u=>/^\/api\/images\/\d+$/.test(u||'')?u+'?v='+BUST:(u||'');
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+
+$('#backBtn').onclick=()=>{ if(history.length>1) history.back(); else location.href='/elfa.html'; };
+$('#goHome').onclick=()=>location.href='/elfa.html';
+$('#burger').onclick=()=>document.body.classList.toggle('noside');
+
+function show(v){
+  ['regView','doneView','loginView','dashView'].forEach(id=>$('#'+id).classList.toggle('hide',id!==v));
+  document.body.classList.toggle('dash',v==='dashView');
+  $('#tabReg').classList.toggle('on',v==='regView'||v==='doneView');
+  $('#tabLogin').classList.toggle('on',v==='loginView'||v==='dashView');
+}
+$('#tabReg').onclick=()=>show('regView');
+$('#tabLogin').onclick=()=>session()?openDash():show('loginView');
+$('#goLogin').onclick=()=>show('loginView');
+
+$('#phone').addEventListener('input',e=>{
+  const d=e.target.value.replace(/\D/g,'').replace(/^0+/,'').slice(0,9);
+  e.target.value=d.replace(/^(\d{2})(\d{0,3})(\d{0,2})(\d{0,2}).*/,(m,a,b,c,f)=>[a,b,c,f].filter(Boolean).join(' '));
+});
+/* WhatsApp: yalnız rəqəm, maksimum 9 */
+$('#prWa').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,9)});
+
+/* ---------- Naviqasiya və modal ---------- */
+const VIEWS=['secHome','secProd','secProf'];
+function view(id){
+  VIEWS.forEach(x=>$('#'+x).classList.toggle('hide',x!==id));
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.dataset.nav===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>view(b.dataset.nav));
+function openM(){$('#ov').classList.remove('hide');document.body.style.overflow='hidden'}
+function closeM(){$('#ov').classList.add('hide');document.body.style.overflow=''}
+$('#newP').onclick=()=>{resetForm();openM()};
+$('#newP2').onclick=()=>{resetForm();openM()};
+$('#mClose').onclick=()=>{resetForm();closeM()};
+$('#ov').addEventListener('mousedown',e=>{if(e.target.id==='ov'){resetForm();closeM()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#ov').classList.contains('hide')){resetForm();closeM()}});
+function setPrev(src){
+  const p=$('#pPrev');
+  if(src){p.src=src;p.classList.remove('hide');$('#pNone').classList.add('hide');$('#pClear').classList.remove('hide')}
+  else{p.classList.add('hide');p.removeAttribute('src');$('#pNone').classList.remove('hide');$('#pClear').classList.add('hide')}
+}
+function updCnt(){$('#cName').textContent=$('#pName').value.length+'/80';$('#cDesc').textContent=$('#pDesc').value.length+'/600'}
+$('#pName').addEventListener('input',updCnt);
+$('#pDesc').addEventListener('input',updCnt);
+
+/* ---------- API ---------- */
+function forceLogout(msg){
+  LS.s('elfa_seller_session',null);
+  closeM();show('loginView');
+  toast(msg||'Sessiya bitib, yenidən daxil olun');
+}
+async function api(path,opts={}){
+  let response;
+  try{
+    response=await fetch(path,{...opts,headers:{'Content-Type':'application/json',...(opts.headers||{})}});
+  }catch(e){throw new Error('Serverə qoşulmaq mümkün olmadı. İnterneti yoxlayın.')}
+  let data=null;
+  try{data=await response.json()}catch{}
+  if(!response.ok){
+    const authed=opts.headers&&opts.headers.Authorization;
+    if(response.status===401&&authed){forceLogout();const e=new Error('Sessiya bitib, yenidən daxil olun');e.auth=true;throw e}
+    const raw=(data&&(data.error||data.detail))||(response.status>=500?'Server hazırda cavab vermir, bir az sonra yenidən cəhd edin':'Xəta ('+response.status+')');
+    throw new Error(typeof raw==='string'?raw:'Məlumatlar düzgün deyil');
+  }
+  return data;
+}
+const auth=()=>{const s=session();return {Authorization:'Bearer '+((s&&s.token)||'')}};
+
+/* ---------- Şifrə qaydası: düz 11 simvol = 8 rəqəm + 1 böyük + 1 kiçik hərf + 1 simvol ---------- */
+function checkPw(pw){
+  if(/\s/.test(pw)) return 'Şifrədə boşluq ola bilməz';
+  if(pw.length!==11) return 'Şifrə düz 11 simvol olmalıdır (hazırda '+pw.length+')';
+  const digits=(pw.match(/[0-9]/g)||[]).length;
+  if(digits<8) return 'Şifrədə 8 rəqəm olmalıdır';
+  if(!/\p{Lu}/u.test(pw)) return 'Şifrədə 1 böyük hərf olmalıdır';
+  if(!/\p{Ll}/u.test(pw)) return 'Şifrədə 1 kiçik hərf olmalıdır';
+  if(!/[^\p{L}\p{N}\s]/u.test(pw)) return 'Şifrədə 1 simvol olmalıdır (məs: ! @ # $ %)';
+  return '';
+}
+
+/* ---------- Qeydiyyat ---------- */
+$('#regForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const v={
+    store_name:$('#storeName').value.trim(),owner_name:$('#ownerName').value.trim(),category:'Digər',
+    phone:$('#phone').value.replace(/\s/g,''),email:$('#email').value.trim().toLowerCase(),
+    city:$('#city').value.trim(),about:$('#about').value.trim()
+  };
+  const pw=$('#pw').value,pw2=$('#pw2').value;
+  if(!v.store_name||!v.owner_name||!v.phone||!v.email||!pw) return toast('Ulduzlu sahələri doldurun');
+  if(v.store_name.length<2) return toast('Mağaza adı ən azı 2 hərf olmalıdır');
+  if(v.owner_name.length<2) return toast('Ad və soyad ən azı 2 hərf olmalıdır');
+  if(v.phone.length!==9) return toast('Telefon nömrəsi 9 rəqəm olmalıdır');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) return toast('E-poçt düzgün deyil');
+  const pwErr=checkPw(pw);
+  if(pwErr) return toast(pwErr);
+  if(pw!==pw2) return toast('Şifrələr üst-üstə düşmür');
+  if(!$('#agree').checked) return toast('Qaydalarla razılaşmalısınız');
+  const btn=$('#regBtn');btn.disabled=true;btn.textContent='Göndərilir...';
+  try{
+    v.phone='+994'+v.phone;
+    await api('/api/sellers/register',{method:'POST',body:JSON.stringify({...v,password:pw})});
+    $('#regForm').reset();
+    show('doneView');
+  }catch(err){toast(err.message||'Xəta baş verdi')}
+  btn.disabled=false;btn.textContent='Müraciət göndər';
+});
+
+/* ---------- Giriş / çıxış ---------- */
+$('#loginBtn').onclick=async()=>{
+  const email=$('#lem').value.trim().toLowerCase(),pw=$('#lpw').value;
+  if(!email||!pw) return toast('E-poçt və şifrəni yazın');
+  const btn=$('#loginBtn');btn.disabled=true;
+  try{
+    const res=await api('/api/sellers/login',{method:'POST',body:JSON.stringify({email,password:pw})});
+    if(!res||!res.token) throw new Error('Serverdən düzgün cavab alınmadı');
+    LS.s('elfa_seller_session',{email,store_name:res.store_name,status:res.status,token:res.token});
+    $('#lpw').value='';
+    openDash();
+  }catch(err){toast(err.message||'Giriş zamanı xəta baş verdi')}
+  finally{btn.disabled=false}
+};
+$('#logout').onclick=async()=>{
+  const s=session();
+  try{if(s) await fetch('/api/seller/logout',{method:'POST',headers:auth()})}catch{}
+  LS.s('elfa_seller_session',null);
+  resetForm();closeM();
+  show('loginView');toast('Çıxış edildi');
+};
+
+/* ---------- Panel ---------- */
+let MYLIST=[];
+const currentStatus=()=>(session()&&session().status)||'pending';
+function setName(n){
+  const name=n||'Mağaza',letter=(n||'E').trim().charAt(0).toUpperCase();
+  $('#dStore').textContent=name;$('#hName').textContent=name;$('#wName').textContent=name;
+  ['#dAv','#hAv'].forEach(id=>{if(!$(id).style.backgroundImage)$(id).textContent=letter});
+}
+
+async function openDash(){
+  const s=session();
+  if(!s) return show('loginView');
+  show('dashView');
+  view('secHome');
+  setName(s.store_name);
+  let st=s.status||'pending';
+  try{
+    const res=await api('/api/seller/me',{headers:auth()});
+    st=res.status||st;
+    setHomeInfo(res);fillProfile(res);
+    LS.s('elfa_seller_session',{...s,status:st,store_name:res.store_name||s.store_name});
+    setName(res.store_name||s.store_name);
+  }catch(err){
+    if(err.auth) return;
+    toast(err.message||'Satıcı məlumatları yenilənmədi');
+  }
+  applyStatus(st);
+  await renderProducts();
+}
+function syncVideoUI(){
+  const f=$('#vFile'),d=$('#vDrop'),h=$('#vHint');
+  let msg='';
+  if(!OPT.storage_enabled) msg='Video yükləmə hələ aktiv deyil: saytın fayl saxlama xidməti (R2) qoşulmayıb. Administrator qoşandan sonra işləyəcək.';
+  else if(currentStatus()!=='approved') msg='Video yükləmək üçün mağazanın ELFA tərəfindən təsdiqlənməsi lazımdır.';
+  f.disabled=!!msg;d.classList.toggle('dis',!!msg);
+  if(msg){f.value='';h.textContent=msg}
+  else if(!editVideo&&!f.files[0]) h.textContent=VHINT;
+}
+function applyStatus(st){
+  const ok=st==='approved',rej=st==='rejected';
+  const b=$('#dStatus');
+  b.textContent=ok?'Təsdiqlənib':rej?'Rədd edilib':'Yoxlanılır';
+  b.className='badge '+(ok?'green':rej?'red':'wait');
+  $('#pendingNote').classList.toggle('hide',st!=='pending');
+  $('#rejectedNote').classList.toggle('hide',!rej);
+  $('#addP').disabled=rej;$('#newP').disabled=rej;$('#newP2').disabled=rej;
+  syncVideoUI();
+}
+function setHomeInfo(res){
+  const used=res.home_used||0,slots=res.home_slots||0;
+  $('#homeInfo').textContent=slots
+    ? 'Ana səhifə: '+used+' / '+slots+' məhsul seçilib. Məhsulun yanındakı düymə ilə ana səhifəyə qoya və ya çıxara bilərsiniz.'
+    : 'Ana səhifədə məhsul göstərmək üçün ELFA ilə əlaqə saxlayın. Hələ sizə ana səhifə yeri verilməyib.';
+}
+async function toggleHome(id,on){
+  try{
+    const r=await api('/api/seller/products/'+encodeURIComponent(id)+'/home',{method:'PUT',headers:auth(),body:JSON.stringify({on_home:on})});
+    setHomeInfo(r);
+    toast(on?'Məhsul ana səhifəyə qoyuldu ✓':'Məhsul ana səhifədən çıxarıldı');
+    await renderProducts();
+  }catch(err){if(!err.auth)toast(err.message||'Xəta baş verdi')}
+}
+const EMPTY='<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 16l-5-5-9 9"/></svg><b>Hələ heç bir məhsul əlavə edilməyib.</b>İlk məhsulunu əlavə et və mağazanı inkişaf et.</div>';
+const rowHtml=p=>`
+    <div class="pi">
+      <div class="im">${p.image_url?`<img src="${esc(bu(p.image_url))}" alt="" onerror="this.remove()">`:'ELFA'}</div>
+      <div class="mid"><b>${esc(p.name)}</b><small>${money(p.price)} · Stok: ${esc(p.stock)}${p.video_url?' · ▶ video':''}${p.on_home?' · ana səhifədə':''}</small></div>
+      <div class="pact">
+        <button class="del b" data-edit="${esc(p.id)}">Redaktə</button>
+        <button class="del g" data-home="${esc(p.id)}" data-on="${p.on_home?'1':'0'}">${p.on_home?'Ana səhifədən çıxar':'Ana səhifəyə qoy'}</button>
+        <button class="del" data-del="${esc(p.id)}">Sil</button>
+      </div>
+    </div>`;
+async function renderProducts(){
+  try{
+    MYLIST=await api('/api/seller/products',{headers:auth()});
+  }catch(err){
+    if(!err.auth) toast(err.message||'Məhsullar yüklənmədi');
+    return;
+  }
+  const list=MYLIST;
+  $('#sCount').textContent=list.length;
+  $('#sStock').textContent=list.reduce((a,p)=>a+(+p.stock||0),0);
+  $('#sValue').textContent=money(list.reduce((a,p)=>a+(+p.price||0)*(+p.stock||0),0));
+  $('#plist').innerHTML=list.length?list.map(rowHtml).join(''):EMPTY;
+  const recent=[...list].sort((a,b)=>(+b.id||0)-(+a.id||0)).slice(0,4);
+  $('#rlist').innerHTML=recent.length?recent.map(rowHtml).join(''):EMPTY;
+}
+function rowClick(e){
+  const ed=e.target.closest('[data-edit]');if(ed) return startEdit(ed.dataset.edit);
+  const h=e.target.closest('[data-home]');if(h) return toggleHome(h.dataset.home,h.dataset.on!=='1');
+  const d=e.target.closest('[data-del]');if(d) return delProduct(d.dataset.del);
+}
+$('#plist').addEventListener('click',rowClick);
+$('#rlist').addEventListener('click',rowClick);
+
+/* ---------- Seçimlər ("Özüm yazım" dəstəyi ilə) ---------- */
+let OPT={categories:[],genders:[],age_groups:[],clothing_sizes:[],shoe_sizes:[],colors:[],size_classes:[],storage_enabled:false};
+const OTHERS=[['pCat','pCatO'],['pColor','pColorO'],['pSizeClass','pSizeClassO']];
+function fillSel(id,vals,withOther){
+  $('#'+id).innerHTML='<option value="">Seçin</option>'+vals.map(v=>'<option>'+esc(v)+'</option>').join('')+(withOther?'<option value="'+OTHER+'">✎ Özüm yazım</option>':'');
+}
+function syncOther(sel,oth){
+  const on=$('#'+sel).value===OTHER;
+  $('#'+oth).classList.toggle('hide',!on);
+  if(!on) $('#'+oth).value='';
+}
+function syncOthers(){OTHERS.forEach(([s,o])=>syncOther(s,o))}
+OTHERS.forEach(([s,o])=>$('#'+s).addEventListener('change',()=>{syncOther(s,o);if($('#'+s).value===OTHER)$('#'+o).focus()}));
+const getVal=(sel,oth)=>$('#'+sel).value===OTHER?$('#'+oth).value.trim():$('#'+sel).value;
+function setVal(sel,oth,v){
+  const s=$('#'+sel);
+  if(!v){s.value='';syncOther(sel,oth);return}
+  if([...s.options].some(o=>o.value===v&&v!==OTHER)){s.value=v;syncOther(sel,oth)}
+  else{s.value=OTHER;syncOther(sel,oth);$('#'+oth).classList.remove('hide');$('#'+oth).value=v}
+}
+function renderSizeChips(keepChecked=true){
+  const cat=$('#pCat').value;
+  const keep=keepChecked?[...document.querySelectorAll('#pSizes input:checked')].map(i=>i.value):[];
+  const grp=(title,arr)=>arr.length?'<div class="sg"><div class="sgt">'+title+'</div><div class="chips sz">'+arr.map(v=>'<label><input type="checkbox" value="'+esc(v)+'"'+(keep.includes(v)?' checked':'')+'>'+esc(v)+'</label>').join('')+'</div></div>':'';
+  $('#pSizes').innerHTML=(cat!=='Ayaqqabı'?grp('Geyim ölçüləri',OPT.clothing_sizes):'')+(cat!=='Geyim'?grp('Ayaqqabı ölçüləri',OPT.shoe_sizes):'');
+}
+const isKid=()=>$('#pGender').value==='Qız'||$('#pGender').value==='Oğlan';
+function syncKid(){
+  $('#ageWrap').classList.toggle('hide',!isKid());
+  $('#sizeWrap').classList.toggle('hide',isKid());
+}
+$('#pCat').addEventListener('change',()=>renderSizeChips(true));
+$('#pGender').addEventListener('change',syncKid);
+async function loadOptions(){
+  try{const r=await fetch('/api/options');OPT=Object.assign(OPT,await r.json())}catch(e){}
+  fillSel('pCat',OPT.categories,true);fillSel('pGender',OPT.genders);fillSel('pAge',OPT.age_groups);
+  fillSel('pColor',OPT.colors,true);fillSel('pSizeClass',OPT.size_classes,true);
+  renderSizeChips(false);syncKid();syncOthers();
+  syncVideoUI();
+}
+loadOptions();
+
+/* ---------- Şəkil və video yükləmə ---------- */
+function loadImg(file){
+  return new Promise((resolve,reject)=>{
+    const u=URL.createObjectURL(file),i=new Image();
+    i.onload=()=>{URL.revokeObjectURL(u);resolve(i)};
+    i.onerror=()=>{URL.revokeObjectURL(u);reject(new Error('Şəkil oxunmadı. JPG, PNG və ya WEBP seçin.'))};
+    i.src=u;
+  });
+}
+async function compressImage(file,max,q){
+  if(!/^image\//.test(file.type)) throw new Error('Yalnız şəkil faylı seçin');
+  const img=await loadImg(file);
+  const k=Math.min(1,max/Math.max(img.width,img.height));
+  const w=Math.max(1,Math.round(img.width*k)),h=Math.max(1,Math.round(img.height*k));
+  const c=document.createElement('canvas');c.width=w;c.height=h;
+  const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+  const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',q));
+  if(!blob) throw new Error('Şəkil işlənmədi');
+  return blob;
+}
+async function readError(response,fallback){
+  let data=null;try{data=await response.json()}catch(_){}
+  if(response.status===401){forceLogout();const e=new Error('Sessiya bitib, yenidən daxil olun');e.auth=true;return e}
+  return new Error((data&&(data.error||data.detail))||(fallback+' ('+response.status+')'));
+}
+async function dbUploadImage(blob){
+  let response;
+  try{response=await fetch('/api/seller/upload',{method:'POST',headers:{'Content-Type':'image/jpeg',...auth()},body:blob})}
+  catch(e){throw new Error('Serverə qoşulmaq mümkün olmadı.')}
+  if(!response.ok) throw await readError(response,'Şəkil yüklənmədi');
+  const data=await response.json();
+  if(!data||!data.url) throw new Error('Serverdən düzgün cavab alınmadı.');
+  return data.url;
+}
+async function getUploadUrl(kind,type){
+  let response;
+  try{response=await fetch('/api/seller/upload-url',{method:'POST',headers:{'Content-Type':'application/json',...auth()},body:JSON.stringify({kind,content_type:type})})}
+  catch(e){throw new Error('Serverə qoşulmaq mümkün olmadı.')}
+  if(!response.ok) throw await readError(response,'Yükləmə linki alınmadı');
+  return response.json();
+}
+function putFile(url,blob,type,onProgress){
+  return new Promise((resolve,reject)=>{
+    const x=new XMLHttpRequest();
+    x.open('PUT',url);x.setRequestHeader('Content-Type',type);
+    x.upload.onprogress=e=>{if(e.lengthComputable&&onProgress)onProgress(Math.round(e.loaded/e.total*100))};
+    x.onload=()=>x.status>=200&&x.status<300?resolve():reject(new Error('Yükləmə alınmadı ('+x.status+'). Saxlama (R2) CORS ayarlarını yoxlayın.'));
+    x.onerror=()=>reject(new Error('Yükləmə zamanı şəbəkə xətası. İnterneti və saxlama (R2) CORS ayarlarını yoxlayın.'));
+    x.send(blob);
+  });
+}
+async function storageUpload(kind,blob,type,onProgress){
+  const u=await getUploadUrl(kind,type);
+  await putFile(u.upload_url,blob,type,onProgress);
+  return u.public_url;
+}
+async function uploadImageSmart(file){
+  if(OPT.storage_enabled&&currentStatus()==='approved'){
+    const blob=await compressImage(file,2000,0.86);
+    return storageUpload('image',blob,'image/jpeg');
+  }
+  return dbUploadImage(await compressImage(file,1200,0.82));
+}
+const VIDEO_TYPES={mp4:'video/mp4',mov:'video/quicktime',webm:'video/webm',m4v:'video/x-m4v'};
+function videoType(f){
+  if(Object.values(VIDEO_TYPES).includes(f.type)) return f.type;
+  const ext=(f.name.split('.').pop()||'').toLowerCase();
+  return VIDEO_TYPES[ext]||'';
+}
+function showBar(pct){const bar=$('#vBar');bar.classList.remove('hide');bar.firstElementChild.style.width=pct+'%'}
+
+/* ---------- Çoxlu şəkil (maks. 5) ---------- */
+let imgs=[]; // {src, url?, file?}
+function renderImgs(){
+  setPrev(imgs[0]?imgs[0].src:'');
+  $('#thumbs').innerHTML=Array.from({length:MAXIMG},(_,i)=>{
+    const m=imgs[i];
+    return m?'<div class="th'+(i===0?' on':'')+'" data-th="'+i+'"><img src="'+esc(m.src)+'" alt=""><button type="button" class="rm" data-rm="'+i+'" aria-label="Sil">✕</button></div>':'<div class="th ph"></div>';
+  }).join('');
+  $('#imgCnt').textContent=imgs.length+'/'+MAXIMG;
+}
+$('#thumbs').addEventListener('click',e=>{
+  const rm=e.target.closest('[data-rm]');
+  if(rm){imgs.splice(+rm.dataset.rm,1);return renderImgs()}
+  const th=e.target.closest('[data-th]');
+  if(th){const i=+th.dataset.th;if(i>0){const [m]=imgs.splice(i,1);imgs.unshift(m);renderImgs()}}
+});
+$('#pClear').onclick=()=>{imgs.shift();renderImgs()};
+$('#pFile').addEventListener('change',()=>{
+  const fs=[...$('#pFile').files];
+  let skipped=false;
+  fs.forEach(f=>{
+    if(imgs.length>=MAXIMG){skipped=true;return}
+    imgs.push({file:f,src:URL.createObjectURL(f)});
+  });
+  if(skipped) toast('Ən çox '+MAXIMG+' şəkil əlavə etmək olar');
+  $('#pFile').value='';
+  renderImgs();
+});
+$('#vFile').addEventListener('change',()=>{
+  const f=$('#vFile').files[0];
+  if(!f){$('#vHint').textContent=VHINT;return}
+  $('#vHint').textContent=f.name+' · '+(f.size/1048576).toFixed(1)+' MB';
+  if(!videoType(f)) toast('Dəstəklənən formatlar: MP4, MOV, WEBM');
+});
+
+/* ---------- Məhsul formu: əlavə et / redaktə et ---------- */
+let editId=null,editVideo='';
+const FORM_IDS=['pName','pPrice','pStock','pDesc','pFile','vFile','pBrand','pDim','pMat','pCat','pGender','pAge','pColor','pSizeClass','pCatO','pColorO','pSizeClassO','pSizeO'];
+
+function resetForm(){
+  editId=null;editVideo='';imgs=[];
+  FORM_IDS.forEach(id=>$('#'+id).value='');
+  $('#vBar').classList.add('hide');syncVideoUI();
+  renderSizeChips(false);syncKid();syncOthers();renderImgs();updCnt();
+  $('#formTitle').textContent='Yeni məhsul əlavə et';
+  $('#addTxt').textContent='Məhsulu əlavə et';
+  $('#editBar').classList.add('hide');
+  $('#cancelEdit').classList.add('hide');
+}
+function startEdit(id){
+  const p=MYLIST.find(x=>String(x.id)===String(id));
+  if(!p) return;
+  resetForm();
+  editId=p.id;editVideo=p.video_url||'';
+  $('#pName').value=p.name||'';$('#pPrice').value=p.price;$('#pStock').value=p.stock;
+  setVal('pCat','pCatO',p.category||'');
+  $('#pBrand').value=p.brand||'';
+  $('#pGender').value=p.gender||'';syncKid();
+  renderSizeChips(false);
+  const extra=[];
+  (p.sizes||[]).forEach(sz=>{
+    const i=[...document.querySelectorAll('#pSizes input')].find(x=>x.value===sz);
+    if(i)i.checked=true;else extra.push(sz);
+  });
+  $('#pSizeO').value=extra.join(', ');
+  $('#pAge').value=p.age_group||'';
+  setVal('pColor','pColorO',p.color||'');
+  setVal('pSizeClass','pSizeClassO',p.size_class||'');
+  $('#pDim').value=p.dimensions||'';$('#pMat').value=p.material||'';
+  $('#pDesc').value=p.description||'';
+  const list=(p.images&&p.images.length)?p.images:(p.image_url?[p.image_url]:[]);
+  imgs=list.slice(0,MAXIMG).map(u=>({src:bu(u),url:u}));
+  renderImgs();
+  if(editVideo) $('#vHint').textContent='Cari video saxlanılacaq. Dəyişmək üçün yeni video seçin.';
+  $('#formTitle').textContent='Məhsulu redaktə et';
+  $('#addTxt').textContent='Dəyişiklikləri saxla';
+  $('#editBar').classList.remove('hide');
+  $('#cancelEdit').classList.remove('hide');
+  updCnt();
+  openM();
+}
+$('#cancelEdit').onclick=()=>{resetForm();closeM()};
+
+$('#addP').onclick=async()=>{
+  if(!session()) return;
+  if(currentStatus()==='rejected') return toast('Mağazanız rədd edilib');
+  const kid=isKid();
+  const chipSizes=[...document.querySelectorAll('#pSizes input:checked')].map(i=>i.value);
+  const ownSizes=$('#pSizeO').value.split(',').map(x=>x.trim()).filter(Boolean);
+  const p={
+    name:$('#pName').value.trim(),price:parseFloat($('#pPrice').value),stock:parseInt($('#pStock').value,10),
+    description:$('#pDesc').value.trim(),
+    category:getVal('pCat','pCatO'),brand:$('#pBrand').value.trim(),gender:$('#pGender').value,
+    age_group:kid?$('#pAge').value:'',
+    sizes:kid?[]:[...new Set([...chipSizes,...ownSizes])],
+    color:getVal('pColor','pColorO'),size_class:getVal('pSizeClass','pSizeClassO'),
+    dimensions:$('#pDim').value.trim(),material:$('#pMat').value.trim(),
+    video_url:editVideo
+  };
+  if(!p.name||isNaN(p.price)||isNaN(p.stock)) return toast('Ad, qiymət və stoku yazın');
+  if(p.price<0||p.stock<0) return toast('Qiymət və stok mənfi ola bilməz');
+  if($('#pCat').value===OTHER&&!p.category) return toast('Kateqoriyanı yazın və ya siyahıdan seçin');
+  if($('#pColor').value===OTHER&&!p.color) return toast('Rəngi yazın və ya siyahıdan seçin');
+  if($('#pSizeClass').value===OTHER&&!p.size_class) return toast('Boyutu yazın və ya siyahıdan seçin');
+  const vfile=OPT.storage_enabled?$('#vFile').files[0]:null;
+  if(vfile&&!videoType(vfile)) return toast('Video formatı dəstəklənmir (MP4, MOV, WEBM)');
+  if(vfile&&currentStatus()!=='approved') return toast('Video yükləmək üçün mağazanın təsdiqlənməsi lazımdır');
+
+  const btn=$('#addP'),txt=$('#addTxt'),wasEdit=!!editId;
+  btn.disabled=true;
+  try{
+    const urls=[];
+    for(let i=0;i<imgs.length;i++){
+      const m=imgs[i];
+      if(m.file){
+        txt.textContent='Şəkil yüklənir '+(i+1)+'/'+imgs.length+'...';
+        m.url=await uploadImageSmart(m.file);
+        m.file=null;
+      }
+      urls.push(m.url);
+    }
+    p.images=urls;
+    p.image_url=urls[0]||'';
+    if(vfile){
+      txt.textContent='Video yüklənir... 0%';showBar(0);
+      p.video_url=await storageUpload('video',vfile,videoType(vfile),pct=>{txt.textContent='Video yüklənir... '+pct+'%';showBar(pct)});
+    }
+    txt.textContent=wasEdit?'Saxlanılır...':'Məhsul əlavə edilir...';
+    if(wasEdit){
+      await api('/api/seller/products/'+encodeURIComponent(editId),{method:'PUT',headers:auth(),body:JSON.stringify(p)});
+      toast('Məhsul yeniləndi ✓');
+    }else{
+      await api('/api/seller/products',{method:'POST',headers:auth(),body:JSON.stringify(p)});
+      toast('Məhsul əlavə olundu ✓');
+    }
+    resetForm();closeM();
+    await renderProducts();
+  }catch(err){if(!err.auth)toast(err.message||'Xəta baş verdi')}
+  txt.textContent=editId?'Dəyişiklikləri saxla':'Məhsulu əlavə et';
+  btn.disabled=currentStatus()==='rejected';
+};
+async function delProduct(id){
+  if(!confirm('Bu məhsulu silmək istəyirsiniz?')) return;
+  try{
+    await api('/api/seller/products/'+encodeURIComponent(id),{method:'DELETE',headers:auth()});
+    if(String(editId)===String(id)) resetForm();
+    toast('Məhsul silindi');await renderProducts();
+  }catch(err){if(!err.auth)toast(err.message||'Xəta baş verdi')}
+}
+
+/* ---------- Mağaza profili ---------- */
+function fillProfile(r){
+  const logoUrl=bu(r.logo_url||''),prev=$('#lgPrev');
+  ['#dAv','#hAv'].forEach(id=>{
+    const av=$(id);
+    if(logoUrl){av.style.backgroundImage='url("'+logoUrl.replace(/"/g,'%22')+'")';av.textContent=''}
+    else av.style.backgroundImage='';
+  });
+  if(logoUrl){prev.src=logoUrl;prev.classList.remove('hide')}
+  else{prev.classList.add('hide');prev.removeAttribute('src')}
+  let wa=String(r.whatsapp||'').replace(/\D/g,'');
+  if(wa.length>9) wa=wa.slice(-9);
+  $('#prWa').value=wa;
+  $('#prCity').value=r.city||'';
+  $('#prIg').value=r.instagram||'';$('#prTk').value=r.tiktok||'';
+  $('#prAddr').value=r.address||'';$('#prAbout').value=r.about||'';
+}
+$('#lgFile').addEventListener('change',()=>{
+  const f=$('#lgFile').files[0],prev=$('#lgPrev');
+  if(!f)return;
+  prev.src=URL.createObjectURL(f);prev.classList.remove('hide');
+});
+$('#saveProf').onclick=async()=>{
+  if(!session()) return;
+  const wa=$('#prWa').value.replace(/\D/g,'');
+  if(wa&&wa.length!==9) return toast('WhatsApp nömrəsi 9 rəqəm olmalıdır');
+  const btn=$('#saveProf');btn.disabled=true;
+  try{
+    const body={
+      whatsapp:wa?'+994'+wa:'',city:$('#prCity').value.trim(),
+      instagram:$('#prIg').value.trim(),tiktok:$('#prTk').value.trim(),
+      address:$('#prAddr').value.trim(),about:$('#prAbout').value.trim()
+    };
+    const f=$('#lgFile').files[0];
+    if(f){btn.textContent='Loqo yüklənir...';body.logo_url=await uploadImageSmart(f)}
+    btn.textContent='Yadda saxlanılır...';
+    const r=await api('/api/seller/profile',{method:'PUT',headers:auth(),body:JSON.stringify(body)});
+    $('#lgFile').value='';
+    fillProfile(r);
+    toast('Profil yadda saxlanıldı ✓');
+  }catch(err){if(!err.auth)toast(err.message||'Xəta baş verdi')}
+  btn.textContent='Profili yadda saxla';btn.disabled=false;
+};
+
+renderImgs();
+if(session()) openDash();
+</script>
+</body>
+</html>
