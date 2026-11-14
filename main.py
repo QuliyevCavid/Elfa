@@ -17,10 +17,9 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
-import psycopg
 
 BASE_DIR = Path(__file__).resolve().parent
-DATABASE_URL = (os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL") or "").strip()
+# DİQQƏT: hostinqdə ELFA_DB daimi diskə (volume) yönəlməlidir, əks halda hər deploy-da məlumat silinir.
 DB_PATH = os.environ.get("ELFA_DB", str(BASE_DIR / "elfa.db"))
 ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 R2_ACCOUNT_ID = os.environ.get("R2_ACCOUNT_ID", "").strip()
@@ -33,51 +32,6 @@ STORAGE_ENABLED = bool(
     and R2_BUCKET and R2_PUBLIC_URL
 )
 SESSION_DAYS = 14
-
-
-class HybridRow(dict):
-    """PostgreSQL row that supports both SQLite-style key and index access."""
-    def __init__(self, cursor, values):
-        self._values = tuple(values)
-        super().__init__((col.name, value) for col, value in zip(cursor.description, values))
-
-    def __getitem__(self, key):
-        return self._values[key] if isinstance(key, int) else super().__getitem__(key)
-
-
-def hybrid_row_factory(cursor):
-    return lambda values: HybridRow(cursor, values)
-
-
-class PgCursor:
-    def __init__(self, cursor, lastrowid=None):
-        self._cursor = cursor
-        self.lastrowid = lastrowid
-
-    def fetchone(self):
-        return self._cursor.fetchone()
-
-    def fetchall(self):
-        return self._cursor.fetchall()
-
-
-class PgConnection:
-    def __init__(self, connection):
-        self._connection = connection
-
-    def execute(self, sql, params=()):
-        sql = sql.replace("?", "%s")
-        needs_id = bool(re.match(r"\s*INSERT\s+INTO\s+(images|products)\b", sql, re.I))
-        if needs_id:
-            sql += " RETURNING id"
-        cursor = self._connection.execute(sql, params)
-        lastrowid = cursor.fetchone()["id"] if needs_id else None
-        return PgCursor(cursor, lastrowid)
-
-    def executescript(self, script):
-        for statement in script.split(";"):
-            if statement.strip():
-                self.execute(statement)
 
 app = FastAPI(title="ELFA API")
 
@@ -95,7 +49,9 @@ CLOTHING_SIZES = ["XS", "S", "M", "L", "XL", "XXL"]
 SHOE_SIZES = [str(n) for n in range(36, 46)]
 COLORS = [
     "Qara", "Ağ", "Qırmızı", "Mavi", "Yaşıl", "Sarı",
-    "Çəhrayı", "Boz", "Qəhvəyi", "Bej", "Digər",
+    "Çəhrayı", "Boz", "Qəhvəyi", "Bej",
+    "Lacivərd", "Meşə yaşılı", "Narıncı", "Parlaq qızılı", "Metal qızıl", "Nanə-firuzəyi",
+    "Rəngarəng", "Digər",
 ]
 SIZE_CLASSES = ["Kiçik", "Orta", "Böyük"]
 SELLER_CATEGORIES = [
@@ -127,6 +83,11 @@ PRODUCT_NEW_COLUMNS = [
     ("images", "TEXT NOT NULL DEFAULT ''"),
     ("department", "TEXT NOT NULL DEFAULT ''"),
     ("subcategory", "TEXT NOT NULL DEFAULT ''"),
+    ("old_price", "REAL NOT NULL DEFAULT 0"),
+    ("variants", "TEXT NOT NULL DEFAULT ''"),
+    ("colors", "TEXT NOT NULL DEFAULT ''"),
+    ("size_stock", "TEXT NOT NULL DEFAULT ''"),
+    ("name_bold", "INTEGER NOT NULL DEFAULT 0"),
 ]
 
 
@@ -135,18 +96,6 @@ PRODUCT_NEW_COLUMNS = [
 # ---------------------------------------------------------------
 @contextmanager
 def db():
-    if DATABASE_URL:
-        with psycopg.connect(
-            DATABASE_URL,
-            row_factory=hybrid_row_factory,
-            prepare_threshold=None,
-            sslmode="require",
-            connect_timeout=10,
-        ) as raw:
-            yield PgConnection(raw)
-        return
-    if os.environ.get("VERCEL"):
-        raise RuntimeError("Vercel üçün DATABASE_URL (PostgreSQL) mühiti təyin edilməlidir")
     con = sqlite3.connect(DB_PATH, timeout=15)
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA foreign_keys = ON")
@@ -159,15 +108,7 @@ def db():
 
 
 def ensure_columns(con, table: str, columns):
-    if DATABASE_URL:
-        existing = {
-            r["column_name"] for r in con.execute(
-                "SELECT column_name FROM information_schema.columns "
-                "WHERE table_schema = current_schema() AND table_name = %s", (table,)
-            ).fetchall()
-        }
-    else:
-        existing = {r["name"] for r in con.execute(f"PRAGMA table_info({table})")}
+    existing = {r["name"] for r in con.execute(f"PRAGMA table_info({table})")}
     for name, ddl in columns:
         if name not in existing:
             con.execute(f"ALTER TABLE {table} ADD COLUMN {name} {ddl}")
@@ -175,7 +116,7 @@ def ensure_columns(con, table: str, columns):
 
 def init_db():
     with db() as con:
-        schema = """
+        con.executescript("""
             CREATE TABLE IF NOT EXISTS sellers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 store_name TEXT NOT NULL,
@@ -213,15 +154,7 @@ def init_db():
                 data BLOB NOT NULL,
                 created_at TEXT NOT NULL
             );
-        """
-        if DATABASE_URL:
-            schema = (schema.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "BIGSERIAL PRIMARY KEY")
-                            .replace("BLOB NOT NULL", "BYTEA NOT NULL"))
-            for statement in schema.split(";"):
-                if statement.strip():
-                    con.execute(statement)
-        else:
-            con.executescript(schema)
+        """)
         ensure_columns(con, "sellers", SELLER_NEW_COLUMNS)
         ensure_columns(con, "products", PRODUCT_NEW_COLUMNS)
 
@@ -359,9 +292,23 @@ class LoginIn(BaseModel):
     password: str = Field(max_length=100)
 
 
+class VarSizeIn(BaseModel):
+    size: str = Field(max_length=20)
+    stock: int = Field(default=0, ge=0, le=1_000_000)
+
+
+class VariantIn(BaseModel):
+    color: str = Field(max_length=40)
+    stock: int = Field(default=0, ge=0, le=1_000_000)
+    sizes: List[VarSizeIn] = Field(default_factory=list, max_length=30)
+    images: List[str] = Field(default_factory=list, max_length=5)
+
+
 class ProductIn(BaseModel):
-    name: str = Field(min_length=1, max_length=80)
+    name: str = Field(min_length=1, max_length=150)
+    name_bold: int = Field(default=0, ge=0, le=30)
     price: float = Field(ge=0, le=1_000_000)
+    old_price: float = Field(default=0, ge=0, le=1_000_000)
     stock: int = Field(default=0, ge=0, le=1_000_000)
     image_url: str = Field(default="", max_length=500)
     images: List[str] = Field(default_factory=list, max_length=5)
@@ -378,6 +325,8 @@ class ProductIn(BaseModel):
     dimensions: str = Field(default="", max_length=60)
     material: str = Field(default="", max_length=60)
     video_url: str = Field(default="", max_length=500)
+    variants: List[VariantIn] = Field(default_factory=list, max_length=10)
+    size_stock: List[VarSizeIn] = Field(default_factory=list, max_length=40)
 
 
 class ProfileIn(BaseModel):
@@ -418,6 +367,11 @@ _AZ = str.maketrans({
 
 def fold(s) -> str:
     return (s or "").strip().translate(_AZ).casefold()
+
+
+def multi(v) -> list:
+    """Filtrdə bir neçə dəyər: 'Qara|Ağ' -> ['qara', 'ag']"""
+    return [fold(x) for x in (v or "").split("|") if x.strip()]
 
 
 # ---------------------------------------------------------------
@@ -564,10 +518,66 @@ def clean_product(data: ProductIn, seller_id: int) -> dict:
         images = [clean_image_url(data.image_url, "Şəkil linki")]
     images = images[:5]
 
+    # Rəng variantları: hər rəngin öz ölçüləri və stoku. Ümumi stok, rəng və ölçülər buradan hesablanır.
+    variants, seen = [], set()
+    for v in data.variants:
+        c = v.color.strip().replace(",", " ")
+        if not c or fold(c) in seen:
+            continue
+        seen.add(fold(c))
+        vs, used = [], set()
+        if gender not in KID_GENDERS:
+            for it in v.sizes:
+                z = it.size.strip().upper().replace(",", " ")
+                if z and z not in used:
+                    used.add(z)
+                    vs.append({"size": z, "stock": it.stock})
+        vimgs = []
+        for u in v.images:
+            u = clean_image_url(u, "Şəkil linki")
+            if u and len(u) <= 500 and u not in vimgs:
+                vimgs.append(u)
+        variants.append({"color": c, "stock": sum(x["stock"] for x in vs) if vs else v.stock,
+                         "sizes": vs, "images": vimgs[:5]})
+    stock_val = data.stock
+    if variants:
+        color = variants[0]["color"]
+        stock_val = sum(v["stock"] for v in variants)
+        sizes = []
+        for v in variants:
+            for x in v["sizes"]:
+                if x["stock"] > 0 and x["size"] not in sizes:
+                    sizes.append(x["size"])
+    # Rəngsiz məhsul: hər ölçünün öz stoku (0 olan ölçü saxlanır, saytda ✕ ilə görünür)
+    size_stock, ss_seen = [], set()
+    if not variants and gender not in KID_GENDERS:
+        for it in data.size_stock:
+            z = it.size.strip().upper().replace(",", " ")
+            if z and len(z) <= 20 and z not in ss_seen:
+                ss_seen.add(z)
+                size_stock.append({"size": z, "stock": it.stock})
+        if size_stock:
+            sizes = [x["size"] for x in size_stock if x["stock"] > 0]
+            stock_val = sum(x["stock"] for x in size_stock)
+    colors = ",".join(v["color"] for v in variants) if variants else color.replace(",", " ")
+    if not images:  # ümumi şəkil yoxdursa, ilk rəngin şəkilləri əsas şəkil olur
+        for v in variants:
+            if v["images"]:
+                images = v["images"][:5]
+                break
+
+    # Köhnə qiymət yalnız yeni qiymətdən böyükdürsə endirim sayılır
+    old_price = data.old_price if data.old_price > data.price else 0
+
     return {
         "name": name,
+        "name_bold": data.name_bold,
         "price": data.price,
-        "stock": data.stock,
+        "old_price": old_price,
+        "stock": stock_val,
+        "variants": json.dumps(variants, ensure_ascii=False) if variants else "",
+        "colors": colors,
+        "size_stock": json.dumps(size_stock, ensure_ascii=False) if size_stock else "",
         "image_url": images[0] if images else "",
         "images": json.dumps(images),
         "description": data.description.strip(),
@@ -587,7 +597,7 @@ def clean_product(data: ProductIn, seller_id: int) -> dict:
 
 
 PRODUCT_FIELDS = (
-    "name", "price", "stock", "image_url", "images", "description", "category",
+    "name", "name_bold", "price", "old_price", "stock", "variants", "colors", "size_stock", "image_url", "images", "description", "category",
     "brand", "gender", "age_group", "sizes", "color", "size_class",
     "dimensions", "material", "video_url", "department", "subcategory",
 )
@@ -604,6 +614,14 @@ def row_image_urls(row) -> set:
                 urls.add(u)
     except ValueError:
         pass
+    try:
+        if "variants" in row.keys():
+            for v in json.loads(row["variants"] or "[]"):
+                for u in v.get("images", []):
+                    if isinstance(u, str) and u:
+                        urls.add(u)
+    except ValueError:
+        pass
     return urls
 
 
@@ -614,9 +632,9 @@ def drop_image(con, seller_id: int, url: str):
         return
     iid = int(m.group(1))
     used = con.execute(
-        """SELECT (SELECT COUNT(*) FROM products WHERE image_url = ? OR images LIKE ?)
+        """SELECT (SELECT COUNT(*) FROM products WHERE image_url = ? OR images LIKE ? OR variants LIKE ?)
                 + (SELECT COUNT(*) FROM sellers WHERE logo_url = ?)""",
-        (url, '%' + json.dumps(url) + '%', url),
+        (url, '%' + json.dumps(url) + '%', '%' + json.dumps(url) + '%', url),
     ).fetchone()[0]
     if used == 0:
         con.execute("DELETE FROM images WHERE id = ? AND seller_id = ?", (iid, seller_id))
@@ -654,7 +672,7 @@ def register(data: RegisterIn):
                 (store_name, owner_name, category, phone, email,
                  data.city.strip(), data.about.strip(), salt, pw, now().isoformat()),
             )
-    except (sqlite3.IntegrityError, psycopg.IntegrityError):
+    except sqlite3.IntegrityError:
         raise HTTPException(409, "Bu e-poçt artıq qeydiyyatdan keçib")
     return {"ok": True, "status": "pending"}
 
@@ -908,13 +926,24 @@ def product_dict(r: sqlite3.Row) -> dict:
     data = {
         k: r[k]
         for k in (
-            "id", "name", "price", "stock", "image_url", "description",
+            "id", "name", "price", "old_price", "stock", "image_url", "description",
             "category", "brand", "gender", "age_group", "color",
             "size_class", "dimensions", "material", "video_url",
             "department", "subcategory",
         )
     }
+    data["name_bold"] = r["name_bold"] if "name_bold" in r.keys() else 0
     data["sizes"] = [x for x in (r["sizes"] or "").split(",") if x]
+    try:
+        data["variants"] = json.loads(r["variants"] or "[]") if "variants" in keys else []
+    except ValueError:
+        data["variants"] = []
+    try:
+        data["size_stock"] = json.loads(r["size_stock"] or "[]") if "size_stock" in keys else []
+    except ValueError:
+        data["size_stock"] = []
+    cols = [x for x in ((r["colors"] if "colors" in keys else "") or "").split(",") if x]
+    data["colors"] = cols or ([r["color"]] if r["color"] else [])
     imgs = []
     if "images" in keys:
         try:
@@ -1033,7 +1062,7 @@ def update_product(pid: int, data: ProductIn, s: sqlite3.Row = Depends(current_s
     f = clean_product(data, s["id"])
     with db() as con:
         old = con.execute(
-            "SELECT image_url, images FROM products WHERE id = ? AND seller_id = ?", (pid, s["id"])
+            "SELECT image_url, images, variants FROM products WHERE id = ? AND seller_id = ?", (pid, s["id"])
         ).fetchone()
         if not old:
             raise HTTPException(404, "Məhsul tapılmadı")
@@ -1042,7 +1071,8 @@ def update_product(pid: int, data: ProductIn, s: sqlite3.Row = Depends(current_s
                 WHERE id = ? AND seller_id = ?""",
             (*[f[k] for k in PRODUCT_FIELDS], pid, s["id"]),
         )
-        new_urls = {f["image_url"], *json.loads(f["images"])}
+        new_urls = {f["image_url"], *json.loads(f["images"]),
+                    *[u for v in json.loads(f["variants"] or "[]") for u in v.get("images", [])]}
         for u in row_image_urls(old) - new_urls:
             drop_image(con, s["id"], u)
         row = con.execute("SELECT * FROM products WHERE id = ?", (pid,)).fetchone()
@@ -1053,7 +1083,7 @@ def update_product(pid: int, data: ProductIn, s: sqlite3.Row = Depends(current_s
 def delete_product(pid: int, s: sqlite3.Row = Depends(current_seller)):
     with db() as con:
         old = con.execute(
-            "SELECT image_url, images FROM products WHERE id = ? AND seller_id = ?", (pid, s["id"])
+            "SELECT image_url, images, variants FROM products WHERE id = ? AND seller_id = ?", (pid, s["id"])
         ).fetchone()
         if not old:
             raise HTTPException(404, "Məhsul tapılmadı")
@@ -1107,7 +1137,7 @@ def filters(category: Optional[str] = None):
         all_rows = approved_rows(con)
     rows = all_rows
     if category:
-        rows = [r for r in rows if fold(r["category"]) == fold(category)]
+        rows = [r for r in rows if fold(r["category"]) in multi(category)]
 
     def distinct(col, src=None):
         seen = {}
@@ -1160,6 +1190,7 @@ def public_products(
     department: Optional[str] = None,
     subcategory: Optional[str] = None,
     home: Optional[bool] = None,
+    sale: Optional[bool] = None,
     sort: Optional[str] = None,
     limit: int = Query(100, ge=1, le=200),
     offset: int = Query(0, ge=0),
@@ -1172,7 +1203,9 @@ def public_products(
     for r in rows:
         if home and not (r["on_home"] or r["store_home_all"]):
             continue
-        if category and fold(r["category"]) != fold(category):
+        if sale and not (r["old_price"] and r["old_price"] > r["price"]):
+            continue
+        if category and fold(r["category"]) not in multi(category):
             continue
         if store_category and fold(r["store_category"]) != fold(store_category):
             continue
@@ -1185,19 +1218,21 @@ def public_products(
                 continue  # köhnə məhsul (üst kateqoriyası yoxdur): mağazanın kateqoriyasına görə
         if subcategory and fold(r["subcategory"]) != fold(subcategory):
             continue
-        if brand and fold(r["brand"]) != fold(brand):
+        if brand and fold(r["brand"]) not in multi(brand):
             continue
-        if gender and fold(r["gender"]) != fold(gender):
+        if gender and fold(r["gender"]) not in multi(gender):
             continue
-        if age and (r["age_group"] or "") != age.strip():
+        if age and (r["age_group"] or "") not in [x.strip() for x in age.split("|")]:
             continue
-        if size and size.strip().upper() not in (r["sizes"] or "").split(","):
+        if size and not ({x.strip().upper() for x in size.split("|") if x.strip()} & set((r["sizes"] or "").split(","))):
             continue
-        if color and fold(r["color"]) != fold(color):
+        if color:
+            cs = [fold(x) for x in (r["colors"] or "").split(",") if x] or [fold(r["color"])]
+            if not (set(multi(color)) & set(cs)):
+                continue
+        if material and fold(r["material"]) not in multi(material):
             continue
-        if material and fold(r["material"]) != fold(material):
-            continue
-        if size_class and fold(r["size_class"]) != fold(size_class):
+        if size_class and fold(r["size_class"]) not in multi(size_class):
             continue
         if price_min is not None and r["price"] < price_min:
             continue
@@ -1206,7 +1241,7 @@ def public_products(
         if words:
             text = fold(" ".join([
                 r["name"], r["brand"], r["store_name"], r["category"],
-                r["description"], r["material"], r["color"], r["gender"],
+                r["description"], r["material"], r["color"], r["colors"], r["gender"],
                 r["department"], r["subcategory"],
             ]))
             if not all(w in text for w in words):
@@ -1220,13 +1255,76 @@ def public_products(
     elif sort == "price_desc":
         result.sort(key=lambda r: (r["stock"] <= 0, -r["price"]))
     elif sort == "newest":
-        result.sort(key=lambda r: r["stock"] <= 0)
+        # Ən yenilər: mağazaların əlavə etdiyi vaxta görə təzədən köhnəyə
+        result.sort(key=lambda r: (r["created_at"] or "", r["id"]), reverse=True)
+    elif sort == "discount":
+        def _disc(r):
+            return (r["old_price"] - r["price"]) / r["old_price"] if r["old_price"] and r["old_price"] > r["price"] else 0
+        result.sort(key=lambda r: (r["stock"] <= 0, -_disc(r)))
     else:
         # Tövsiyə olunan: ana səhifə üçün seçilmiş məhsullar əvvəl
         result.sort(key=lambda r: (r["stock"] <= 0, 0 if (r["on_home"] or r["store_home_all"]) else 1))
     response.headers["X-Total-Count"] = str(len(result))
     response.headers["Access-Control-Expose-Headers"] = "X-Total-Count"
     return [public_product_dict(r) for r in result[offset:offset + limit]]
+
+
+def cover_key(r) -> str:
+    """Şəkil üst kateqoriya + kateqoriya + alt kateqoriya üzrə ayrılır (Qadın Sviter ilə Kişi Sviter qarışmasın)."""
+    k = r.keys()
+    dep = (r["department"] if "department" in k else "") or (r["store_category"] if "store_category" in k else "")
+    return "|".join(fold(x) for x in (dep, r["category"] or "", r["subcategory"] or ""))
+
+
+@app.get("/api/category-images")
+def category_images():
+    """Alt kateqoriya şəkli: ilk yüklənən məhsulun şəkli. O məhsul silinibsə (və ya təsdiqdən çıxıbsa),
+    ən son yüklənən məhsulun şəkli seçilir və sonra o yadda saxlanır."""
+    out = {}
+    with db() as con:
+        con.execute("CREATE TABLE IF NOT EXISTS category_cover (sub_key TEXT PRIMARY KEY, product_id INTEGER NOT NULL)")
+        rows = approved_rows(con)  # ən yenisi əvvəldə
+        by_id = {r["id"]: r for r in rows}
+        cover = {r["sub_key"]: r["product_id"] for r in con.execute("SELECT sub_key, product_id FROM category_cover")}
+        groups = {}
+        for r in rows:
+            sub = (r["subcategory"] or "").strip()
+            if sub and (r["image_url"] or "").strip():
+                groups.setdefault(cover_key(r), []).append(r)
+        for key, items in groups.items():
+            chosen = by_id.get(cover.get(key))
+            if chosen is None or cover_key(chosen) != key or not (chosen["image_url"] or "").strip():
+                # yadda saxlanmış yoxdur və ya silinib: ilk dəfədirsə ən köhnəsi, silinibsə ən sonuncu
+                chosen = items[0] if key in cover else items[-1]
+                con.execute("INSERT OR REPLACE INTO category_cover (sub_key, product_id) VALUES (?, ?)", (key, chosen["id"]))
+            out["|".join(key.split("|"))] = chosen["image_url"].strip()
+    return out
+
+
+@app.get("/api/suggest")
+def suggest(q: str = Query("", max_length=60)):
+    """Axtarış qutusu üçün sürətli təkliflər: məhsul, mağaza, kateqoriya."""
+    w = fold(q)
+    if len(w) < 2:
+        return {"products": [], "stores": [], "categories": []}
+    words = w.split()
+    with db() as con:
+        rows = approved_rows(con)
+        stores = con.execute("SELECT id, store_name, logo_url, category FROM sellers WHERE status = 'approved'").fetchall()
+    prods, cats = [], {}
+    for r in rows:
+        text = fold(" ".join([r["name"], r["brand"], r["category"], r["subcategory"]]))
+        if all(x in text for x in words):
+            if len(prods) < 6:
+                prods.append({"id": r["id"], "name": r["name"], "price": r["price"],
+                              "image_url": r["image_url"], "category": r["subcategory"] or r["category"]})
+        for c in (r["category"], r["subcategory"]):
+            c = (c or "").strip()
+            if c and w in fold(c) and fold(c) not in cats:
+                cats[fold(c)] = c
+    st = [{"id": s["id"], "store_name": s["store_name"], "logo_url": s["logo_url"], "category": s["category"]}
+          for s in stores if w in fold(s["store_name"])][:3]
+    return {"products": prods, "stores": st, "categories": list(cats.values())[:4]}
 
 
 @app.get("/api/products/{pid}")
@@ -1373,7 +1471,7 @@ def admin_products():
 def admin_delete_product(pid: int):
     with db() as con:
         old = con.execute(
-            "SELECT seller_id, image_url, images FROM products WHERE id = ?", (pid,)
+            "SELECT seller_id, image_url, images, variants FROM products WHERE id = ?", (pid,)
         ).fetchone()
         if not old:
             raise HTTPException(404, "Məhsul tapılmadı")
@@ -1388,14 +1486,6 @@ def admin_delete_product(pid: int):
 # ---------------------------------------------------------------
 def page(name: str):
     file_path = BASE_DIR / name
-    if not file_path.is_file():
-        # OneDrive sometimes appends a copy number to uploaded filenames.
-        uploaded_names = {
-            "index.html": "index (5).html",
-            "admin.html": "admin (2).html",
-            "seller-register.html": "seller-register (3).html",
-        }
-        file_path = BASE_DIR / uploaded_names.get(name, name)
     if not file_path.is_file():
         raise HTTPException(404, "Səhifə tapılmadı")
     return FileResponse(file_path)
@@ -1415,7 +1505,6 @@ def home():
 
 
 @app.get("/admin")
-@app.get("/admin.html")
 def admin_page():
     return page("admin.html")
 
