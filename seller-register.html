@@ -4,57 +4,65 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ELFA — Satıcı ol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f7f6f3;--text:#171717;--muted:#777;--line:#e8e6e1;--red:#d22;--sand:#f3ece3}
-body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+:root{--bg:#F8F6F2;--text:#242424;--muted:#777;--line:#EAE7DF;--red:#d22;--sand:#f3ece3;
+  /* əlavə rəng paleti */
+  --navy:#000352;--forest:#3B6633;--orange:#FF6700;--gold:#FFD700;--metal:#D4AF37;--mint:#1CFFC7}
+body{font-family:'Montserrat',Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer;border:0}
 a{text-decoration:none;color:inherit;cursor:pointer}
-.topbar{background:#171717;color:#fff;text-align:center;padding:9px 20px;font-size:12px;letter-spacing:.4px}
+.topbar{background:#263B35;color:#fff;text-align:center;padding:9px 20px;font-size:12px;letter-spacing:.4px}
 header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
 .nav{width:min(1240px,94%);height:70px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .nl{display:flex;align-items:center;gap:18px}
-.logo{font-size:26px;font-weight:400;letter-spacing:8px}
-.back{display:inline-flex;align-items:center;gap:8px;font-size:14px;background:none;color:#171717}
-.back:hover{color:#777}
+.logo{font-size:26px;font-weight:800;letter-spacing:6px}
 .burger{display:none;background:none;width:38px;height:38px;border-radius:10px;align-items:center;justify-content:center}
-.burger:hover{background:#f3f2ee}
-.burger svg{width:22px;height:22px;stroke:#171717;fill:none;stroke-width:1.7;stroke-linecap:round}
+.burger:hover{background:#EAE7DF}
+.burger svg{width:22px;height:22px;stroke:#263B35;fill:none;stroke-width:1.7;stroke-linecap:round}
 .hu{display:none;align-items:center;gap:10px;font-size:14px;font-weight:700;max-width:260px}
 .hu span.nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wrap{width:min(1100px,94%);margin:34px auto 60px;display:grid;grid-template-columns:1fr 1.2fr;gap:28px;align-items:start}
-.intro{background:#171717;color:#fff;border-radius:22px;padding:42px;position:sticky;top:96px}
-.intro .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.7;margin-bottom:16px}
+.intro{background:#263B35;color:#fff;border-radius:22px;padding:42px;position:sticky;top:96px}
+.intro .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#E9B949;margin-bottom:16px;font-weight:700}
 .intro h1{font-size:40px;line-height:1.08;letter-spacing:-1.5px;margin-bottom:16px}
 .intro p{color:#ddd;line-height:1.7;font-size:14px}
 .intro ul{list-style:none;margin-top:24px;display:grid;gap:14px}
 .intro li{display:flex;gap:12px;font-size:14px;color:#eee;line-height:1.5}
-.intro li b{flex:none;width:26px;height:26px;border-radius:50%;background:#fff;color:#171717;display:flex;align-items:center;justify-content:center;font-size:12px}
+.intro li b{flex:none;width:26px;height:26px;border-radius:50%;background:#E9B949;color:#263B35;display:flex;align-items:center;justify-content:center;font-size:12px}
 .panel{background:#fff;border-radius:22px;padding:30px;border:1px solid var(--line)}
-.tabs{display:flex;gap:6px;background:#f3f2ee;border-radius:24px;padding:5px;margin-bottom:24px}
+.tabs{display:flex;gap:6px;background:#EAE7DF;border-radius:24px;padding:5px;margin-bottom:24px}
 .tab{flex:1;padding:11px;border-radius:20px;background:none;font-size:14px;font-weight:700;color:#777}
-.tab.on{background:#171717;color:#fff}
+.tab.on{background:#263B35;color:#fff}
 h2{font-size:24px;letter-spacing:-.5px;margin-bottom:6px}
 .sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
 label{display:block;font-size:12px;font-weight:700;margin:0 0 6px;color:#444}
 label i.rq{color:var(--red);font-style:normal}
 .f{margin-bottom:14px}
-input,select,textarea{width:100%;border:1px solid #ddd;border-radius:10px;padding:12px 14px;background:#fff;color:#171717;outline:none;font-size:14px}
+input,select,textarea{width:100%;border:1px solid #ddd;border-radius:10px;padding:12px 14px;background:#fff;color:#263B35;outline:none;font-size:14px}
 input,select{height:46px}
 textarea{min-height:100px;resize:vertical}
-input:focus,select:focus,textarea:focus{border-color:#171717}
+input:focus,select:focus,textarea:focus{border-color:#263B35}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.pnr{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.pnr>.f:nth-child(1){grid-column:span 4}
+.pnr>.f:nth-child(2){grid-column:span 2}
+.pnr>.f:nth-child(3),.pnr>.f:nth-child(4){grid-column:span 3}
+.pnr.novs>.f:nth-child(1){grid-column:1/-1}
 .phone-box{display:flex;align-items:center;border:1px solid #ddd;border-radius:10px;background:#fff;overflow:hidden}
-.phone-box:focus-within{border-color:#171717}
+.phone-box:focus-within{border-color:#263B35}
 .phone-box span{padding:0 12px;height:44px;display:flex;align-items:center;background:#f3f3f3;border-right:1px solid #ddd;font-size:14px;color:#444}
 .phone-box input{border:0;border-radius:0;height:44px}
 .chk{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#444;line-height:1.5;margin:6px 0 4px}
 .chk input{width:18px;height:18px;margin-top:2px;flex:none}
-.btn{width:100%;margin-top:16px;background:#171717;color:#fff;padding:14px;border-radius:24px;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn{width:100%;margin-top:16px;background:#263B35;color:#fff;padding:14px;border-radius:24px;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn:hover{background:#333}
-.btn.alt{background:#eee;color:#171717}
+.btn.alt{background:#eee;color:#263B35}
 .btn.alt:hover{background:#e3e3e3}
 .btn.fit{width:auto;margin-top:0;padding:12px 22px}
 .btn:disabled{opacity:.6;cursor:not-allowed}
@@ -66,18 +74,18 @@ input:focus,select:focus,textarea:focus{border-color:#171717}
 .ok .big{font-size:46px;margin-bottom:10px}
 .hide{display:none!important}
 .badge{display:inline-block;border-radius:12px;padding:3px 10px;font-size:12px;background:#eee;white-space:nowrap}
-.badge.green{background:#e3f6e8;color:#1a7a35}
-.badge.wait{background:#fff3d6;color:#8a6200}
+.badge.green{background:rgba(59,102,51,.13);color:var(--forest)}
+.badge.wait{background:rgba(255,103,0,.13);color:#B84A00}
 .badge.red{background:#fde4e4;color:#b42323}
 .bar{height:8px;border-radius:6px;background:#eee;overflow:hidden;margin-top:8px}
-.bar i{display:block;height:100%;width:0;background:#171717;transition:width .15s}
+.bar i{display:block;height:100%;width:0;background:#263B35;transition:width .15s}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips label{display:flex;align-items:center;gap:6px;border:1px solid #ddd;border-radius:18px;padding:6px 12px;font-size:12px;font-weight:700;margin:0;cursor:pointer;background:#fff}
-.chips label:has(input:checked){background:#171717;color:#fff;border-color:#171717}
+.chips label:has(input:checked){background:#263B35;color:#fff;border-color:#263B35}
 .chips input{position:absolute;opacity:0;width:0;height:0}
-.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#171717;color:#fff;padding:11px 20px;border-radius:24px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:80;max-width:90%;text-align:center}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#263B35;color:#fff;padding:11px 20px;border-radius:24px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:80;max-width:90%;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%)}
-footer{background:#171717;color:#aaa;padding:30px 0;text-align:center;font-size:12px}
+footer{background:#263B35;color:#aaa;padding:30px 0;text-align:center;font-size:12px}
 
 /* ikonlu sahələr */
 .ic{position:relative}
@@ -122,8 +130,8 @@ body.noside .side{display:none}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 20px}
 .stat{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;font-size:12px;color:#777}
 .stat i{width:44px;height:44px;border-radius:12px;background:var(--sand);display:flex;align-items:center;justify-content:center;flex:none}
-.stat i svg{width:22px;height:22px;stroke:#171717;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.stat b{display:block;font-size:22px;color:#171717;margin-top:2px}
+.stat i svg{width:22px;height:22px;stroke:#263B35;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.stat b{display:block;font-size:22px;color:#263B35;margin-top:2px}
 .drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;border:1.5px dashed #cfc9bf;border-radius:14px;background:#faf9f6;padding:18px 12px;cursor:pointer;font-size:13px;font-weight:700;color:#333;position:relative;margin:0}
 .drop small{font-weight:400;color:#888;font-size:11px;line-height:1.4}
 .drop input{position:absolute;inset:0;opacity:0;cursor:pointer;height:100%;padding:0}
@@ -148,37 +156,126 @@ body.noside .side{display:none}
 .empty b{display:block;color:#444;font-size:14px;margin-bottom:4px}
 
 /* modal */
-.ov{position:fixed;inset:0;background:rgba(23,23,23,.5);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:max(16px,4vh) 16px;overflow:auto}
+.ov{position:fixed;inset:0;background:rgba(38,59,53,.5);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:max(16px,4vh) 16px;overflow:auto}
 .md{background:#fff;border-radius:22px;width:min(1080px,100%);padding:26px;position:relative}
 .mh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
 .mt{display:flex;gap:14px;align-items:center}
-.mt .pl{width:44px;height:44px;border-radius:50%;background:#171717;display:flex;align-items:center;justify-content:center;flex:none}
+.mt .pl{width:44px;height:44px;border-radius:50%;background:#263B35;display:flex;align-items:center;justify-content:center;flex:none}
 .mt .pl svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
 .mh h2{font-size:20px;margin:0 0 2px}
-.mx{background:#f3f2ee;width:36px;height:36px;border-radius:50%;font-size:18px;flex:none}
+.mx{background:#EAE7DF;width:36px;height:36px;border-radius:50%;font-size:18px;flex:none}
 .mb{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start}
 .gal{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:12px}
 .main-img{aspect-ratio:1;border-radius:12px;background:#ece9e4;display:flex;align-items:center;justify-content:center;color:#999;font-size:13px;overflow:hidden;position:relative}
 .main-img img{width:100%;height:100%;object-fit:cover}
-.main-img span.tg{position:absolute;left:10px;top:10px;background:rgba(23,23,23,.75);color:#fff;font-size:11px;padding:4px 9px;border-radius:12px;z-index:2}
+.main-img span.tg{position:absolute;left:10px;top:10px;background:var(--navy);color:#fff;font-size:11px;padding:4px 9px;border-radius:12px;z-index:2}
 .trash{position:absolute;right:10px;top:10px;width:32px;height:32px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,.15)}
 .trash svg{width:16px;height:16px;stroke:#444;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .th{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:#ece9e4;border:2px solid transparent;cursor:pointer}
-.th.on{border-color:#171717}
+.th.on{border-color:#263B35}
 .th.ph{border:1.5px dashed #cfc9bf;background:#faf9f6;cursor:default}
 .th img{width:100%;height:100%;object-fit:cover;display:block}
-.th .rm{position:absolute;right:2px;top:2px;width:18px;height:18px;border-radius:50%;background:rgba(23,23,23,.8);color:#fff;font-size:10px;line-height:18px;padding:0}
-.sizes{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
-.sg+.sg{border-left:1px solid var(--line);padding-left:18px}
+.th .rm{position:absolute;right:2px;top:2px;width:18px;height:18px;border-radius:50%;background:rgba(38,59,53,.8);color:#fff;font-size:10px;line-height:18px;padding:0}
+.sizes{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 .sgt{font-size:12px;color:#555;margin-bottom:8px}
 .mfoot{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
 .sizes:empty{display:none}
+.vwrap{background:#F8F6F2;border:1px solid var(--line);border-radius:14px;padding:14px}
+.vr{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0}
+.vr-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.vr-top .vsel{position:relative;flex:1;min-width:0}
+.vr-top .vdot{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.2);pointer-events:none}
+.vr-top select{padding-left:42px}
+.vr .vco{margin:0 0 10px}
+.vx{flex:none;background:#fde4e4;color:#b42323;border-radius:10px;height:46px;padding:0 14px;font-size:12px;font-weight:700}
+.vsz{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px}
+.vs{margin:0;text-align:center;font-size:11px}
+.vs span{display:block;margin-bottom:4px}
+.vs input{height:38px;padding:6px 6px;text-align:center}
+.vns{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:#555}
+.vns input{width:90px;height:38px;padding:6px 8px;text-align:center}
+.vchip{display:inline-flex;align-items:center;gap:5px}
+.vchip i{width:10px;height:10px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
 
 @media(max-width:860px){.wrap{grid-template-columns:1fr}.intro{position:static;padding:30px}.intro h1{font-size:32px}
 .dg{grid-template-columns:1fr}.side{position:static}.menu{grid-auto-flow:column;overflow-x:auto}.menu button{white-space:nowrap}
 .mb{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.logoRow{grid-template-columns:1fr}.hu .nm{display:none}.logo{letter-spacing:6px}}
-@media(max-width:560px){.two,.three{grid-template-columns:1fr}.panel{padding:20px}.md{padding:18px}.sec{padding:18px}.pi{flex-wrap:wrap}.pact{justify-content:flex-start}.sg+.sg{border-left:0;padding-left:0}.welcome{font-size:21px}}
+@media(max-width:560px){.pnr{grid-template-columns:1fr 1fr}.pnr .f:first-child{grid-column:1/-1}.two,.three{grid-template-columns:1fr}.panel{padding:20px}.md{padding:18px}.sec{padding:18px}.pi{flex-wrap:wrap}.pact{justify-content:flex-start}.welcome{font-size:21px}}
+select:disabled{background:#f4f2ee;color:#9a958b;cursor:not-allowed}
+input:disabled{background:#f4f2ee;color:#6b665c;cursor:not-allowed}
+/* şifrə sahəsində göz düyməsi */
+.pwx{position:relative}
+.pwx input{padding-right:48px}
+.pwx .eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:none;border:0;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pwx .eye svg{width:20px;height:20px;fill:none;stroke:#777;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pwx .eye.on svg{stroke:var(--brand,#263B35)}
+.pwx .eye .off{display:none}
+.pwx .eye.on .off{display:block}
+.pwx .eye.on .see{display:none}
+</style>
+<style>
+.vimg{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;align-items:center}
+.vimg .vtl{flex-basis:100%;font-size:11px;color:#555;font-weight:700;margin:0}
+.vimg .vi{position:relative;width:56px;height:56px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#EAE7DF}
+.vimg .vi img{width:100%;height:100%;object-fit:cover;display:block}
+.vimg .vi button{position:absolute;right:2px;top:2px;width:18px;height:18px;border-radius:50%;background:rgba(38,59,53,.85);color:#fff;font-size:10px;line-height:18px;padding:0}
+.vimg label.vadd-img{width:56px;height:56px;border-radius:10px;border:1.5px dashed #cfc9bf;display:flex;align-items:center;justify-content:center;cursor:pointer;margin:0;font-size:24px;font-weight:400;color:#263B35;background:#faf9f6}
+.bw{display:flex;align-items:center;gap:10px;margin:2px 0 4px;font-size:13px;font-weight:600}
+.bw label{margin:0;font-weight:600}
+.bw input{width:56px;height:30px;padding:2px 6px;text-align:center;border-radius:15px;background:var(--soft,#F4EBDD);font-weight:700}
+.bwpv{font-size:13px;color:var(--muted);margin:0 0 6px}.bwpv:empty{display:none}
+.szh{display:flex!important;align-items:center;gap:9px;background:#243B36;color:#fff!important;border-radius:10px;padding:10px 14px;margin-bottom:10px!important;font-weight:700}
+.szh svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round}
+.vsi{border:1px solid #D9D5CA;border-radius:8px;overflow:visible;background:#fff}
+.vsi b{background:#F4F2EC;margin:0!important;padding:8px 0 6px;border-radius:7px 7px 0 0}
+.vsi input{border:0!important;border-top:1px solid #E7E3D8!important;border-radius:0 0 7px 7px;font-weight:700}
+.vadd{display:flex;gap:8px;align-items:center;max-width:340px;margin-bottom:10px}
+.vadd input{height:40px;padding:6px 12px}
+.vplus{flex:none;width:40px;height:40px;border-radius:10px;background:#263B35;color:#fff;font-size:24px;line-height:1;padding:0 0 3px}
+.vsl{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:6px}
+.vsi{position:relative;width:80px;margin:0;text-align:center}
+.vsi b{display:block;font-size:12px;margin-bottom:4px}
+.vsi input{height:38px;padding:6px;text-align:center}
+.vsi .vsr{position:absolute;right:-6px;top:-8px;width:18px;height:18px;border-radius:50%;background:#fde4e4;color:#b42323;font-size:10px;line-height:18px;padding:0}
+@media(max-width:560px){
+ .pnr>.f:nth-child(n){grid-column:span 3}
+ .pnr>.f:nth-child(1),.pnr>.f:nth-child(2){grid-column:1/-1}
+}
+
+/* ===== Forma: kartlı düzən (şəkildəki dizayn) ===== */
+.card2{background:#fff;border:1px solid #ECE8DE;border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.card2 .f{margin-bottom:12px}.card2 .f:last-child{margin-bottom:0}
+.card2>.two,.card2>.f{margin-bottom:12px}
+.card2 label{font-weight:700;font-size:14px;color:#242424}
+.card2 .pnr{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:end}
+.card2 .pnr>.f{grid-column:auto!important;margin:0}
+.card2 .pnr>.f label{min-height:0;display:block;line-height:1.2;margin-bottom:6px}
+.card2 .ic input,.card2 .ic select{height:46px;border-radius:12px;background:#fff}
+.bw{display:flex;align-items:center;gap:10px;margin:2px 0 0;font-size:14px}
+.bw label{font-weight:500!important;font-size:14px!important;margin:0}
+.bw input{width:48px!important;height:30px!important;padding:0!important;border-radius:15px!important;background:#F4EBDD!important;text-align:center;font-weight:700;border:0!important}
+.bwpv{display:none!important}
+.card2.vwrap,.vwrap{background:#F8EFE4;border-radius:12px;padding:12px 14px;margin:0}
+.vwrap .chk{display:flex;align-items:center;gap:10px;margin:0;font-weight:700}
+.vwrap .chk input{width:20px;height:20px;accent-color:#263B35}
+.card2.szc{padding:0;overflow:hidden;background:#fff}
+.szc .szh{border-radius:0;margin:0!important;padding:12px 16px}
+.szc .vsl{padding:12px 12px 0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.szc .vsi{width:auto;border:1px solid #E1DDD2;border-radius:6px;background:#fff}
+.szc .vsi b{display:block;text-align:center;font-size:14px;padding:12px 0 8px;background:#F4F2EC;border-radius:5px 5px 0 0;margin:0}
+.szc .vsi input{height:40px;border-radius:0 0 5px 5px;font-size:14px}
+.szc .vsi .vsr{right:4px;top:4px;width:18px;height:18px;background:#fff;border:1.5px solid #D93025;color:#D93025;font-size:10px;line-height:15px}
+.szopen{display:flex;align-items:center;justify-content:center;gap:10px;width:calc(100% - 24px);margin:12px;height:46px;border:1px solid #E1DDD2;border-radius:10px;background:#F4F2EC;font-weight:700;font-size:14px;color:#242424}
+.szopen svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.szopen.hide{display:none}
+.szc .vadd{margin:12px;max-width:none}.szc .hint{margin:0 12px 12px}
+.dh{display:flex!important;align-items:center;gap:10px;font-weight:800}
+.dh svg{width:18px;height:18px;stroke:#263B35;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.drop .big{font-size:13px;font-weight:500;color:#333}.drop .tip{display:block}
+.drop em{font-style:normal}
+.mfoot{padding:4px 0 0;justify-content:flex-end}
+@media(max-width:560px){.card2 .pnr{grid-template-columns:1fr 1fr 1fr;gap:8px}.szc .vsl{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
@@ -187,8 +284,11 @@ body.noside .side{display:none}
   <div class="nav">
     <div class="nl">
       <a class="logo" href="/elfa.html">ELFA</a>
-      <button class="burger" id="burger" aria-label="Menyu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-      <button class="back" id="backBtn">← Geri</button>
+      <button class="burger" id="burger" aria-label="Menyu">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
     </div>
     <div class="hu" id="hUser"><div class="av sm" id="hAv">E</div><span class="nm" id="hName">Mağaza</span></div>
   </div>
@@ -245,9 +345,11 @@ body.noside .side{display:none}
     <div id="loginView" class="hide">
       <h2>Satıcı girişi</h2>
       <p class="sub">Qeydiyyatda istifadə etdiyiniz e-poçt və şifrə ilə daxil olun.</p>
-      <div class="f"><label for="lem">E-poçt</label><input id="lem" type="email" placeholder="ad@mail.com" autocomplete="email"></div>
-      <div class="f"><label for="lpw">Şifrə</label><input id="lpw" type="password" placeholder="Şifrə" autocomplete="current-password"></div>
-      <button class="btn" id="loginBtn">Daxil ol</button>
+      <form id="loginForm" novalidate>
+        <div class="f"><label for="lem">E-poçt</label><input id="lem" type="email" placeholder="ad@mail.com" autocomplete="email"></div>
+        <div class="f"><label for="lpw">Şifrə</label><input id="lpw" type="password" placeholder="Şifrə" autocomplete="current-password"></div>
+        <button class="btn" id="loginBtn" type="submit">Daxil ol</button>
+      </form>
       <p class="hint" style="margin-top:12px">Şifrəni unutmusunuzsa, ELFA ilə əlaqə saxlayın.</p>
     </div>
 
@@ -347,8 +449,9 @@ body.noside .side{display:none}
               <div class="thumbs" id="thumbs"></div>
               <label class="drop" for="pFile">
                 <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>
-                Şəkil əlavə et (<span id="imgCnt">0/5</span>)
-                <small>Ən çox 5 şəkil seçə bilərsiniz (JPG, PNG, WEBP). Şəkillər avtomatik optimallaşdırılır. Birinci şəkil əsas şəkildir, başqa şəkli əsas etmək üçün üzərinə basın. iPhone HEIC şəkli oxunmursa, ayarlarda “Ən uyğun” formatını seçin.</small>
+                <span>Şəkil əlavə et <em id="imgCnt" class="hide">0/5</em></span>
+                <small class="big">(5-ə qədər şəkil)</small>
+                <small class="tip">JPG, PNG, WEBP · Birinci şəkil əsas şəkildir, başqa şəkli əsas etmək üçün üzərinə basın.</small>
                 <input id="pFile" type="file" accept="image/*" multiple>
               </label>
               <div id="videoField">
@@ -363,28 +466,58 @@ body.noside .side{display:none}
             </div>
 
             <div>
-              <div class="two" style="grid-template-columns:2fr 1fr 1fr">
-                <div class="f"><label for="pName">Məhsul adı <i class="rq">*</i></label><div class="ic nm"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/></svg><input id="pName" maxlength="80" placeholder="Məhsulun adını daxil edin"><span class="cnt" id="cName">0/80</span></div></div>
-                <div class="f"><label for="pPrice">Qiymət (AZN) <i class="rq">*</i></label><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg><input id="pPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div></div>
-                <div class="f"><label for="pStock">Stok sayı <i class="rq">*</i></label><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg><input id="pStock" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div></div>
+              <div class="card2">
+                <div class="f"><label for="pName">Məhsul adı <i class="rq">*</i></label><div class="ic nm"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/></svg><input id="pName" maxlength="150" placeholder="Ad, rəng, marka, cinsiyyət, ölçü və s. yazın"><span class="cnt" id="cName">0/150</span></div></div>
+                <div class="bw"><label for="pBold">Başdan neçə söz qalın:</label><input id="pBold" type="number" min="0" max="30" placeholder="0" inputmode="numeric" title="0 = hamısı qalın"></div><div id="pBoldPv" class="bwpv"></div>
               </div>
-              <div class="three">
-                <div class="f"><label for="pCat">Kateqoriya</label><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><select id="pCat"><option value="">Seçin</option></select></div><input class="oth hide" id="pCatO" maxlength="60" placeholder="Kateqoriyanı özünüz yazın"></div>
-                <div class="f"><label for="pBrand">Marka</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg><input id="pBrand" maxlength="60" placeholder="Məs: Nike"></div></div>
+              <div class="card2"><div class="pnr">
+                <div class="f"><label for="pPrice">Qiymət (AZN) <i class="rq">*</i></label><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg><input id="pPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div></div>
+                <div class="f"><label for="pOld">Köhnə qiymət (endirim üçün)</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg><input id="pOld" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Boş"></div></div>
+                <div class="f"><label for="pStock">Stok sayı <i class="rq">*</i></label><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg><input id="pStock" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div></div>
+              </div></div>
+              <div class="card2">
+              <div class="two">
+                <div class="f"><label for="pDept">Üst kateqoriya</label><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><select id="pDept"><option value="">Seçin</option></select></div><input class="oth hide" id="pDeptO" maxlength="60" placeholder="Üst kateqoriyanı özünüz yazın"></div>
+                <div class="f"><label for="pCat">Kateqoriya</label><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><select id="pCat" disabled><option value="">Seçin</option></select></div><label class="hide" id="pCatGL" for="pCatG" style="margin-top:10px">Hansı başlıq</label><div class="ic hide" id="pCatGW"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6"/></svg><select id="pCatG"></select></div><input class="oth hide" id="pCatO" maxlength="60" placeholder="Nə yazmaq istəyirsiniz? (məs: Paltar)"></div>
+              </div>
+              <div class="two">
                 <div class="f"><label for="pGender">Cinsiyyət</label><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><select id="pGender"><option value="">Seçin</option></select></div></div>
+                <div class="f"><label for="pBrand">Marka</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg><input id="pBrand" maxlength="60" placeholder="Məs: Nike"></div></div>
               </div>
               <div class="f hide" id="ageWrap"><label for="pAge">Yaş aralığı</label><select id="pAge"><option value="">Seçin</option></select></div>
-              <div class="f" id="sizeWrap"><label>Ölçülər</label><div class="sizes" id="pSizes"></div>
-                <input class="oth" id="pSizeO" maxlength="80" placeholder="Başqa ölçünü özünüz yazın (vergüllə ayırın): 3XL, 48, 52"></div>
               <div class="two">
+                <div class="f"><label for="pMat">Material</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5M3 17.5l9 5 9-5" opacity=".6"/></svg><input id="pMat" maxlength="60" placeholder="Məsələn: Pambıq, dəri, metal"></div></div>
+                <div class="f"><label for="pDim">Ölçülər (sm)</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><input id="pDim" maxlength="60" placeholder="Məsələn: 10 x 20 x 5"></div></div>
+              </div>
+              <div class="f vwrap">
+                <label class="chk" for="useVar"><input type="checkbox" id="useVar"> <span>Hər rəngin öz ölçüsü və stoku var</span></label>
+                <div id="varBox" class="hide">
+                  <div id="varRows"></div>
+                  <button type="button" class="btn alt fit" id="addVar">+ Rəng əlavə et</button>
+                  <datalist id="vsList"></datalist>
+                  <p class="sub" style="margin:8px 0 0">Hər rəng üçün ölçünü yazıb "+" basın, altındakı xanaya həmin ölçüdən neçə ədəd olduğunu yazın. Stok 0 olan ölçü alıcıya ✕ ilə göstərilir.</p>
+                </div>
+              </div>
+
+              </div>
+              <!-- Ölçülər və stok (rəngsiz rejim) -->
+              <div class="card2 szc f" id="sizeWrap">
+                <label class="szh"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Ölçülər və stok</label>
+                <div class="vsl" id="pSzList"></div>
+                <button type="button" class="szopen hide" id="pSzOpen"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Başqa ölçü əlavə et</button>
+                <div class="vadd" id="pSzRow"><input class="vsn" id="pSzIn" list="vsList" maxlength="120" placeholder="Ölçü(lər): 15 20 14 19 32" autocomplete="off"><button type="button" class="vplus" id="pSzAdd" aria-label="Ölçü əlavə et">+</button></div>
+                <p class="hint">Bir neçə ölçünü qarışıq yaza bilərsiniz (boşluq və ya vergüllə ayırın: <b>15 20 14 19 32</b>), "+" basın: ölçülər avtomatik artan sırada düzülür və hər biri ayrıca stok xanası ilə görünür. Stok 0 olan ölçü alıcıya ✕ ilə göstərilir. Ümumi stok avtomatik hesablanır.</p>
+                <div style="display:none"><div class="sizes" id="pSizes"></div><input id="pSizeO"></div>
+              </div>
+
+              <!-- Rəng / Boyut: gizlədilib (JS sınmasın deyə silinməyib) -->
+              <div class="two hide">
                 <div class="f"><label for="pColor">Rəng</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2s0-2 1.5-2h2a3 3 0 0 0 3-3c0-6-3.6-11-8-11z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16" cy="11" r="1"/></svg><select id="pColor"><option value="">Seçin</option></select></div><input class="oth hide" id="pColorO" maxlength="40" placeholder="Rəngi özünüz yazın"></div>
                 <div class="f"><label for="pSizeClass">Boyut</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg><select id="pSizeClass"><option value="">Seçin</option></select></div><input class="oth hide" id="pSizeClassO" maxlength="40" placeholder="Boyutu özünüz yazın"></div>
               </div>
-              <div class="two">
-                <div class="f"><label for="pDim">Ölçülər (sm)</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><input id="pDim" maxlength="60" placeholder="Məsələn: 10 x 20 x 5"></div></div>
-                <div class="f"><label for="pMat">Material</label><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5M3 17.5l9 5 9-5" opacity=".6"/></svg><input id="pMat" maxlength="60" placeholder="Məsələn: Pambıq, dəri, metal"></div></div>
+              <div class="card2">
+              <div class="f"><label for="pDesc" class="dh"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/></svg>Təsvir <i class="rq">*</i></label><div class="ic ta"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/></svg><textarea id="pDesc" maxlength="600" placeholder="Məhsul haqqında ətraflı məlumat yazın..."></textarea><span class="cnt" id="cDesc">0/600</span></div></div>
               </div>
-              <div class="f"><label for="pDesc">Təsvir</label><div class="ic ta"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/></svg><textarea id="pDesc" maxlength="600" placeholder="Məhsul haqqında ətraflı məlumat yazın..."></textarea><span class="cnt" id="cDesc">0/600</span></div></div>
               <div class="mfoot">
                 <button class="btn alt fit hide" id="cancelEdit">Redaktəni ləğv et</button>
                 <button class="btn fit" id="addP"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span id="addTxt">Məhsulu əlavə et</span></button>
@@ -413,7 +546,6 @@ const BUST=Date.now();
 const bu=u=>/^\/api\/images\/\d+$/.test(u||'')?u+'?v='+BUST:(u||'');
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
 
-$('#backBtn').onclick=()=>{ if(history.length>1) history.back(); else location.href='/elfa.html'; };
 $('#goHome').onclick=()=>location.href='/elfa.html';
 $('#burger').onclick=()=>document.body.classList.toggle('noside');
 
@@ -454,8 +586,13 @@ function setPrev(src){
   if(src){p.src=src;p.classList.remove('hide');$('#pNone').classList.add('hide');$('#pClear').classList.remove('hide')}
   else{p.classList.add('hide');p.removeAttribute('src');$('#pNone').classList.remove('hide');$('#pClear').classList.add('hide')}
 }
-function updCnt(){$('#cName').textContent=$('#pName').value.length+'/80';$('#cDesc').textContent=$('#pDesc').value.length+'/600'}
-$('#pName').addEventListener('input',updCnt);
+function updCnt(){$('#cName').textContent=$('#pName').value.length+'/150';boldPv();$('#cDesc').textContent=$('#pDesc').value.length+'/600'}
+function boldPv(){
+  const w=$('#pName').value.trim().split(/\s+/).filter(Boolean),n=Math.max(0,parseInt($('#pBold').value,10)||0);
+  const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  $('#pBoldPv').innerHTML=w.length?(n>0?'<b>'+e(w.slice(0,n).join(' '))+'</b> '+e(w.slice(n).join(' ')):'<b>'+e(w.join(' '))+'</b>'):'';
+}
+$('#pName').addEventListener('input',updCnt);$('#pBold').addEventListener('input',boldPv);
 $('#pDesc').addEventListener('input',updCnt);
 
 /* ---------- API ---------- */
@@ -522,7 +659,8 @@ $('#regForm').addEventListener('submit',async e=>{
 });
 
 /* ---------- Giriş / çıxış ---------- */
-$('#loginBtn').onclick=async()=>{
+$('#loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
   const email=$('#lem').value.trim().toLowerCase(),pw=$('#lpw').value;
   if(!email||!pw) return toast('E-poçt və şifrəni yazın');
   const btn=$('#loginBtn');btn.disabled=true;
@@ -534,7 +672,7 @@ $('#loginBtn').onclick=async()=>{
     openDash();
   }catch(err){toast(err.message||'Giriş zamanı xəta baş verdi')}
   finally{btn.disabled=false}
-};
+});
 $('#logout').onclick=async()=>{
   const s=session();
   try{if(s) await fetch('/api/seller/logout',{method:'POST',headers:auth()})}catch{}
@@ -609,7 +747,7 @@ const EMPTY='<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="3" width
 const rowHtml=p=>`
     <div class="pi">
       <div class="im">${p.image_url?`<img src="${esc(bu(p.image_url))}" alt="" onerror="this.remove()">`:'ELFA'}</div>
-      <div class="mid"><b>${esc(p.name)}</b><small>${money(p.price)} · Stok: ${esc(p.stock)}${p.video_url?' · ▶ video':''}${p.on_home?' · ana səhifədə':''}</small></div>
+      <div class="mid"><b>${esc(p.name)}</b><small>${p.old_price>p.price?'<s>'+money(p.old_price)+'</s> ':''}${money(p.price)} · Stok: ${esc(p.stock)}${p.video_url?' · ▶ video':''}${p.on_home?' · ana səhifədə':''}</small></div>
       <div class="pact">
         <button class="del b" data-edit="${esc(p.id)}">Redaktə</button>
         <button class="del g" data-home="${esc(p.id)}" data-on="${p.on_home?'1':'0'}">${p.on_home?'Ana səhifədən çıxar':'Ana səhifəyə qoy'}</button>
@@ -639,9 +777,114 @@ function rowClick(e){
 $('#plist').addEventListener('click',rowClick);
 $('#rlist').addEventListener('click',rowClick);
 
+/* ---------- Üst kateqoriya → kateqoriya → alt kateqoriya (index.html-dəki "Bütün kateqoriyalar" menyusu ilə eyni siyahı) ---------- */
+const G=(t,i,x=[])=>({t,i,x});
+const MENU={
+ 'Qadın':[
+  G('Geyim',['Paltar','T-shirt','Köynək','Cins şalvar','Gödəkçə'],['Ətək','Şort','Sviter']),
+  G('Çanta',['Çiyin çantası','Sırt çantası','Pulqabı'],['Səyahət çantası','Noutbuk çantası']),
+  G('Ayaqqabı',['Hündürdaban ayaqqabı','İdman ayaqqabısı','Gündəlik ayaqqabı','Babet'],['Bot','Çəkmə','Sandalet']),
+  G('İç geyim',['Pijama','Gecə geyimi','Alt paltarı','Corab'],['Korset','Kombinezon']),
+  G('Aksesuar',['Kəmər','Şərf'],['Saç aksesuarları','Bəzək əşyaları']),
+  G('Saat',['Saat'],[]),
+  G('Eynək',['Eynək'],[]),
+  G('Kosmetika',['Makiyaj','Dəriyə qulluq','Saç baxımı'],['Dırnaq qulluğu']),
+  G('Ətir',['Ətir'],['Parfum seti'])
+ ],
+ 'Kişi':[
+  G('Geyim',['Köynək','T-shirt','Şalvar','Kostyum','Gödəkçə'],['Sviter','Şort','İdman geyimi']),
+  G('Ayaqqabı',['İdman ayaqqabısı','Klassik ayaqqabı','Gündəlik ayaqqabı'],['Bot','Sandalet']),
+  G('Aksesuar',['Kəmər','Pulqabı'],['Şərf']),
+  G('Çanta',['Çanta'],[]),
+  G('Saat',['Saat'],[]),
+  G('Eynək',['Eynək'],[]),
+  G('Kosmetika',['Təraş vasitələri','Dəriyə qulluq'],['Dezodorant']),
+  G('Ətir',['Ətir'],[])
+ ],
+ 'Ana & Uşaq':[
+  G('Körpə',['Bədən','Tulum','Bələk','Qidalanma vasitələri'],['Uşaq arabası','Gigiyena']),
+  G('Uşaq geyimi',['T-shirt','Şalvar','Paltar','Gödəkçə'],['Aksesuar']),
+  G('Ayaqqabı',['Ayaqqabı'],[]),
+  G('Oyuncaq',['Konstruktor','Kukla','Təhsil oyuncaqları'],['Yumşaq oyuncaqlar']),
+  G('Ana',['Hamilə geyimi','Əmizdirmə vasitələri'],['Ana çantası'])
+ ],
+ 'Ev & Yaşayış':[
+  G('Mətbəx',['Qab-qacaq','Çaydan','Mətbəx alətləri'],['Saxlama qabları','Məişət texnikası']),
+  G('Ev tekstili',['Yataq dəsti','Yorğan','Xalça','Pərdə'],['Dəsmal','Yastıq']),
+  G('Dekor',['Vaza','Şam','Çərçivə','Güzgü'],['Divar dekoru']),
+  G('Təmizlik',['Təmizlik vasitələri','Səbət'],['Süpürgə','Mop'])
+ ],
+ 'Kosmetika':[
+  G('Ətir',['Qadın ətri','Kişi ətri','Uniseks ətir'],['Dezodorant','Parfum seti']),
+  G('Makiyaj',['Göz makiyajı','Dodaq boyası','Pudra'],['Tonal krem','Tuş']),
+  G('Dəriyə qulluq',['Krem','Maska','Serum','Günəşdən qoruyucu'],['Təmizləyici vasitələr']),
+  G('Saç baxımı',['Şampun','Saç yağı','Saç maskası'],['Fen','Saç düzləşdirici'])
+ ],
+ 'Elektronika':[
+  G('Telefon',['Smartfon','Qoruyucu şüşə','Telefon qabı','Adapter'],['Powerbank','Kabel']),
+  G('Kompüter',['Noutbuk','Klaviatura','Siçan'],['Monitor','Planşet']),
+  G('Audio',['Qulaqlıq','Dinamik','Bluetooth qulaqlıq'],['Mikrofon']),
+  G('Ağıllı cihazlar',['Ağıllı saat','Ağıllı qolbaq'],['Ağıllı ev cihazları'])
+ ],
+ 'Digər':[G('Digər məhsullar',['Digər'])]
+};
+/* üst kateqoriyanın (məs. Qadın) kateqoriyaları (məs. Geyim) */
+const catsFor=d=>(MENU[d]||[]).map(g=>g.t);
+/* seçilmiş üst kateqoriya + kateqoriya üçün alt kateqoriyalar (məs. Köynək) */
+function subsFor(d,cat){
+  const out=[];
+  (MENU[d]||[]).forEach(g=>{if(g.t===cat)[...g.i,...g.x].forEach(v=>{if(!out.includes(v))out.push(v)})});
+  return out;
+}
+const inferDept=cat=>Object.keys(MENU).find(d=>(MENU[d]||[]).some(g=>g.t===cat))||'';
+/* müqayisə üçün: böyük/kiçik hərf, boşluq və ə/ö/ü/ş/ç/ğ/ı fərqi nəzərə alınmır */
+const AZMAP={'İ':'i','I':'i','ı':'i','Ə':'e','ə':'e','Ö':'o','ö':'o','Ü':'u','ü':'u','Ş':'s','ş':'s','Ç':'c','ç':'c','Ğ':'g','ğ':'g'};
+const fk=s=>String(s||'').trim().replace(/[İIıƏəÖöÜüŞşÇçĞğ]/g,c=>AZMAP[c]).toLowerCase().replace(/\s+/g,' ');
+/* siyahıda eyni ad varsa onu (mövcud yazılışı ilə) qaytarır, yoxdursa yazılanı */
+const matchIn=(arr,v)=>arr.find(x=>fk(x)===fk(v))||v;
+/* seçilmiş üst kateqoriya üçün BÜTÜN kateqoriyalar (qrup başlığı altında) */
+function catOptions(d){
+  return (MENU[d]||[]).map(g=>{
+    const leaves=[...g.i,...g.x].filter((v,i,arr)=>arr.indexOf(v)===i);
+    return '<optgroup label="'+esc(g.t)+'">'+leaves.map(v=>'<option value="'+esc(g.t+'||'+v)+'">'+esc(v)+'</option>').join('')+'</optgroup>';
+  }).join('');
+}
+function syncCat(keep){
+  const d=$('#pDept').value;
+  const cur=keep===undefined?$('#pCat').value:keep;
+  $('#pCat').innerHTML='<option value="">Seçin</option>'+((d&&d!==OTHER)?catOptions(d):'')+(d?'<option value="'+OTHER+'">✎ Özüm yazım</option>':'');
+  $('#pCat').disabled=!d;
+  $('#pCat').value=[...$('#pCat').options].some(o=>o.value===cur)?cur:'';
+  if(d===OTHER)$('#pCat').value=OTHER; /* yeni üst kateqoriyanın hazır kateqoriyası yoxdur */
+  syncOther('pCat','pCatO');
+}
+/* seçimdən (və ya yazılandan) {category, subcategory} çıxarır: siyahıdakı sözün qrupu avtomatik tapılır */
+function resolveCat(dept){
+  const v=$('#pCat').value;
+  if(v&&v!==OTHER){const [g,l]=v.split('||');return {category:g,subcategory:l||''}}
+  const typed=getVal('pCat','pCatO');
+  if(!typed) return {category:'',subcategory:''};
+  const gs=MENU[dept]||[];
+  if(grpOn()){
+    const g=gs.find(x=>x.t===$('#pCatG').value);
+    if(g){
+      if(fk(typed)===fk(g.t)) return {category:g.t,subcategory:''};
+      const leaf=[...g.i,...g.x].find(x=>fk(x)===fk(typed));
+      return {category:g.t,subcategory:leaf||typed};
+    }
+  }
+  const grp=gs.find(g=>fk(g.t)===fk(typed));
+  if(grp) return {category:grp.t,subcategory:''};
+  for(const g of gs){
+    const leaf=[...g.i,...g.x].find(x=>fk(x)===fk(typed));
+    if(leaf) return {category:g.t,subcategory:leaf};
+  }
+  return {category:typed,subcategory:''};
+}
+
 /* ---------- Seçimlər ("Özüm yazım" dəstəyi ilə) ---------- */
 let OPT={categories:[],genders:[],age_groups:[],clothing_sizes:[],shoe_sizes:[],colors:[],size_classes:[],storage_enabled:false};
-const OTHERS=[['pCat','pCatO'],['pColor','pColorO'],['pSizeClass','pSizeClassO']];
+const OTHERS=[['pDept','pDeptO'],['pCat','pCatO'],['pColor','pColorO'],['pSizeClass','pSizeClassO']];
 function fillSel(id,vals,withOther){
   $('#'+id).innerHTML='<option value="">Seçin</option>'+vals.map(v=>'<option>'+esc(v)+'</option>').join('')+(withOther?'<option value="'+OTHER+'">✎ Özüm yazım</option>':'');
 }
@@ -649,6 +892,17 @@ function syncOther(sel,oth){
   const on=$('#'+sel).value===OTHER;
   $('#'+oth).classList.toggle('hide',!on);
   if(!on) $('#'+oth).value='';
+  if(sel==='pCat') syncGrp();
+}
+/* Kateqoriyada "Özüm yazım" seçiləndə: "Hansı başlıq" xanası (seçilmiş üst kateqoriyanın başlıqları) */
+function grpOn(){return $('#pCat').value===OTHER&&!!$('#pDept').value&&$('#pDept').value!==OTHER&&(MENU[$('#pDept').value]||[]).length>0}
+function syncGrp(){
+  const on=grpOn();
+  ['pCatGL','pCatGW'].forEach(id=>$('#'+id).classList.toggle('hide',!on));
+  if(!on){$('#pCatG').innerHTML='';return}
+  const cur=$('#pCatG').value;
+  $('#pCatG').innerHTML='<option value="">Seçin</option>'+(MENU[$('#pDept').value]||[]).map(g=>'<option>'+esc(g.t)+'</option>').join('');
+  $('#pCatG').value=[...$('#pCatG').options].some(o=>o.value===cur)?cur:'';
 }
 function syncOthers(){OTHERS.forEach(([s,o])=>syncOther(s,o))}
 OTHERS.forEach(([s,o])=>$('#'+s).addEventListener('change',()=>{syncOther(s,o);if($('#'+s).value===OTHER)$('#'+o).focus()}));
@@ -660,7 +914,7 @@ function setVal(sel,oth,v){
   else{s.value=OTHER;syncOther(sel,oth);$('#'+oth).classList.remove('hide');$('#'+oth).value=v}
 }
 function renderSizeChips(keepChecked=true){
-  const cat=$('#pCat').value;
+  const cat=($('#pCat').value||'').split('||')[0];
   const keep=keepChecked?[...document.querySelectorAll('#pSizes input:checked')].map(i=>i.value):[];
   const grp=(title,arr)=>arr.length?'<div class="sg"><div class="sgt">'+title+'</div><div class="chips sz">'+arr.map(v=>'<label><input type="checkbox" value="'+esc(v)+'"'+(keep.includes(v)?' checked':'')+'>'+esc(v)+'</label>').join('')+'</div></div>':'';
   $('#pSizes').innerHTML=(cat!=='Ayaqqabı'?grp('Geyim ölçüləri',OPT.clothing_sizes):'')+(cat!=='Geyim'?grp('Ayaqqabı ölçüləri',OPT.shoe_sizes):'');
@@ -668,17 +922,84 @@ function renderSizeChips(keepChecked=true){
 const isKid=()=>$('#pGender').value==='Qız'||$('#pGender').value==='Oğlan';
 function syncKid(){
   $('#ageWrap').classList.toggle('hide',!isKid());
-  $('#sizeWrap').classList.toggle('hide',isKid());
+  $('#sizeWrap').classList.toggle('hide',isKid()||$('#useVar').checked);
+  if($('#useVar').checked)renderVars();
+  syncSZStock();
 }
-$('#pCat').addEventListener('change',()=>renderSizeChips(true));
+$('#pCat').addEventListener('change',()=>{renderSizeChips(true);if($('#useVar').checked)renderVars();else fillSizeHints()});
+$('#pDept').addEventListener('change',()=>{syncCat('');renderSizeChips(true);if($('#useVar').checked)renderVars();else fillSizeHints()});
 $('#pGender').addEventListener('change',syncKid);
 async function loadOptions(){
   try{const r=await fetch('/api/options');OPT=Object.assign(OPT,await r.json())}catch(e){}
-  fillSel('pCat',OPT.categories,true);fillSel('pGender',OPT.genders);fillSel('pAge',OPT.age_groups);
+  fillSel('pDept',Object.keys(MENU),true);syncCat('');fillSel('pGender',OPT.genders);fillSel('pAge',OPT.age_groups);
   fillSel('pColor',OPT.colors,true);fillSel('pSizeClass',OPT.size_classes,true);
-  renderSizeChips(false);syncKid();syncOthers();
+  renderSizeChips(false);syncKid();syncOthers();fillSizeHints();
   syncVideoUI();
 }
+
+/* ---------- Ölçü + stok (rəngsiz rejim) ---------- */
+let SZ=[]; // {s: ölçü, q: stok}
+function renderSZ(){
+  SZ.sort((x,y)=>sizeCmp(x.s,y.s));
+  fillSizeHints();
+  $('#pSzList').innerHTML=SZ.map((z,k)=>'<label class="vsi"><b>'+esc(z.s)+'</b><button type="button" class="vsr" data-k="'+k+'" aria-label="Sil">✕</button><input type="number" min="0" step="1" inputmode="numeric" class="vsq" data-k="'+k+'" placeholder="Stok" value="'+esc(z.q)+'"></label>').join('');
+  syncSZStock();
+  szRowUI();
+}
+let szOpen=false;
+function szRowUI(){const has=SZ.length>0;$('#pSzOpen').classList.toggle('hide',!has||szOpen);$('#pSzRow').classList.toggle('hide',has&&!szOpen)}
+/* Ölçü varsa ümumi stok avtomatik hesablanır və əl ilə dəyişdirilmir */
+function syncSZStock(){
+  const st=$('#pStock');
+  const has=SZ.length>0&&!isKid()&&!$('#useVar').checked;
+  st.disabled=has;
+  if(has) st.value=SZ.reduce((a,z)=>a+(parseInt(z.q,10)||0),0);
+}
+/* ölçüləri sıralama: əvvəl rəqəmlər (artan), sonra XS..XXL, sonra qalanı əlifba ilə */
+const SIZE_ORDER=['XXXS','XXS','XS','S','M','L','XL','XXL','2XL','XXXL','3XL','4XL','5XL'];
+function sizeCmp(a,b){
+  const da=/^\d/.test(a),db=/^\d/.test(b);
+  if(da&&db){const d=parseFloat(a.replace(',','.'))-parseFloat(b.replace(',','.'));return d||a.localeCompare(b,undefined,{numeric:true})}
+  if(da!==db) return da?-1:1;
+  const ia=SIZE_ORDER.indexOf(a),ib=SIZE_ORDER.indexOf(b);
+  if(ia>=0&&ib>=0) return ia-ib;
+  if(ia>=0!==ib>=0) return ia>=0?-1:1;
+  return a.localeCompare(b,undefined,{numeric:true});
+}
+const parseSizes=str=>String(str||'').split(/[\s,;]+/).map(x=>x.trim().toUpperCase()).filter(Boolean);
+/* list-ə yeni ölçüləri əlavə edir (təkrarsız), sıralayır; {added,dup,full} qaytarır */
+function mergeSizes(list,raw){
+  let added=0,dup=0,full=false;
+  parseSizes(raw).forEach(z=>{
+    if(list.some(x=>x.s===z)){dup++;return}
+    if(list.length>=30){full=true;return}
+    list.push({s:z,q:''});added++;
+  });
+  list.sort((a,b)=>sizeCmp(a.s,b.s));
+  return {added,dup,full};
+}
+function addSZ(){
+  const inp=$('#pSzIn');
+  if(!parseSizes(inp.value).length) return toast('Əvvəl ölçünü yazın');
+  const r=mergeSizes(SZ,inp.value);
+  inp.value='';
+  renderSZ();
+  if(r.full) toast('Ən çox 30 ölçü əlavə etmək olar');
+  else if(r.dup&&!r.added) toast('Bu ölçü artıq əlavə olunub');
+  const q=[...$('#pSzList').querySelectorAll('.vsq')].find(i=>!i.value);
+  if(q) q.focus();
+}
+$('#pSzAdd').onclick=()=>{addSZ();szOpen=false;szRowUI()};
+$('#pSzOpen').onclick=()=>{szOpen=true;szRowUI();$('#pSzIn').focus()};
+$('#pSzIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSZ()}});
+$('#pSzList').addEventListener('input',e=>{
+  if(e.target.classList.contains('vsq')){SZ[+e.target.dataset.k].q=e.target.value;syncSZStock()}
+});
+$('#pSzList').addEventListener('click',e=>{
+  const r=e.target.closest('.vsr');
+  if(r){e.preventDefault();SZ.splice(+r.dataset.k,1);renderSZ()}
+});
+
 loadOptions();
 
 /* ---------- Şəkil və video yükləmə ---------- */
@@ -787,15 +1108,121 @@ $('#vFile').addEventListener('change',()=>{
   if(!videoType(f)) toast('Dəstəklənən formatlar: MP4, MOV, WEBM');
 });
 
+const COLOR_HEX={'Lacivərd':'#000352','Meşə yaşılı':'#3B6633','Narıncı':'#FF6700','Parlaq qızılı':'#FFD700','Metal qızıl':'#D4AF37','Nanə-firuzəyi':'#1CFFC7','Qara':'#1E1E1E','Ağ':'#FFFFFF','Qırmızı':'#C73E1D','Mavi':'#2F6FB3','Yaşıl':'#2E7D4F','Sarı':'#E9B949','Çəhrayı':'#E88FB0','Boz':'#8C8C8C','Qəhvəyi':'#7A5230','Bej':'#D8C3A5'};
+const RAINBOW='url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAggklEQVR42s2ce5Bk113fP7/fObe757GzL81KWj0sYQuE1togSwjLERmtHxRQgEM5uzGSMYkDdqqwbPNIBUiF0RbBIUUR5KicxCYQ7NiK2cGAgFAYWYy2yrJseRdkSbuSJbBkPZC0q33Mu7vvPeeXP865t+/MrgQScshU3brdfbvv9P3e7+/7e54Wvkl/BsKBvcr0MZE9B6t1x774xjGCm6YfrqjoOV+V12HSiQGIoECMMoxF916/qoEj8Sif23pcvjS31j7P/MyMv2HHDmNuLgrYN+M65FUHxhDunnFtUOyLbxwj6i6q4fcQ/O5ocg1RplVlCgScQhSIQLS0N4EqARYX4qI9o8ftOXfIiA8Q7M+Kzo4j8usjwOZnZvwNBw+GVxsoeVUZMz8CxkD40huup9Ifi5W+TUUupqdQAv0IpRGHGGAWzWpQxICQToAhVIgWIjiFx7rwvKOqIjG4J63SOzVUnyh++8+/UAPzagMlrw5r9jqRuQBg86/ZQm/ru2P0N6nItRQKKwHrByxSYQhBhIhIFMGkYY0ZSJtBlhlUYeLM4sBZ9dWeUakvKsWZpyqNyrgvIp8+Vgw/eeknDp4GsL17ncyl7/QPBpAZwtxelX1zwT5GEa7a/UExuVl77mLWIC4HUyNEE5WAJhPKDAlgMQOSgWhMzJK5WQQxSc8REKF8cJxwSqCSaEOLcahuDC9OPCtDe5Igtz1yyfGPXPPxw6Wx18HfT59eMUB2ACf7SKw5vOsdqPs5usU1LAdiv6oIqARUomBRGlAwGm0hZLbEOAKoAUsSo2pwUGKpDO/vIauOsGBp6wux1Ki42PUdP97p0Y8cKgO/MnXojs8mc9/rhFfGplcEkM3PeNlzsLLPfcsOzpv4NQp9F0OIq7Ei4MRMJBgWRmwhpIsmWOs5WLDEonA2cOrXBJxQnegxPFQwfL4kLguiHhGP4EA8Zs7EfJh0Pa9SMDT91Olq7WfOf+D3j9nMrJeD+6tvKkAGwqGrvVxzuLT7Xj9DT3+Drl4WT1WBiAii1BcbrLUlBkkAq6xhjwVDWmDVpoW1wDLBAmihrHxhgrWHKjBBXYGIQ8QDDswDHsxhuIh1bWsx4YZRH1sx+Ylt9//GQbv6vQWHP169HJPTl6U3NityzeHS/mLXB5mQO8Eui6fLSgQniDb/tr71DQsMYsRiTOYUApI3YgAL6XgIECJUMe1DxIYR7QT6R5SV+4dJirzPuqR5863HDpVCVZ07VVaVoZdNMHbnwpUf+KAc/njJ7KzYyyCG/l3BueUWRGR/DIcv/whjcqutVUVYq6Iqfj0olh5GEDOI2YQySAkgI0ZLx4NlQAISRsBQRaw0tAj0v6Ys3q2Ik2ROUUBcZo6DqAgFYh7FI+YRczjxfrWy2I9WTLjxWxev/Hcfkf374y3MiiWE/9Y//3dizi2zsn///mj3vfbTbOvcGE+UFQGngppZy1oTEBYBIs2hDBQWM7kTiLUXs1AHiAZR02kiaCcy/BvP8nwHUYc6h1htVrVJeSSblljrdQqwAsVriM6WYgxbOls+cGr3L52z9YF/fxOglr61vWINSlExjruJfO/0/+Kc6RvjqViKSNGc2tJpJEoyiUZ3gMqSxwqWHoeY9yRdqur35M/UGlQJUkC1KCz80Tg28IjzED1OHZBBkRZAOLAig5TAMQpMCqDArCDiy23dbcWpqrp961eXfpQZlIP7XzKofGkTO4yXPVTxzZtuZXryxnDKShErEnLrMTYzrL71FpG8x+LItOogsHHtEauZU7MsgCjEFVj80zHiqkd8MhsVl5niIHokeoQiPbYEFrGAWCDWQeik4xlEpShODNfKrW7Ljcev3H6rHNxfcfXH/CvSIDOcXENp82M361Tn5ni6UypW1EFbQ55ad4hJUwCRBBjRWkC1gLAcHFrSITNrvBUWiZWxcFePeNrhOoqE5MqVBEi68A5k3RErIHYQ60A+ZiTmQHotscmD+OJEtVxOdiZvfuaq/36zHH5faXsPuJcFkB3AiRDszk3X0bVbKYtgUXxz9XKmfTYMor5gWo/zRutxHUEbKJJFPZ1rab5L9TcdtKcQPSqK4BBa5oRLDIoj0MjmNQKnSJ8Rn0RdknkGE79aDcOYjt369FX/4zqZ2xcOvAhIZwBksyh7MfvDyXPoVp/GkFh1RQVpEBHJHKIVtNBih61nTf3XjpQtm5klkbYAosbyPV2G3+jgxhVCkYHJwpyFWKxIW9YaYtonkGpwsslZMjHDY1YkYMXLEJGoTrwb//QzV3/6nL1X7LVZZvVvZ9AuRIRIr7yNXnVpHGgQX+jIJY1gadtjQ6naPdWa02YMI9NKJ8hlDgMtjMUvdll7uIcbVwTFiaLiUPFoA5JHYg1QJ7v3pEPEIns03zCoBgcKIp4gnqgFpl5XqiqM+4lL+2q3yX6Jt+zdJS8JkM3jZR+hvLPzdjbxTk5biTqP6DpIxOogMF+osDH8zU/bLIrZhFpsy1G0eGPxywVrR3u4SU2u3ByCNsKcNp/NLLv0qFmgW+ZXs6t2+ZLZg8PEYeKJOCIO1PkTYaWc7G5+55E3/e+3y9y+MD8z68/q5i0przCHj1s7X9EeV8ZVM+lOKJPnZZbo6OIbk0qnSPFMjoRLg761XHhy5xLAgkCVt5CCv4W7leVDHYoJh1OHE49ogUonmU/lsqkUjXkl8fWNl6p1x6QDkkwpis+AeII4ojoCea+eSpSAxI6fkBWqB20xfOeuo3srGWWBLQbN40SIbB37SZ3S3XHVgjTHswCJbTCylvDScv1ypkuk8VYxFca8gvU5dccay3cP8G4AVYAypR+yugbHTiMnltGh5dyrS4yeaAXWFmwZbZJTDsM1W8RhKNEUE0eUuvIimDhdif2wuZjaHabcTwoS52dm3bpLacKaz2+dIq4eRe38OBQTNbWii2y5YANj2q66bV0pp2JosFYHgTEHikDQxKa1FeKCsfTQaxm6q+m96Qo63345unkLog6LETu9hD38ODz4dezok8QnXsDpGL1NU0Q8VfCE6Im159LOSJgpMPUEKUA8lToiShCXNUipxFGKSwUGNDrXlYrw7LAsr7j68N7FTAtL9nY3TvZQ2Wf772KT7YwnQyUiHhEYH0KsQDtZX1rVPquDdUvlCQSR7N/MRu8n507VCgyHcN53E3fdxMS/eDObd07n+xSwxr3lRHTPHowSO3mK8suP8tjcfZy8+zF2IExPjDFuwrhpo0dBHJV4Ao6AgigmipmkPYKlYiYBSUE7SlTRMpbVVDG1cxgX3yXIR+dn5j0HqaRx7buQEDpfcb34HQyIJuZSXSYiF+6E8c3ZLdMCp+2VWp6qH2ElsykIBAcrJ2HiddhV/xZe+3bwXYgr2KBsMGnArR0BqSKL94gfZwAc/txR7tj/Rzx3/5PsOGeM7RgXSofzfYcLOx12aMGYeHraQfCUKH0cq6JUqok1OCp1VPm1qEJEQ1cLfb5cuf/kJfKdR+aO2H72R6krg8NP+X/se3xBhiEa2mgPlWGbxpGLL0rmkhmTM9JMkrqOnIEaZICCIdFha6ewC/di3/XLMLEDGS5iIYJqjqky1rV2mSCNZ5SkXSEiKmhvjNXFJX7z5/+QO//nIbpTE5RZTjtqTEpkszp2+h6v60xyru9wjnq2+C7eFVQ4BqasIgydUjpNBU4zglk8ZarPlf3rf+Kr77rnwN4DznMkfT8RfY8UwWKfKJg23kkVltZgaRkmJ5OINq66JWVipPAxV1simCgyXIDX/yx21S9ANYD+6WRu6tLHWqIvdQIslqFJeici4B1mRrm6wthYh5s/+m4ueM35/M4tn2PL1FhK4wyWTTkd4evVkHvKJZwqYwI7ih7ndca4yHfZKR22ui5jWqAIVQysWuB0CDFIT0JVvQe458ixI5KKRwfoxb5/TIt4ASXRUuAz+ooRrNdFLr1wxBgsBXnt1L/2VP0AS0D/BPbtP4NdNYsMFjJLtMlYXqxsebYawwgwsGhEM4qxTdy+/4/5zIc/z6bpKWJURDIrRUEVE6EiUpF0CEmZ2mbX4TXdSc4vevQMzIQSiUFU+9XgmcHC5GU/8/S+vhew4cLYlW6iOp8h0WwETjvkkaU1OH4Szp1O7riupY+KPjkXA7RAyhewi98B/+gXkcFi4ofmCEM2gNEuKcnZgZL8H9L5Jd35/jI3zn4/zz2+wD1/8DV6W8cIITafM61P6OiI4NQ3LF02eGiwyiNlnwlRdjjPtHa0wEcnY+cztXolcJ+m/zd4q/qosSI2tZrclmkK7KLw3ElYXcmd0JZQ11/dUmuGOICJb8Wu+jAW+lg2E3uRapQ1FckW3nK2nGYEldQ3pVrjPf/p+9h+yXYGQ8AnFx+dxzRtOI+5gqBKVMWc4tTRU0dPU7R9HOEJ4JSFqOK1svjWJlCMQXczNKxCUgu4VfSKkgCLpDLoE89DVa7Pqeoir1gCsuoTv+0DMH4+hH4K3M5WCK7xbdGqEeyzBJ2SVa5mkzqlGga2nLuFd/78dzMYBiwDZOpBPTiX9uqSU9Ds+kVTwCgpY3EilMDTVHLMBsRY7U6X9EkmquXiiO/G1zAkGiSBbl+NSMMWKwPs2AKX7ECCbUhYBeIa5i6HN3w2UdxeonS5kSWy4Vwi6yi0/m01TPXe8wvv+D0euf95ehMF0SJtHZUcRkiuDyigojgRvKTnXhQxiU4L3RSG3/hW39ulrDCtxO0MIUaRpgXT7mdVo8RSnUeOLcELS+nuxNbVqgMq5KJ3QjGVIus2GCIvXuzdeEPW6Rvr2LVRwGIwfKdgz75vZ1CGlMOKYjraktdMLDJVzDnQFDiOGCWp/i+RZee2HxmEaV8Nu5f7TpyMZVwvizbieiJUi1UmyF+/AGNdrNdJlUPV1DIttmFbvhuLfRpnCGdR5bO4q/Zh2fC4ddwskzqHBqpAHHDNntew9fwpVlaGOK+1nieWSXIQIjTfqy5xRRFUmn8opQXraHdytRsu1xCcqzVGAjnTZlRYj7kgH9NzqzuigwCPHks322kK6Ko1mNiNjV2ShLqm95ntx7O5qA0lyrMxq03ExukjIoRh5JwLJrjo9eewOqigcJjTLMx5XkKFqFl3JD/WxJz60gPp9cQqnBZWXocYBOK64YLY3kYAUZcr1MPCEB4/AUVu2lnExi8H6aS4SFpFtBfto9hZgTirmLeftswvZTkREeXC6y9jKB2iUyoVgrZAUknAiI7AyVtQSZenQhSN4gtwcp3H6DUXX4uxtbSgKWm0uCAgkWTPT5yGiS5y0TnoqhL9uU13tfFcIi8REMqZpZHGnBv7XmeVQquh1ZijAoGxS6c5tXkz222NoXrUQipySoqd6rvW5NuS/KJvVX7MIpUYpcWep9JIEVtiq031bJ0stL9o+2ZHxY6egMkxjArYnC9C6pbZi0bHZ63fSkt87MzPt6MCsfWdFVA2TXge33E+l5x4PF9S+t4qkrL7nMUrrdwvI+6QxMRaaVSj15a2CCMW2UsIqEVrkUKQMmIPH4OLUxJ71sJZfb2tL2U5azdpRdgmObBsv6nFno35X04TLJd7vUVWp7byfHmC7adPUnqPQ0GMmN17E03l/5E+mYotDkFVCeqIpvgYUK0kCbQ0vFunkvVTkfbMTlt0BXmhhN4As8Uz9VXWl64tX2gdz6xLP+RslckRQiaj6qW1VKAG9PTyEMKAx8/ZyabllcwSI4o2MbjUpiU1awy13LTS9FpwShlRr5X28ZE8CsXILkaZdX1XUze7XTBrX5giTxss/80I3ybAbL9vg7WdzeufNXC00YxETlvacVE+ypPHS4gVixNTPLN1mgtPPU/pHGqgms1L0l4MohgqoDnaT2ORhhKplL6votzrB4JVptISmY2pgeTm3sjeZb3ZOLAV4MjDyJWWxY8NvUZZl0es0wDbIDfCGSxdXzPKQGVGKYKFwKFvBOiM4zCemj6frWuLFFVFcOnia3AgsSYKufOWpneiGQo6pMJE7lVfElLcI63ci5Fbr80v5NG5piOR3qtRUzJTRnAeHroHTjyVKoYWWyXYDXGPrI+K247OzoiFZN3+jBtnKag/dirw1ecCOtFD1DPojfPUjguBSCWJGWUT3mnubrhcaZT0nhwOBOeonAuKhUdiybITEYvZEVUgLRCsjn/WbZrFvRUbSQ8WnoOv/Tm4HlKXaOtevtmZKNj6wF3grN6ybUYjrBJ7ooF4x/zXhjy77OiNdzDvKCRyYus5nJqaSu/zKXiMzhGdy7FP3rTxXFa5jgwIy9HJI0q15ThRTkCum4d66LI1eHkGMLr+tarFMBPky59CQpkzZ0s+Q1o+gFEuKi17MhmZtp0lREq+x0al8JpDAjEIv/WVIXQ9UngoOming3W6PL/zUoL3BE3BY2IKVDnSbjanVKoWvadUTqx2yuMqv/b8ClG+hDiIzmRDapFSDXL/fEMa0gCkaSsN/AR87SBy5C7o1gnrunLXmUm9rY+0W82SdQyzlnbVeVSIEd9VPv/wgLv+esjYZAICn+s+BJYmNnFqy1ZiDJQ1SA0ojsqlIn5QpRLMfI+g7kt33vnuFQWwkgcwgZAn0zIwxMSWWCkSNGtRmzXZtGL7tRRocscvw2AVUd/qfsgZRcPRMMRImqSdc7Wlq+298lCaqFAOlV+8awgdjxYChUMKh3gHRQHec2znJQy6vUZ3QmZSmcGqcgG/dGKV9wxVHhgVzJx9nr5FNVULI2BqFo1mnVt604AzAk1CFms/CY9+Afn9D0NnMrWkRZBWwGO0om3jxWe8ciDYNARa4EYzfEfZf9eALz8DY+MuBYMqiKsBcqjCcGKKhenziBapnFIJlErWnxT3BHVE9ToI/WhqnyfP6cmh67Y/uOI6z4KpBY0Ng0I9Wlf303W9BlUZlCBIEKwir8UIWG8K/vRXkS9+BhnbAqFsKtct1Rm5f5Gz5h4mkrsc1piVAVWMdHqO2/8y8OEvDBmbgKgK3oHLTXOX5qslg7R43gWUvW66PM1C7TSDIwTVGIuuDiifLTfzICB69+yMe9O+p9eOXLjzc/QK04poVoPgiDUosV6Rk3UppOfWdvu1V6tASsGKAj71XvjK72FjW7EYkFaxZ2Rio0hxY0hQl1hrYAJGjNDtOX73qPEv/9ToTnjEpVVD4l2qmbef+zSgMhwfZ3nHNBAJ3mWQlKCJTaXGSHfcYtH53Jfm9q3NzMw7Pb5rhwEcvXT6tx696DyhErW6YF9PsgTJbl/WlUIkjryXlRmsmNZWSDSkclg1xP7bjciffRTpbQE/hsVq1Hg8azF+QzmjaewFCvEUPeGjRwfc+CcgheB8XTU0TK0BB6egkhJ9B2KB5elzCZ2CyKg+FHJ7KIjoMPYliP0WwI4dx83NzR212Vn0Q3c98cw91772Bzvj7vxtTy1GcGrqkBoISzrU5GGm61fl5KHxhgwmWAl4h3QiPPDHyMnHkQuuhC0XpHp1qEaRu1juoY+qCKlbb6gI3hU41+XRwRI/+Y1H+NWD2+haF+eMmDux0qp8pP5YEvY6EleE2B3HD9fwy8tEp02aZOKCdsY0hNX7H+qVsxy9Qo4efX9UgBtumFGZI8ig/5uPfds2+cs37LSgBbpqUMm6kYLk5XS9q4+KmDYD5FbV5ejMXelgY1OEr3yC8GtvhN95P/rsw7juJlx3M64zgafAi+JJ80Hedei4cTpuDGfGV1dO8NNPH+K6J+/idx7axuawGdcJuRRuiEqqr/q6Ds3oNaep6qmCqbCy7Rwql4pntXoENbPOmMTO2G8yty/MzNygZ4y/zM1dPdXDjoYpf3731MAue3hBL3liGb8aUhCigNNWLj3qaYkJFiOa5w7XRX4aweVm4/gAOka1ZQeDi69j7bUz9F93Bez4Fsb8FlSVMgZOhDX+arDIg8MF5pef596lBVakT2fhdRR/dQMSy7xYJs9fR0tLHUI9XVsvs8qT/qklm8slgalHjtAbVEQVJMaoqoKFZ6PvXfH1ubcu1uLYqOHs7Izfv/9g9Qd/cPVPTY7rf36uH6qwqfBbVwIXPrXGeU+tMXW6pLs0RNcqtDxLGVWN4JRYOPpdZa1XsDLuWRj3LEx0ODVZcGxqnOe3jnFSIgvDFRYF+uOTDCe3o7KJgRQs+y7PieeYOYZM4JhkrJhA3Tj26FsIJ6cRG+bwg2Z5Qw0U9cI8s1S7iqORQI2R6D3u648ydWqRwnssVJXrTPqwevKnH//Df/rrzMx68sog2RDQytzcFT74zld6U/7KgWF+S6Fuk6NQ8CV0VgLFasCtBGKZ5zWBqugwLBwrhWO5W7BUKMuqrDhlGaFvMDBHGWFYRUqDCpcGmaIwiMYawiqegfQYukkGbhNBJ4nSIxSGLV6JPvEWiIPkEAxisDQpkif868UzI4AYDZPWUbvvwHNPod94nJ5odL4jIQwe3C6XfufRK3ZV7B+N4K2fDb5hxr3/Bw6VP/yj5z3b2dz5EelotWlKXCcaEiFIZNCD1SnP0vaCxekuC9NdTk93ObW1w8lJx8K4Y7lQ1sQoYyRUAcqIlBE3jGgZU2xlSmVGCEYlkqa/NM0YRvWUeIYolSlBAHX4594Cg8k8/iRNNCBNnUlaEbg0eZpongvIyZ94h1QDZOkUfawqnXdrYeV9z/7unqOA4xsH41mnXPfvOVgdsL3uXT9w/x39oJ/ZsXOsCDFUlUVCvTilzNMbawFbC1g/EteM0A+EYUxbFQnRKBFKcZTqKJ1r5nFKVUqBICl6DeRhJqsXIQoxK75SIiwhSxcTVs8FHWThTe47LfqR1Fb2guUcrA4SR5vW8+eYAhoRb1Uxtb1QKT+z9tm9d7D3gGPDorsz5qSP3DJnZrMae8XN/UH/8W7XuRiJIUaqGNPYoSilpBrKABiIMQCGCEMkAYNSoQSEYEKIeV+v6RUliCZg0uLmPEOY2i+pmBnASjQKbuHaBhBRRo+dNFsDnFu/H0XWmt8XkTiIOrHJ4arHw+T4zcyacsWRMxKeM8bvDx7Edu3aoT/ytj9Z2fsT0/c5X7zHEBuGFBIFgzKmCypNqUwYAoOolJaAGeZ9ZUIZ6/cIVTaZUoQhmsHUDGZmEY4yj86ZOKIOkHI3bnkGpY+IJvddx9k2ylLaxf+muVj35DWZnWqKC/zaqmlVYtXaDyx+/C2PsmOX8l/fH/9OazX27ZsLB2yv+6Hdf3nv2hof8j3nUKmqKFRWXzgMIwxNGIZkCEOEQX4tHZd0vAEis8sSa9IwZT1loY2plc3ysUg0hw7ehFPDe0nt/3ae5XO07FILumaVOTdKN2oTrItlQuW8d6LhQ6c+/rZ7OWCOuX3hZa322Sdz4dChq4u37/7ibQtL4bbJbb2iMi0rc5S4dMGmGaQkTYlBGRST9NyE0mBYm6DUIJFNUFssUoaW9ok9fYrwenx5Gbg+ubo+MjOX1ndIrUcZKGnSizO1KBZauu5YEVdO3nb81utv472HCvZJeEXrxa65+nA1Pz/jH9r9PR964YTdPr51vCgjZRmhjK4FgCSgIpSmrU2yviTGlJBZlMApUQYoQxxDlIFommnO88smBZ3qzSh5KHCjBuVN1UaCrc1ioPxewRqAKIvJicItPHf7ibH/8yFmzfPxq6tXvmZVsD03HAzcsp8bdx+86cTp6vax7eNFhauG0SwBpVTmqMxRmmsY04BhiWFDhFKyqYljKI4BLoPjGIpnIC6xB09gQGHfhY+vQ10/mVAzAyUJDKFJH2pQRixLoJgXzGHmpXLbJgtZW7n95M9edBPcAvsJG5YPvPw1qwh2SzqF/vh33H3TbYf3vKA9/4G4ZpTRYoloAkRbAi1URuPNSpHGnIIkQMtGkNPE+9AcwdJxIyBMMh7eClQ4l8u+zTL63ObZ2MLLolzPsBuCWYyiXqXT9bbc/y+n/9XkB5mdVW7BckD4Kq2bN2SWWdkv++N/vO/NH/S9zq+WUYuVflmViB80+pNNq34uWatEGu0aMGJPX9K+RAmmRBwly0y672ey/GeEsAJR82RrSi2iSbPqIcZWaaa1uDFPw1Z0ex6zUgblvzl9U+8jmGVs/3ZwXta6eQTbL/vtY4euLn7+2j//yGK/ettQeKy7ZdyXpmEYNSaxNkqMUkixEiO3PmiDk80smaUS8nKBKAMK2ckEbwXro7WLrmMZHa1s0HrcWkcrxPECatHUgmwZ86bxsTAYvO30Tb2P8DErXg44Lw+gfFPed83hcnZ+xv/StZ8/uLRcXr+6ap+Sia6TntfKtKpQC7hkPjWLWkI8bJnUEJdMqp5pNqhiyRb3drpMoVri1BDJWxpzRjWtBWhEutEmM5FY+ckx9VNjzqrqU2Fp7frlm8YPMmue90n5csD5e/24yd4De93cvvSDIf/63u97R+X9z0mvd83aWqBfWjUwdCiiA5PEFjZsklbcVFaPpDgqlpjSt7BJ/zkW1jBzOc+UbE7SLAmJUdLzaFi0SCTiu966iq2EQzHar5z8oeKzABww91Ku/KX+3CsF6OjcUTNDju7a6z75vXcckWtu+O1t24aLpcnl1aZia6kqgyFWqgtDEUpxUtXxU700SdMqwBiNKq6xxV/LOcUPEswR87SFqq5rLtaDCzldCyImMjamOlmoVeFJyvAfXnjqq+9du+mihzhgjgO3wOsl/oP+wFKbTTPzb9/S6/l3V+pvqrS4tuoVrPYDg6ExRKtSnAScBFRKTIIERCfYHK5lE9dgbhNBN6c1Y0gqw8a8Ej9g0cSi4fFdXFcJ/UhVxfssyqdXF5Y+ufDDW0//fVnzzfoNM5mZn3EHR79dJv/k0I9fv0r8sbUyvq1Ud3Hc1EsBY1kSVsHWOtZzl9rm3husE8+lDH2CjmP+vCQuqawjUQvBFVCkUmq5FAghPCkmd6rnE4+/sfhCoy3z8549N4SXqzX/z37kDUNm7l4HFBd+8afGJtzKrqrofU/hd+4u4rnXsLJ5uiPnTrliK1J0iBIxHKWB+c04v5lqmFIYK8tFET1ukUNReCCI/tlwUBx5+k0y+lW8efPcQMjdyf9/fwWvfe69B/bqseljcnDDzwT+1JM29uAxppdX/+KK2CldDHpdUN8JOa6pOh4v40N0+t416QTb0ju6o+D4ly6WdT8TyPy85/gNxr72zxK8un//F4Io2NRl60kQAAAAAElFTkSuQmCC) center/cover no-repeat';
+const colorHex=c=>c==='Rəngarəng'?RAINBOW:(COLOR_HEX[c]||'#CFCABD');
+/* ---------- Rəng variantları: hər rəngin öz şəkilləri, ölçüləri və stoku ---------- */
+let VARS=[];
+const newVar=()=>({color:'',o:false,stock:'',sz:[],imgs:[]});
+const varOn=()=>$('#useVar').checked;
+function fillSizeHints(){
+  const cat=($('#pCat').value||'').split('||')[0];
+  const base=[...(cat!=='Ayaqqabı'?OPT.clothing_sizes:[]),...(cat!=='Geyim'?OPT.shoe_sizes:[])];
+  $('#vsList').innerHTML=base.map(z=>'<option value="'+esc(z)+'">').join('');
+}
+function renderVars(){
+  const cols=OPT.colors.filter(c=>c!=='Digər'),kid=isKid();
+  VARS.forEach(v=>v.sz.sort((x,y)=>sizeCmp(x.s,y.s)));
+  fillSizeHints();
+  $('#varRows').innerHTML=VARS.map((v,i)=>{
+    const other=v.o||(v.color&&!cols.includes(v.color));
+    const selVal=other?OTHER:(v.color||'');
+    return '<div class="vr" data-i="'+i+'"><div class="vr-top"><div class="vsel"><i class="vdot" style="background:'+colorHex(v.color)+'"></i><select class="vc"><option value="">Rəng seçin</option>'+
+      cols.map(c=>'<option'+(c===selVal?' selected':'')+'>'+esc(c)+'</option>').join('')+'<option value="'+OTHER+'"'+(selVal===OTHER?' selected':'')+'>✎ Özüm yazım</option></select></div>'+
+      '<button type="button" class="vx">Sil</button></div>'+
+      (other?'<input class="vco" maxlength="40" placeholder="Rəngi özünüz yazın" value="'+esc(v.color)+'">':'')+
+      '<div class="vimg"><div class="vtl">Bu rəngin şəkilləri ('+v.imgs.length+'/'+MAXIMG+')</div>'+
+        v.imgs.map((m,k)=>'<div class="vi"><img src="'+esc(m.src)+'" alt=""><button type="button" class="vir" data-k="'+k+'" aria-label="Sil">✕</button></div>').join('')+
+        (v.imgs.length<MAXIMG?'<label class="vadd-img" title="Şəkil əlavə et">+<input type="file" class="vfile" accept="image/*" multiple hidden></label>':'')+'</div>'+
+      (kid?'':'<div class="vadd"><input class="vsn" list="vsList" maxlength="120" placeholder="Ölçü(lər): M L XL və ya 15 20 14" autocomplete="off"><button type="button" class="vplus" aria-label="Ölçü əlavə et">+</button></div>')+
+      (!kid&&v.sz.length?'<div class="vsl">'+v.sz.map((z,k)=>'<label class="vsi"><b>'+esc(z.s)+'</b><button type="button" class="vsr" data-k="'+k+'" aria-label="Sil">✕</button><input type="number" min="0" step="1" inputmode="numeric" class="vsq" data-k="'+k+'" placeholder="Stok" value="'+esc(z.q)+'"></label>').join('')+'</div>':'')+
+      ((kid||!v.sz.length)?'<div class="vns">Bu rəngdə stok:<input type="number" min="0" step="1" inputmode="numeric" class="vstock" placeholder="0" value="'+esc(v.stock)+'"></div>':'')+
+      '</div>';
+  }).join('');
+}
+function syncVarMode(){
+  const on=varOn();
+  $('#varBox').classList.toggle('hide',!on);
+  $('#pStock').closest('.f').classList.toggle('hide',on);
+  $('#pColor').closest('.f').classList.toggle('hide',on);
+  $('.pnr').classList.toggle('novs',on);
+  $('#sizeWrap').classList.toggle('hide',on||isKid());
+  if(on){if(!VARS.length)VARS.push(newVar());renderVars()}
+  syncSZStock();
+}
+function addVarSize(row){
+  const v=VARS[+row.dataset.i];if(!v)return;
+  const inp=row.querySelector('.vsn');
+  if(!parseSizes(inp.value).length)return toast('Əvvəl ölçünü yazın');
+  const r=mergeSizes(v.sz,inp.value);
+  if(r.full)toast('Ən çox 30 ölçü əlavə etmək olar');
+  else if(r.dup&&!r.added)toast('Bu ölçü artıq əlavə olunub');
+  renderVars();
+  const q=[...$('#varRows').querySelectorAll('.vr[data-i="'+row.dataset.i+'"] .vsq')].find(i=>!i.value);
+  if(q)q.focus();
+}
+$('#useVar').addEventListener('change',syncVarMode);
+$('#addVar').onclick=()=>{if(VARS.length>=10)return toast('Ən çox 10 rəng əlavə etmək olar');VARS.push(newVar());renderVars()};
+$('#varRows').addEventListener('input',e=>{
+  const row=e.target.closest('.vr');if(!row)return;
+  const v=VARS[+row.dataset.i];if(!v)return;
+  const t=e.target;
+  if(t.classList.contains('vsq'))v.sz[+t.dataset.k].q=t.value;
+  else if(t.classList.contains('vstock'))v.stock=t.value;
+  else if(t.classList.contains('vco')){v.color=t.value.trim();row.querySelector('.vdot').style.background=colorHex(v.color)}
+});
+$('#varRows').addEventListener('change',e=>{
+  const row=e.target.closest('.vr');if(!row)return;
+  const v=VARS[+row.dataset.i];if(!v)return;
+  if(e.target.classList.contains('vc')){
+    if(e.target.value===OTHER){v.o=true;v.color=''}else{v.o=false;v.color=e.target.value}
+    renderVars();
+  }else if(e.target.classList.contains('vfile')){
+    let skipped=false;
+    [...e.target.files].forEach(f=>{if(v.imgs.length>=MAXIMG){skipped=true;return}v.imgs.push({file:f,src:URL.createObjectURL(f)})});
+    if(skipped)toast('Hər rəng üçün ən çox '+MAXIMG+' şəkil');
+    renderVars();
+  }
+});
+$('#varRows').addEventListener('click',e=>{
+  const row=e.target.closest('.vr');if(!row)return;
+  const v=VARS[+row.dataset.i];if(!v)return;
+  if(e.target.closest('.vx')){VARS.splice(+row.dataset.i,1);if(!VARS.length)VARS.push(newVar());renderVars();return}
+  const ir=e.target.closest('.vir');if(ir){v.imgs.splice(+ir.dataset.k,1);renderVars();return}
+  const sr=e.target.closest('.vsr');if(sr){e.preventDefault();v.sz.splice(+sr.dataset.k,1);renderVars();return}
+  if(e.target.closest('.vplus'))addVarSize(row);
+});
+$('#varRows').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.classList.contains('vsn')){e.preventDefault();addVarSize(e.target.closest('.vr'))}
+});
+function collectVariants(){
+  const kid=isKid();
+  return VARS.filter(v=>v.color).map(v=>({
+    color:v.color,
+    stock:Math.max(0,parseInt(v.stock,10)||0),
+    sizes:kid?[]:v.sz.map(z=>({size:z.s,stock:Math.max(0,parseInt(z.q,10)||0)})),
+    images:v.imgs.filter(m=>m.url).map(m=>m.url)
+  }));
+}
+async function uploadVarImages(txt){
+  for(const v of VARS){
+    for(const m of v.imgs){
+      if(m.file){txt.textContent='Rəng şəkli yüklənir...';m.url=await uploadImageSmart(m.file);m.file=null}
+    }
+  }
+}
+
 /* ---------- Məhsul formu: əlavə et / redaktə et ---------- */
 let editId=null,editVideo='';
-const FORM_IDS=['pName','pPrice','pStock','pDesc','pFile','vFile','pBrand','pDim','pMat','pCat','pGender','pAge','pColor','pSizeClass','pCatO','pColorO','pSizeClassO','pSizeO'];
+const FORM_IDS=['pName','pBold','pPrice','pOld','pStock','pDesc','pFile','vFile','pBrand','pDim','pMat','pDept','pCat','pGender','pAge','pColor','pSizeClass','pDeptO','pCatO','pCatG','pColorO','pSizeClassO','pSizeO','pSzIn'];
 
 function resetForm(){
   editId=null;editVideo='';imgs=[];
   FORM_IDS.forEach(id=>$('#'+id).value='');
+  SZ=[];renderSZ();
+  VARS=[];$('#useVar').checked=false;syncVarMode();
   $('#vBar').classList.add('hide');syncVideoUI();
-  renderSizeChips(false);syncKid();syncOthers();renderImgs();updCnt();
+  renderSizeChips(false);syncKid();syncOthers();syncCat('');renderImgs();updCnt();
   $('#formTitle').textContent='Yeni məhsul əlavə et';
   $('#addTxt').textContent='Məhsulu əlavə et';
   $('#editBar').classList.add('hide');
@@ -806,8 +1233,16 @@ function startEdit(id){
   if(!p) return;
   resetForm();
   editId=p.id;editVideo=p.video_url||'';
-  $('#pName').value=p.name||'';$('#pPrice').value=p.price;$('#pStock').value=p.stock;
-  setVal('pCat','pCatO',p.category||'');
+  $('#pName').value=p.name||'';$('#pBold').value=p.name_bold||0;$('#pPrice').value=p.price;$('#pOld').value=p.old_price||'';$('#pStock').value=p.stock;
+  setVal('pDept','pDeptO',p.department||inferDept(p.category||''));
+  syncCat('');
+  const want=p.subcategory?(p.category+'||'+p.subcategory):'';
+  if(want&&[...$('#pCat').options].some(o=>o.value===want)){$('#pCat').value=want;syncOther('pCat','pCatO')}
+  else if(p.subcategory||p.category){
+    setVal('pCat','pCatO',p.subcategory||p.category);
+    syncGrp();
+    if(p.subcategory&&grpOn())$('#pCatG').value=p.category;
+  }
   $('#pBrand').value=p.brand||'';
   $('#pGender').value=p.gender||'';syncKid();
   renderSizeChips(false);
@@ -817,6 +1252,13 @@ function startEdit(id){
     if(i)i.checked=true;else extra.push(sz);
   });
   $('#pSizeO').value=extra.join(', ');
+  /* ölçü + stok */
+  SZ=(p.size_stock&&p.size_stock.length)
+    ? p.size_stock.map(z=>({s:z.size,q:String(z.stock)}))
+    : (p.sizes||[]).map(s=>({s:String(s).toUpperCase(),q:''}));
+  SZ.sort((a,b)=>sizeCmp(a.s,b.s));
+  renderSZ();
+  if(!SZ.length) $('#pStock').value=p.stock;
   $('#pAge').value=p.age_group||'';
   setVal('pColor','pColorO',p.color||'');
   setVal('pSizeClass','pSizeClassO',p.size_class||'');
@@ -829,6 +1271,11 @@ function startEdit(id){
   $('#formTitle').textContent='Məhsulu redaktə et';
   $('#addTxt').textContent='Dəyişiklikləri saxla';
   $('#editBar').classList.remove('hide');
+  if(p.variants&&p.variants.length){
+    VARS=p.variants.map(v=>({color:v.color,o:false,stock:v.stock||'',sz:(v.sizes||[]).map(q=>({s:q.size,q:String(q.stock)})).sort((a,b)=>sizeCmp(a.s,b.s)),imgs:(v.images||[]).map(u=>({src:bu(u),url:u}))}));
+    $('#useVar').checked=true;
+  }else{VARS=[];$('#useVar').checked=false}
+  syncVarMode();
   $('#cancelEdit').classList.remove('hide');
   updCnt();
   openM();
@@ -841,20 +1288,35 @@ $('#addP').onclick=async()=>{
   const kid=isKid();
   const chipSizes=[...document.querySelectorAll('#pSizes input:checked')].map(i=>i.value);
   const ownSizes=$('#pSizeO').value.split(',').map(x=>x.trim()).filter(Boolean);
+  /* indexdəki menyuda eyni ad varsa onu götürür (əlavə etmir), yoxdursa yazılanı yeni kimi göndərir */
+  const knownD=Object.keys(MENU);
+  const dept=matchIn(knownD,getVal('pDept','pDeptO'));
+  const {category:cat,subcategory:sub}=resolveCat(dept);
+  const variants=varOn()?collectVariants():[];
+  if(varOn()&&!variants.length) return toast('Ən azı bir rəng seçin');
   const p={
-    name:$('#pName').value.trim(),price:parseFloat($('#pPrice').value),stock:parseInt($('#pStock').value,10),
+    name:$('#pName').value.trim(),name_bold:Math.max(0,Math.min(30,parseInt($('#pBold').value,10)||0)),price:parseFloat($('#pPrice').value),old_price:parseFloat($('#pOld').value)||0,stock:parseInt($('#pStock').value,10),
     description:$('#pDesc').value.trim(),
-    category:getVal('pCat','pCatO'),brand:$('#pBrand').value.trim(),gender:$('#pGender').value,
+    department:dept,category:cat,subcategory:sub,brand:$('#pBrand').value.trim(),gender:$('#pGender').value,
     age_group:kid?$('#pAge').value:'',
     sizes:kid?[]:[...new Set([...chipSizes,...ownSizes])],
     color:getVal('pColor','pColorO'),size_class:getVal('pSizeClass','pSizeClassO'),
     dimensions:$('#pDim').value.trim(),material:$('#pMat').value.trim(),
-    video_url:editVideo
+    video_url:editVideo,variants
   };
+  if(variants.length){p.stock=variants.reduce((a,v)=>a+(v.sizes.length?v.sizes.reduce((q,z)=>q+z.stock,0):v.stock),0);p.color=variants[0].color;p.sizes=[]}
+  /* rəngsiz rejim: hər ölçünün öz stoku */
+  if(!varOn()&&!kid&&SZ.length){
+    p.size_stock=SZ.map(z=>({size:z.s,stock:Math.max(0,parseInt(z.q,10)||0)}));
+    p.sizes=p.size_stock.filter(z=>z.stock>0).map(z=>z.size);
+    p.stock=p.size_stock.reduce((a,z)=>a+z.stock,0);
+  }
   if(!p.name||isNaN(p.price)||isNaN(p.stock)) return toast('Ad, qiymət və stoku yazın');
   if(p.price<0||p.stock<0) return toast('Qiymət və stok mənfi ola bilməz');
+  if($('#pDept').value===OTHER&&!dept) return toast('Üst kateqoriyanı yazın və ya siyahıdan seçin');
+  if($('#pCat').value===OTHER&&grpOn()&&!$('#pCatG').value) return toast('Hansı başlığın altına əlavə olunacağını seçin');
   if($('#pCat').value===OTHER&&!p.category) return toast('Kateqoriyanı yazın və ya siyahıdan seçin');
-  if($('#pColor').value===OTHER&&!p.color) return toast('Rəngi yazın və ya siyahıdan seçin');
+  if(!varOn()&&$('#pColor').value===OTHER&&!p.color) return toast('Rəngi yazın və ya siyahıdan seçin');
   if($('#pSizeClass').value===OTHER&&!p.size_class) return toast('Boyutu yazın və ya siyahıdan seçin');
   const vfile=OPT.storage_enabled?$('#vFile').files[0]:null;
   if(vfile&&!videoType(vfile)) return toast('Video formatı dəstəklənmir (MP4, MOV, WEBM)');
@@ -875,6 +1337,7 @@ $('#addP').onclick=async()=>{
     }
     p.images=urls;
     p.image_url=urls[0]||'';
+    if(varOn()){await uploadVarImages(txt);p.variants=collectVariants()}
     if(vfile){
       txt.textContent='Video yüklənir... 0%';showBar(0);
       p.video_url=await storageUpload('video',vfile,videoType(vfile),pct=>{txt.textContent='Video yüklənir... '+pct+'%';showBar(pct)});
@@ -948,6 +1411,26 @@ $('#saveProf').onclick=async()=>{
 
 renderImgs();
 if(session()) openDash();
+
+/* ---------- şifrə sahələrində göz düyməsi: basanda şifrə görünür, yenə basanda gizlənir ---------- */
+(function(){
+  const SEE='<svg class="see" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const OFF='<svg class="off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6.4 0 10 6 10 6a17 17 0 0 1-3.2 3.9M6.5 7.6C3.9 9.3 2 12 2 12s3.6 6 10 6c1.6 0 3-.4 4.3-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  document.querySelectorAll('input[type=password]').forEach(inp=>{
+    const w=document.createElement('div');w.className='pwx';
+    inp.parentNode.insertBefore(w,inp);w.appendChild(inp);
+    const b=document.createElement('button');
+    b.type='button';b.className='eye';b.setAttribute('aria-label','Şifrəni göstər');b.innerHTML=SEE+OFF;
+    b.addEventListener('click',()=>{
+      const show=inp.type==='password';
+      inp.type=show?'text':'password';
+      b.classList.toggle('on',show);
+      b.setAttribute('aria-label',show?'Şifrəni gizlət':'Şifrəni göstər');
+      inp.focus();
+    });
+    w.appendChild(b);
+  });
+})();
 </script>
 </body>
 </html>
