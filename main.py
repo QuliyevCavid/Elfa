@@ -4,7 +4,6 @@ import json
 import os
 import re
 import secrets
-import sqlite3
 import time
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
@@ -16,11 +15,12 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, Res
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+import psycopg
 from pydantic import BaseModel, Field
 
 BASE_DIR = Path(__file__).resolve().parent
-# DİQQƏT: hostinqdə ELFA_DB daimi diskə (volume) yönəlməlidir, əks halda hər deploy-da məlumat silinir.
-DB_PATH = os.environ.get("ELFA_DB", str(BASE_DIR / "elfa.db"))
+# Supabase Postgres bağlantı linki (Vercel Environment Variables-da DATABASE_URL).
+DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 R2_ACCOUNT_ID = os.environ.get("R2_ACCOUNT_ID", "").strip()
 R2_ACCESS_KEY_ID = os.environ.get("R2_ACCESS_KEY_ID", "").strip()
@@ -83,7 +83,7 @@ PRODUCT_NEW_COLUMNS = [
     ("images", "TEXT NOT NULL DEFAULT ''"),
     ("department", "TEXT NOT NULL DEFAULT ''"),
     ("subcategory", "TEXT NOT NULL DEFAULT ''"),
-    ("old_price", "REAL NOT NULL DEFAULT 0"),
+    ("old_price", "DOUBLE PRECISION NOT NULL DEFAULT 0"),
     ("variants", "TEXT NOT NULL DEFAULT ''"),
     ("colors", "TEXT NOT NULL DEFAULT ''"),
     ("size_stock", "TEXT NOT NULL DEFAULT ''"),
@@ -94,72 +94,166 @@ PRODUCT_NEW_COLUMNS = [
 # ---------------------------------------------------------------
 # Verilənlər bazası
 # ---------------------------------------------------------------
+class Row:
+    """Row kimi: həm ad (r["x"]), həm də sıra nömrəsi (r[0]) ilə oxunur."""
+
+    __slots__ = ("_names", "_values")
+
+    def __init__(self, names, values):
+        self._names = names
+        self._values = values
+
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return self._values[key]
+        try:
+            return self._values[self._names.index(key)]
+        except ValueError:
+            raise KeyError(key)
+
+    def keys(self):
+        return list(self._names)
+
+    def __iter__(self):
+        return iter(self._values)
+
+    def __len__(self):
+        return len(self._values)
+
+
+def _row_factory(cursor):
+    names = [c.name for c in (cursor.description or [])]
+    return lambda values: Row(names, values)
+
+
+class Conn:
+    """Kodun qalan hissəsi dəyişməsin deyə '?' işarələrini Postgres-in '%s' formasına çevirir."""
+
+    def __init__(self, raw):
+        self._raw = raw
+
+    def execute(self, sql: str, args=()):
+        return self._raw.execute(sql.replace("?", "%s"), tuple(args) if args else None)
+
+
+_READY = False
+
+
 @contextmanager
-def db():
-    con = sqlite3.connect(DB_PATH, timeout=15)
-    con.row_factory = sqlite3.Row
-    con.execute("PRAGMA foreign_keys = ON")
-    con.execute("PRAGMA journal_mode = WAL")
+def db(_init: bool = True):
+    global _READY
+    if _init and not _READY:
+        init_db()
+    if not DATABASE_URL:
+        raise RuntimeError("DATABASE_URL təyin edilməyib (Vercel > Settings > Environment Variables)")
+    raw = psycopg.connect(
+        DATABASE_URL,
+        row_factory=_row_factory,
+        prepare_threshold=None,  # Supabase "Transaction pooler" hazırlanmış sorğuları dəstəkləmir
+        connect_timeout=10,
+    )
     try:
-        yield con
-        con.commit()
+        yield Conn(raw)
+        raw.commit()
+    except Exception:
+        raw.rollback()
+        raise
     finally:
-        con.close()
+        raw.close()
 
 
 def ensure_columns(con, table: str, columns):
-    existing = {r["name"] for r in con.execute(f"PRAGMA table_info({table})")}
+    existing = {
+        r["column_name"]
+        for r in con.execute(
+            "SELECT column_name FROM information_schema.columns "
+            "WHERE table_schema = 'public' AND table_name = ?",
+            (table,),
+        )
+    }
     for name, ddl in columns:
         if name not in existing:
-            con.execute(f"ALTER TABLE {table} ADD COLUMN {name} {ddl}")
+            con.execute(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {name} {ddl}")
+
+
+SCHEMA_SQL = [
+    """CREATE TABLE IF NOT EXISTS sellers (
+        id BIGSERIAL PRIMARY KEY,
+        store_name TEXT NOT NULL,
+        owner_name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        city TEXT DEFAULT '',
+        about TEXT DEFAULT '',
+        pw_salt TEXT NOT NULL,
+        pw_hash TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        created_at TEXT NOT NULL
+    )""",
+    """CREATE TABLE IF NOT EXISTS sessions (
+        token_hash TEXT PRIMARY KEY,
+        seller_id BIGINT NOT NULL REFERENCES sellers(id) ON DELETE CASCADE,
+        expires_at TEXT NOT NULL
+    )""",
+    """CREATE TABLE IF NOT EXISTS products (
+        id BIGSERIAL PRIMARY KEY,
+        seller_id BIGINT NOT NULL REFERENCES sellers(id) ON DELETE CASCADE,
+        name TEXT NOT NULL,
+        price DOUBLE PRECISION NOT NULL,
+        stock INTEGER NOT NULL,
+        image_url TEXT DEFAULT '',
+        description TEXT DEFAULT '',
+        created_at TEXT NOT NULL
+    )""",
+    "CREATE INDEX IF NOT EXISTS idx_products_seller ON products(seller_id)",
+    """CREATE TABLE IF NOT EXISTS images (
+        id BIGSERIAL PRIMARY KEY,
+        seller_id BIGINT NOT NULL REFERENCES sellers(id) ON DELETE CASCADE,
+        mime TEXT NOT NULL,
+        data BYTEA NOT NULL,
+        created_at TEXT NOT NULL
+    )""",
+    """CREATE TABLE IF NOT EXISTS category_cover (
+        sub_key TEXT PRIMARY KEY,
+        product_id BIGINT NOT NULL
+    )""",
+]
+
+APP_TABLES = ("sellers", "sessions", "products", "images", "category_cover")
 
 
 def init_db():
-    with db() as con:
-        con.executescript("""
-            CREATE TABLE IF NOT EXISTS sellers (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                store_name TEXT NOT NULL,
-                owner_name TEXT NOT NULL,
-                category TEXT NOT NULL,
-                phone TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE,
-                city TEXT DEFAULT '',
-                about TEXT DEFAULT '',
-                pw_salt TEXT NOT NULL,
-                pw_hash TEXT NOT NULL,
-                status TEXT NOT NULL DEFAULT 'pending',
-                created_at TEXT NOT NULL
-            );
-            CREATE TABLE IF NOT EXISTS sessions (
-                token_hash TEXT PRIMARY KEY,
-                seller_id INTEGER NOT NULL REFERENCES sellers(id) ON DELETE CASCADE,
-                expires_at TEXT NOT NULL
-            );
-            CREATE TABLE IF NOT EXISTS products (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                seller_id INTEGER NOT NULL REFERENCES sellers(id) ON DELETE CASCADE,
-                name TEXT NOT NULL,
-                price REAL NOT NULL,
-                stock INTEGER NOT NULL,
-                image_url TEXT DEFAULT '',
-                description TEXT DEFAULT '',
-                created_at TEXT NOT NULL
-            );
-            CREATE INDEX IF NOT EXISTS idx_products_seller ON products(seller_id);
-            CREATE TABLE IF NOT EXISTS images (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                seller_id INTEGER NOT NULL REFERENCES sellers(id) ON DELETE CASCADE,
-                mime TEXT NOT NULL,
-                data BLOB NOT NULL,
-                created_at TEXT NOT NULL
-            );
-        """)
+    """Cədvəlləri yaradır və çatışmayan sütunları əlavə edir. Təkrar işə düşməsi zərərsizdir."""
+    global _READY
+    with db(_init=False) as con:
+        con.execute("SELECT pg_advisory_xact_lock(7353001)")
+        for stmt in SCHEMA_SQL:
+            con.execute(stmt)
         ensure_columns(con, "sellers", SELLER_NEW_COLUMNS)
         ensure_columns(con, "products", PRODUCT_NEW_COLUMNS)
-
-
-init_db()
+        # Köhnə sxemdə qiymət 'real' (float4) idi: 12.99 -> 12.9899997 kimi görünməsin
+        con.execute(
+            """DO $$ BEGIN
+                 IF (SELECT data_type FROM information_schema.columns
+                     WHERE table_schema = 'public' AND table_name = 'products'
+                       AND column_name = 'price') = 'real' THEN
+                   ALTER TABLE products ALTER COLUMN price TYPE DOUBLE PRECISION;
+                 END IF;
+               END $$"""
+        )
+        # Supabase-in açıq API-si (anon açar) bu cədvəllərə toxuna bilməsin: RLS açıq, siyasət yoxdur.
+        # Server 'postgres' rolu ilə qoşulur və RLS-ni keçir.
+        open_tables = [
+            r["tablename"]
+            for r in con.execute(
+                "SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND NOT rowsecurity"
+            )
+            if r["tablename"] in APP_TABLES
+        ]
+        for t in open_tables:
+            con.execute(f"ALTER TABLE {t} ENABLE ROW LEVEL SECURITY")
+    _READY = True
 
 
 # ---------------------------------------------------------------
@@ -214,7 +308,7 @@ def client_ip(request: Request) -> str:
     return request.client.host if request.client else "?"
 
 
-def current_seller(authorization: Optional[str] = Header(None)) -> sqlite3.Row:
+def current_seller(authorization: Optional[str] = Header(None)) -> Row:
     token = bearer(authorization)
     with db() as con:
         row = con.execute(
@@ -672,7 +766,7 @@ def register(data: RegisterIn):
                 (store_name, owner_name, category, phone, email,
                  data.city.strip(), data.about.strip(), salt, pw, now().isoformat()),
             )
-    except sqlite3.IntegrityError:
+    except psycopg.errors.UniqueViolation:
         raise HTTPException(409, "Bu e-poçt artıq qeydiyyatdan keçib")
     return {"ok": True, "status": "pending"}
 
@@ -706,7 +800,7 @@ def login(data: LoginIn, request: Request):
 @app.post("/api/seller/logout")
 def logout(
     authorization: Optional[str] = Header(None),
-    s: sqlite3.Row = Depends(current_seller),
+    s: Row = Depends(current_seller),
 ):
     with db() as con:
         con.execute("DELETE FROM sessions WHERE token_hash = ?", (sha(bearer(authorization)),))
@@ -720,7 +814,7 @@ def home_used(con, seller_id: int) -> int:
     ).fetchone()[0]
 
 
-def seller_private(s: sqlite3.Row, used: int = 0) -> dict:
+def seller_private(s: Row, used: int = 0) -> dict:
     return {
         "home_slots": s["home_slots"],
         "home_used": used,
@@ -741,14 +835,14 @@ def seller_private(s: sqlite3.Row, used: int = 0) -> dict:
 
 
 @app.get("/api/seller/me")
-def me(s: sqlite3.Row = Depends(current_seller)):
+def me(s: Row = Depends(current_seller)):
     with db() as con:
         used = home_used(con, s["id"])
     return seller_private(s, used)
 
 
 @app.put("/api/seller/profile")
-def update_profile(data: ProfileIn, s: sqlite3.Row = Depends(current_seller)):
+def update_profile(data: ProfileIn, s: Row = Depends(current_seller)):
     raw = data.model_dump(exclude_unset=True)
     upd = {}
     for key, value in raw.items():
@@ -795,7 +889,7 @@ def sniff_image(b: bytes) -> Optional[str]:
 
 
 @app.post("/api/seller/upload")
-async def upload_image(request: Request, s: sqlite3.Row = Depends(current_seller)):
+async def upload_image(request: Request, s: Row = Depends(current_seller)):
     declared = request.headers.get("content-length")
     if declared and declared.isdigit() and int(declared) > MAX_IMAGE_BYTES:
         raise HTTPException(413, "Şəkil çox böyükdür (maksimum 3 MB)")
@@ -815,10 +909,10 @@ async def upload_image(request: Request, s: sqlite3.Row = Depends(current_seller
         if n >= MAX_IMAGES_PER_SELLER:
             raise HTTPException(400, "Şəkil limiti doldu. Lazımsız məhsulları silin")
         cur = con.execute(
-            "INSERT INTO images (seller_id, mime, data, created_at) VALUES (?, ?, ?, ?)",
+            "INSERT INTO images (seller_id, mime, data, created_at) VALUES (?, ?, ?, ?) RETURNING id",
             (s["id"], mime, body, now().isoformat()),
         )
-    return {"url": f"/api/images/{cur.lastrowid}"}
+    return {"url": f"/api/images/{cur.fetchone()['id']}"}
 
 
 def sigv4_presign(
@@ -875,7 +969,7 @@ class UploadUrlIn(BaseModel):
 
 
 @app.post("/api/seller/upload-url")
-def upload_url(data: UploadUrlIn, s: sqlite3.Row = Depends(current_seller)):
+def upload_url(data: UploadUrlIn, s: Row = Depends(current_seller)):
     if not STORAGE_ENABLED:
         raise HTTPException(503, "Fayl yükləmə hələ aktiv edilməyib")
     if s["status"] != "approved":
@@ -921,7 +1015,7 @@ def favicon():
 # ---------------------------------------------------------------
 # Məhsullar
 # ---------------------------------------------------------------
-def product_dict(r: sqlite3.Row) -> dict:
+def product_dict(r: Row) -> dict:
     keys = r.keys()
     data = {
         k: r[k]
@@ -976,7 +1070,7 @@ def tiktok_url(v: str) -> str:
     return v if HTTP_RE.match(v) else "https://www.tiktok.com/@" + v
 
 
-def public_product_dict(r: sqlite3.Row) -> dict:
+def public_product_dict(r: Row) -> dict:
     data = product_dict(r)
     data["store_id"] = r["seller_id"]
     data["store_city"] = r["store_city"]
@@ -987,7 +1081,7 @@ def public_product_dict(r: sqlite3.Row) -> dict:
     return data
 
 
-def public_store_dict(s: sqlite3.Row, product_count: Optional[int] = None) -> dict:
+def public_store_dict(s: Row, product_count: Optional[int] = None) -> dict:
     data = {
         "id": s["id"],
         "store_name": s["store_name"],
@@ -1008,7 +1102,7 @@ def public_store_dict(s: sqlite3.Row, product_count: Optional[int] = None) -> di
 
 
 @app.get("/api/seller/products")
-def my_products(s: sqlite3.Row = Depends(current_seller)):
+def my_products(s: Row = Depends(current_seller)):
     with db() as con:
         rows = con.execute(
             "SELECT * FROM products WHERE seller_id = ? ORDER BY id DESC", (s["id"],)
@@ -1017,7 +1111,7 @@ def my_products(s: sqlite3.Row = Depends(current_seller)):
 
 
 @app.post("/api/seller/products")
-def add_product(data: ProductIn, s: sqlite3.Row = Depends(current_seller)):
+def add_product(data: ProductIn, s: Row = Depends(current_seller)):
     if s["status"] == "rejected":
         raise HTTPException(403, "Mağazanız rədd edilib, məhsul əlavə etmək olmaz")
     f = clean_product(data, s["id"])
@@ -1026,15 +1120,15 @@ def add_product(data: ProductIn, s: sqlite3.Row = Depends(current_seller)):
         cur = con.execute(
             f"""INSERT INTO products
                 (seller_id, {", ".join(PRODUCT_FIELDS)}, created_at)
-                VALUES (?, {", ".join("?" for _ in PRODUCT_FIELDS)}, ?)""",
+                VALUES (?, {", ".join("?" for _ in PRODUCT_FIELDS)}, ?) RETURNING id""",
             (s["id"], *[f[k] for k in PRODUCT_FIELDS], now().isoformat()),
         )
-        row = con.execute("SELECT * FROM products WHERE id = ?", (cur.lastrowid,)).fetchone()
+        row = con.execute("SELECT * FROM products WHERE id = ?", (cur.fetchone()["id"],)).fetchone()
     return product_dict(row)
 
 
 @app.put("/api/seller/products/{pid}/home")
-def seller_set_home(pid: int, data: HomeIn, s: sqlite3.Row = Depends(current_seller)):
+def seller_set_home(pid: int, data: HomeIn, s: Row = Depends(current_seller)):
     with db() as con:
         p = con.execute(
             "SELECT id, on_home FROM products WHERE id = ? AND seller_id = ?",
@@ -1054,7 +1148,7 @@ def seller_set_home(pid: int, data: HomeIn, s: sqlite3.Row = Depends(current_sel
 
 
 @app.put("/api/seller/products/{pid}")
-def update_product(pid: int, data: ProductIn, s: sqlite3.Row = Depends(current_seller)):
+def update_product(pid: int, data: ProductIn, s: Row = Depends(current_seller)):
     """Məhsulu tam yeniləyir. Göndərilməyən sahə boşaldılır, ona görə bütün sahələri göndərin.
     'on_home' bu sorğu ilə dəyişmir."""
     if s["status"] == "rejected":
@@ -1080,7 +1174,7 @@ def update_product(pid: int, data: ProductIn, s: sqlite3.Row = Depends(current_s
 
 
 @app.delete("/api/seller/products/{pid}")
-def delete_product(pid: int, s: sqlite3.Row = Depends(current_seller)):
+def delete_product(pid: int, s: Row = Depends(current_seller)):
     with db() as con:
         old = con.execute(
             "SELECT image_url, images, variants FROM products WHERE id = ? AND seller_id = ?", (pid, s["id"])
@@ -1282,7 +1376,6 @@ def category_images():
     ən son yüklənən məhsulun şəkli seçilir və sonra o yadda saxlanır."""
     out = {}
     with db() as con:
-        con.execute("CREATE TABLE IF NOT EXISTS category_cover (sub_key TEXT PRIMARY KEY, product_id INTEGER NOT NULL)")
         rows = approved_rows(con)  # ən yenisi əvvəldə
         by_id = {r["id"]: r for r in rows}
         cover = {r["sub_key"]: r["product_id"] for r in con.execute("SELECT sub_key, product_id FROM category_cover")}
@@ -1296,7 +1389,8 @@ def category_images():
             if chosen is None or cover_key(chosen) != key or not (chosen["image_url"] or "").strip():
                 # yadda saxlanmış yoxdur və ya silinib: ilk dəfədirsə ən köhnəsi, silinibsə ən sonuncu
                 chosen = items[0] if key in cover else items[-1]
-                con.execute("INSERT OR REPLACE INTO category_cover (sub_key, product_id) VALUES (?, ?)", (key, chosen["id"]))
+                con.execute("INSERT INTO category_cover (sub_key, product_id) VALUES (?, ?) "
+                            "ON CONFLICT (sub_key) DO UPDATE SET product_id = EXCLUDED.product_id", (key, chosen["id"]))
             out["|".join(key.split("|"))] = chosen["image_url"].strip()
     return out
 
@@ -1410,10 +1504,11 @@ def admin_set_status(sid: int, data: StatusIn):
         raise HTTPException(400, "Status yanlışdır")
     with db() as con:
         cur = con.execute("UPDATE sellers SET status = ? WHERE id = ?", (data.status, sid))
+        updated = cur.rowcount
         if data.status == "rejected":
             # Rədd edilən satıcının açıq sessiyaları bağlanır
             con.execute("DELETE FROM sessions WHERE seller_id = ?", (sid,))
-    if cur.rowcount == 0:
+    if updated == 0:
         raise HTTPException(404, "Satıcı tapılmadı")
     return {"ok": True, "status": data.status}
 
@@ -1442,7 +1537,8 @@ def admin_seller_home(sid: int, data: SellerHomeIn):
 def admin_product_home(pid: int, data: HomeIn):
     with db() as con:
         cur = con.execute("UPDATE products SET on_home = ? WHERE id = ?", (1 if data.on_home else 0, pid))
-    if cur.rowcount == 0:
+        updated = cur.rowcount
+    if updated == 0:
         raise HTTPException(404, "Məhsul tapılmadı")
     return {"ok": True, "on_home": data.on_home}
 
