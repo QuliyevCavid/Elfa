@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#263B35">
 <title>ELFA — Alış-verişin yeni üzü</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#263B35">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ELFA">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="ELFA — Azərbaycanın yeni nəsil marketplace-i. Təsdiqlənmiş mağazaların məhsullarını kəşf et, endirimləri tap və satıcı ilə birbaşa WhatsApp və ya zəng ilə əlaqə saxla.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ELFA">
+<meta property="og:title" content="ELFA — Alış-verişin yeni üzü">
+<meta property="og:description" content="Məhsulları kəşf et, endirimləri tap, satıcı ilə birbaşa əlaqə saxla.">
+<meta property="og:image" content="/icon-512.png">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"ELFA","url":"https://elfa-shop.onrender.com/","inLanguage":"az","potentialAction":{"@type":"SearchAction","target":"https://elfa-shop.onrender.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -26,7 +42,7 @@ header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0
 .search{flex:1;max-width:520px;margin:auto;position:relative}
 .search input{width:100%;height:40px;border:1px solid var(--soft);border-radius:24px;padding:0 54px 0 20px;outline:none;background:var(--bg);font-size:12px}
 .search input:focus{border-color:#aaa;background:#fff}
-.search button{position:absolute;right:4px;top:4px;width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center}
+.search>button{position:absolute;right:4px;top:4px;width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center}
 .nav-actions{display:flex;align-items:center;gap:22px}
 .action{font-size:11.5px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:7px;position:relative}
 .badge{background:var(--brand);color:#fff;border-radius:10px;font-size:9px;padding:2px 6px;display:none;font-weight:700}
@@ -142,6 +158,10 @@ header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0
 .filters label{display:block;font-size:11px;font-weight:700;color:#444;margin-bottom:12px}
 .filters select,.filters input{display:block;width:100%;height:38px;margin-top:6px;padding:0 10px;border:1px solid #D9D5CA;border-radius:8px;background:#fff;font-size:12px;outline:none}
 .filters select:focus,.filters input:focus{border-color:var(--brand)}
+.filters .ms-i{display:flex;align-items:center;gap:10px;margin:0;font-size:12px;font-weight:500;justify-content:flex-start;text-align:left}
+.filters .ms-i input[type=checkbox]{display:inline-block;width:16px;height:16px;margin:0;padding:0;border:0;flex:none;order:0}
+.filters .ms-i span{order:1;flex:1;text-align:left}
+.chip{cursor:default}.chip:hover{border-color:#D9D5CA}
 .price-row{display:flex;gap:8px}
 
 footer{margin-top:56px;background:var(--brand);color:#fff;padding:40px 0}
@@ -450,6 +470,53 @@ body.pfull .totop{display:none}
  .psl h3{font-size:15px}
  .modal.full footer{padding-bottom:88px}
 }
+
+/* ===== iPhone / iOS düzəlişləri ===== */
+html{-webkit-text-size-adjust:100%}
+*{-webkit-tap-highlight-color:transparent}
+a,button,[data-info],[data-store],[data-cat],[data-act],[data-subcat],[data-dept],[data-bn]{touch-action:manipulation}
+[data-info],[data-store],[data-cat],[data-act],[data-subcat],[data-dept],[data-bn],.store,.pcard,.tile,.pd-store{cursor:pointer}
+input:not([type=checkbox]):not([type=radio]){-webkit-appearance:none;appearance:none}
+@media(max-width:800px){
+ input,select,textarea{font-size:16px!important}
+}
+@supports(height:100dvh){
+ .filters{max-height:calc(100dvh - 110px)}
+ .modal{max-height:92dvh}
+ .pd-main{max-height:76dvh}
+ @media(max-width:600px){.modal{max-height:96dvh}}
+ @media(max-width:650px){.megapanel-in{max-height:76dvh}}
+ @media(max-width:800px){.pd-main{max-height:none}}
+}
+
+/* ===== telefonda tam ekran kateqoriya menyusu ===== */
+.cov{position:fixed;inset:0;z-index:70;background:#fff;display:flex;flex-direction:column;height:100vh;height:100dvh;padding-top:env(safe-area-inset-top);animation:covIn .18s ease-out}
+@keyframes covIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+:where(.cov) button{border:0;padding:0;font-family:inherit;cursor:pointer;-webkit-appearance:none;appearance:none}
+.cov-top{flex:none;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line)}
+.cov-logo{font-size:24px;font-weight:800;letter-spacing:6px;color:var(--brand)}
+.cov-x{width:38px;height:38px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center}
+.cov-x svg{width:16px;height:16px;fill:none;stroke:var(--brand);stroke-width:2.4;stroke-linecap:round}
+.cov-tabs{flex:none;display:flex;overflow-x:auto;padding:0 8px;border-bottom:1px solid var(--line);scrollbar-width:none;-ms-overflow-style:none}
+.cov-tabs::-webkit-scrollbar{display:none}
+.cov-tab{flex:none;padding:15px 12px 12px;background:none;font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent}
+.cov-tab.on{color:var(--brand);font-weight:800;border-bottom-color:var(--accent)}
+.cov-body{flex:1;min-height:0;display:flex}
+.cov-side{flex:0 0 108px;width:108px;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding-bottom:24px}
+.cov-side::-webkit-scrollbar,.cov-grid::-webkit-scrollbar{display:none}
+.cov-g{display:block;width:100%;text-align:left;padding:15px 10px 15px 12px;background:none;font-size:12px;font-weight:600;line-height:1.35;color:#5b574f;border-left:3px solid transparent;overflow-wrap:anywhere}
+.cov-g.on{background:#fff;color:var(--brand);font-weight:800;border-left-color:var(--accent)}
+.cov-grid{flex:1;min-width:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 10px;align-content:start;padding:16px 12px calc(28px + env(safe-area-inset-bottom))}
+.cov-it{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;background:none;text-align:center;color:var(--text)}
+.cov-ic{width:100%;max-width:78px;aspect-ratio:1;border-radius:18px;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--brand)}
+.cov-it:active .cov-ic{background:var(--soft)}
+.cov-ic{overflow:hidden;position:relative}
+.cov-ic img.cov-ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cov-ic svg{width:48%;height:48%;stroke:var(--brand);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cov-it span{font-size:10.5px;font-weight:600;line-height:1.3;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cov-all .cov-ic{background:#FBF1D6;border-color:#F1DDA0}
+.cov-all .cov-ic svg{width:30px;height:30px;fill:var(--accent)}
+@media(prefers-reduced-motion:reduce){.cov{animation:none}}
 </style>
 
 <!-- ============================================================
@@ -464,6 +531,154 @@ body.pfull .totop{display:none}
   </style>
 ============================================================ -->
 <style id="imgs"></style>
+<style id="up1">
+/* ===== Mərhələ 1: endirim, axtarış təklifləri, paylaş, izlə, filtr çipləri ===== */
+.sug{position:absolute;left:0;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 16px 36px rgba(38,59,53,.16);padding:8px;z-index:40;max-height:70vh;overflow:auto;text-align:left}
+.sug-h{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;padding:8px 10px 4px}
+.sug-h button{background:none;font-size:10.5px;font-weight:600;text-decoration:underline;text-transform:none;letter-spacing:0;color:var(--muted)}
+.sg-it{width:100%;display:flex;align-items:center;gap:11px;background:none;text-align:left;padding:9px 10px;border-radius:10px;font-size:12px;font-weight:600;min-width:0}
+.sg-it:hover,.sg-it:focus-visible{background:var(--bg);outline:0}
+.sg-it svg{width:16px;height:16px;flex:none;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sg-it .tx{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sg-it .tx small{display:block;font-size:10.5px;color:var(--muted);font-weight:500;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.sg-it b.pr{font-size:11.5px;font-weight:800;flex:none}
+.sg-th{width:42px;height:42px;border-radius:9px;background:var(--soft);overflow:hidden;flex:none}
+.sg-th img{width:100%;height:100%;object-fit:cover;display:block}
+.sg-lg{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;overflow:hidden}
+.sg-lg img{width:100%;height:100%;object-fit:cover}
+.sg-main{background:rgba(38,59,53,.06)}
+.sg-pop{display:flex;flex-wrap:wrap;gap:7px;padding:6px 10px 10px}
+.sg-pop button{background:var(--soft);border-radius:16px;padding:7px 13px;font-size:11px;font-weight:700;color:var(--brand)}
+.sg-none{padding:14px 12px;font-size:12px;color:var(--muted);font-weight:500}
+
+/* güvən zolağı */
+.section.trust{margin:16px auto 0}
+.trust-in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.trust-it{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 15px;min-width:0}
+.trust-it i{width:38px;height:38px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;flex:none}
+.trust-it svg{width:19px;height:19px;stroke:var(--brand);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.trust-it b{display:block;font-size:11.5px;font-weight:700}
+.trust-it small{display:block;font-size:10.5px;color:var(--muted);font-weight:500;margin-top:2px;line-height:1.35}
+@media(max-width:800px){.trust-in{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.trust-it{padding:10px 11px;gap:9px}.trust-it i{width:32px;height:32px}.trust-it small{display:none}}
+
+/* endirim */
+.dbadge{position:absolute;left:8px;top:8px;background:#C73E1D;color:#fff;border-radius:12px;padding:3px 9px;font-size:9.5px;font-weight:800;z-index:2}
+.dbadge+.sbadge{top:34px}
+.pwrap{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.pwrap.sale .price,.mprice.sale{color:#B3361F}
+.oldp{font-size:10px;color:var(--muted);font-weight:600;text-decoration:line-through}
+.mprice .oldp{margin-left:4px}
+.oldp.big{font-size:15px;margin-left:10px;font-weight:600}
+.dpill{display:inline-block;vertical-align:middle;margin-left:10px;background:#C73E1D;color:#fff;border-radius:12px;padding:4px 11px;font-size:12px;font-weight:800;letter-spacing:0}
+.pd-price.sale{color:#B3361F}
+.cat-inner a.sale-link{color:#B3361F;font-weight:800}
+
+/* aktiv filtr çipləri */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 16px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #D9D5CA;border-radius:18px;padding:7px 12px;font-size:11.5px;font-weight:600;color:var(--brand)}
+.chip i{font-style:normal;font-size:15px;line-height:1;color:var(--muted)}
+.chip:hover{border-color:var(--brand)}
+
+/* izlə / paylaş */
+.folbtn{margin-left:auto;flex:none;background:var(--brand);color:#fff;border-radius:20px;padding:10px 18px;font-size:12px;font-weight:700;white-space:nowrap}
+.folbtn.on{background:var(--soft);color:var(--brand)}
+.folbtn.ghost{margin-left:0;background:var(--soft);color:var(--brand)}
+.storehead{flex-wrap:wrap}
+.storehead .storebtns{margin-left:auto;display:flex;gap:8px}
+.storehead .storebtns .folbtn{margin:0}
+
+/* məhsul səhifəsi: çörək qırıntısı, sabit əlaqə zolağı, böyütmə */
+.crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--muted);margin:0 0 14px}
+.crumbs a{cursor:pointer}
+.crumbs a:hover{color:var(--brand);text-decoration:underline}
+.crumbs i{font-style:normal;opacity:.6}
+.pd-stage img{cursor:zoom-in}
+.pd-bar{display:none}
+@media(max-width:800px){
+ .pd-bar{display:flex;align-items:center;gap:10px;position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));z-index:31;background:rgba(255,255,255,.98);border-top:1px solid var(--line);padding:10px 4%;box-shadow:0 -6px 18px rgba(38,59,53,.08)}
+ .pb-price{font-size:15px;font-weight:800;flex:none}
+ .pb-main,.pb-tel{display:flex;align-items:center;justify-content:center;gap:8px;border-radius:22px;font-weight:700;font-size:12.5px;height:44px}
+ .pb-main{flex:1;background:var(--brand);color:#fff}
+ .pb-tel{flex:none;width:44px;background:var(--soft);color:var(--brand)}
+ .pd-bar svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+ .modal.full footer{padding-bottom:150px}
+}
+.lb{position:fixed;inset:0;z-index:90;background:rgba(15,20,18,.94);display:flex;align-items:center;justify-content:center;cursor:zoom-out;animation:covIn .15s ease-out}
+.lb img{max-width:96vw;max-height:94vh;object-fit:contain}
+.lb button{position:absolute;right:16px;top:16px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:22px}
+/* rəng / ölçü variantları */
+.cdots{display:flex;align-items:center;gap:4px;margin:-4px 0 9px}
+.cdots i{width:11px;height:11px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
+.cdots em{font-size:9.5px;font-style:normal;color:var(--muted);font-weight:700}
+.pd-var{margin:18px 0 0;display:grid;gap:16px}
+.pv-l{font-size:12px;font-weight:700;margin-bottom:9px;color:#555}
+.pv-l b{font-weight:800;color:var(--brand)}
+.pv-row{display:flex;flex-wrap:wrap;gap:8px}
+.pd-col{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #D9D5CA;border-radius:20px;padding:7px 14px 7px 8px;font-size:12px;font-weight:700}
+.pd-col i{width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.2);flex:none}
+.pd-col.on{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.pd-col.out{opacity:.5}
+.pd-sz{position:relative;overflow:hidden;min-width:50px;height:42px;padding:0 13px;border-radius:12px;background:#fff;border:1.5px solid #D9D5CA;font-size:12.5px;font-weight:700}
+.pd-sz:hover{border-color:var(--brand)}
+.pd-sz.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.pd-sz.oos{color:#B5B0A2;background:#F4F2EC;border-style:dashed;cursor:not-allowed}
+.pd-sz.oos:hover{border-color:#D9D5CA}
+.pd-sz.oos:after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - 1px),#B5B0A2 calc(50% - 1px),#B5B0A2 calc(50% + 1px),transparent calc(50% + 1px)),linear-gradient(to bottom right,transparent calc(50% - 1px),#B5B0A2 calc(50% - 1px),#B5B0A2 calc(50% + 1px),transparent calc(50% + 1px))}
+
+/* ===== Mərhələ 2: məhsul başlığı yanında etiket, sola sıxılmış nəticələr, çoxlu seçimli filtrlər ===== */
+.pd-title{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 4px}
+.pd-title h2{margin:0}
+.pd-nr{font-weight:500;font-size:.72em;line-height:1.35}
+.pd-title h2{line-height:1.25;word-break:break-word}
+.pd-tags span{background:var(--soft);color:var(--brand);border-radius:12px;padding:4px 11px;font-size:11px;font-weight:700}
+#resultsView{width:auto;margin:16px 12px 0}
+#chips{display:none!important}
+#resultsView .section-head{justify-content:flex-start}
+#resultsView .section-head{gap:18px;flex-wrap:wrap;align-items:center}
+#resultsView .section-head>div:first-child{flex:none}
+#resultsView .head-tools{margin-left:0}
+#resultsView #prodTitle{font-size:15px;letter-spacing:0;text-align:left;display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-weight:700}
+#prodTitle .bc-h{width:20px;height:20px;fill:var(--brand);stroke:none}
+#resultsView #prodTitle{padding-left:18px}
+#prodTitle i{font-style:normal;color:var(--muted);font-weight:500}
+/* sıralama: başlığın altında, məhsulların üstündə, sol tərəfdə */
+#resultsView .section-head{flex-direction:column;align-items:flex-start;gap:14px}
+#resultsView .section-head{margin-bottom:10px}
+#resultsView .head-tools:not(:has(.show)){display:none}
+@media(max-width:800px){#resultsView .head-tools{display:flex}}
+#resultsView{position:relative}
+#sortBox{width:260px;position:absolute;top:-6px;right:0;margin:0!important;z-index:5}
+@media(max-width:800px){#sortBox{position:relative;top:0;width:100%;margin-bottom:12px!important}}
+/* filtr başlıqlarında ikonlar */
+.fl-t{display:flex!important;align-items:center;gap:9px}
+.fl-t svg,.pr-t svg{width:17px;height:17px;flex:none;stroke:var(--brand);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pr-t{display:flex;align-items:center;gap:9px}
+/* boş nəticə */
+.empty.nores{padding:60px 12px}
+.nores svg.bag{width:84px;height:84px;margin:0 auto 14px;fill:var(--brand);display:block}
+.nores b{display:block;font-size:20px;color:var(--brand);margin-bottom:6px}
+.nores button{margin-top:16px;display:inline-flex;align-items:center;gap:9px;border:1.5px solid var(--brand);border-radius:24px;padding:11px 22px;font-weight:700;font-size:13px;color:var(--text);background:#fff}
+.shop.searching{grid-template-columns:230px 1fr;gap:16px}
+.shop.searching .products{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1100px){.shop.searching .products{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){#resultsView{margin-left:8px;margin-right:8px}.shop.searching{grid-template-columns:1fr}.shop.searching .products{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fl{display:block;font-size:11px;font-weight:700;color:#444;margin-bottom:12px}
+.fl-t{display:block;margin-bottom:6px}
+.ms-b{width:100%;height:38px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px;border:1px solid #D9D5CA;border-radius:8px;background:#fff;font-size:12px;font-weight:500;text-align:left}
+.ms-b.on{border-color:var(--brand);font-weight:700;color:var(--brand)}
+.ms-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ms-b svg{width:14px;height:14px;flex:none;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ms-p{margin-top:6px;border:1px solid #D9D5CA;border-radius:8px;padding:4px;max-height:190px;overflow:auto;background:#fff}
+.ms-i{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;margin:0;color:var(--text)}
+.ms-i:hover{background:var(--bg)}
+.ms-i input{width:16px;height:16px;margin:0;flex:none;accent-color:var(--brand);-webkit-appearance:auto;appearance:auto}
+.ms-e{padding:10px;font-size:11.5px;color:var(--muted)}
+
+/* ===== Mərhələ 3: ölçünün altında stok sayı ===== */
+.pd-sz{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;height:auto;min-height:46px;padding:6px 14px}
+.pd-sz small{font-size:10px;font-weight:600;opacity:.7}
+.pd-sz.on small{opacity:.85}
+</style>
 </head>
 <body>
 <div class="topbar">ELFA-DA YENİ MƏHSULLARI KƏŞF ET · SEÇ VƏ SATICI İLƏ BİRBAŞA ƏLAQƏ SAXLA →</div>
@@ -471,8 +686,9 @@ body.pfull .totop{display:none}
   <div class="nav">
     <a class="logo" id="logo">ELFA</a>
     <div class="search">
-      <input type="text" id="q" placeholder="Məhsul, marka və ya mağaza axtar...">
+      <input type="text" id="q" autocomplete="off" enterkeyhint="search" placeholder="Məhsul, marka və ya mağaza axtar...">
       <button id="sbtn" aria-label="Axtar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+      <div class="sug hide" id="sug" role="listbox" aria-label="Axtarış təklifləri"></div>
     </div>
     <div class="nav-actions">
       <a class="action" id="favBtn"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#263B35" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.5S3.5 15 3.5 9A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8.5 2c0 6-8.5 11.5-8.5 11.5z"/></svg><span>Sevimlilər</span><b class="badge" id="favN"></b></a>
@@ -504,9 +720,23 @@ body.pfull .totop{display:none}
     </section>
 
 
+    <section class="section trust">
+      <div class="trust-in">
+        <div class="trust-it"><i><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></i><div><b>Yoxlanılmış mağazalar</b><small>Satıcılar təsdiqdən sonra yayımlanır</small></div></div>
+        <div class="trust-it"><i><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></i><div><b>Birbaşa əlaqə</b><small>WhatsApp və ya zəng ilə satıcıya yaz</small></div></div>
+        <div class="trust-it"><i><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10 9.5v5l4.5-2.5z"/></svg></i><div><b>Şəkil və video</b><small>Məhsulu alıb-almamış yaxından gör</small></div></div>
+        <div class="trust-it"><i><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg></i><div><b>Endirimlər</b><small>Qiyməti düşən məhsullar bir yerdə</small></div></div>
+      </div>
+    </section>
+
     <section class="section hide" id="recentSec">
       <div class="section-head"><div><h2>Son baxdığınız məhsullar</h2><p>Qaldığınız yerdən davam edin</p></div><button class="see" id="clearRecent">Təmizlə</button></div>
       <div class="hscroll" id="recentRow"></div>
+    </section>
+
+    <section class="section hide" id="followSec">
+      <div class="section-head"><div><h2>İzlədiyin mağazalar</h2><p>Sevdiyin sahibkarlar bir yerdə</p></div></div>
+      <div class="scroller" id="followRow"></div>
     </section>
 
     <section class="section">
@@ -533,6 +763,23 @@ body.pfull .totop{display:none}
       </div>
       <div class="feat" id="homeProducts"></div>
       <div class="empty hide" id="homeEmpty"></div>
+    </section>
+
+    <section class="section hide" id="saleSec">
+      <div class="section-head">
+        <div><h2>Endirimdə olanlar</h2><p>Qiyməti düşən məhsulları qaçırma</p></div>
+        <button class="see" data-act="sale">Hamısına bax →</button>
+      </div>
+      <div class="feat" id="saleProducts"></div>
+    </section>
+
+    <section class="section" id="newSec">
+      <div class="section-head">
+        <div><h2>Yeni məhsullar</h2><p>ELFA-ya ən son əlavə olunanlar</p></div>
+        <button class="see" data-act="showAll">Bütün məhsullar →</button>
+      </div>
+      <div class="feat" id="newProducts"></div>
+      <div class="empty hide" id="newEmpty"></div>
     </section>
 
     <div id="catRows"></div>
@@ -577,29 +824,31 @@ body.pfull .totop{display:none}
       </div>
       <div class="head-tools">
         <button class="filter-toggle" id="fToggle">Filtrlər</button>
-        <div class="sortbox" id="sortBox">
-          <button type="button" class="sortbtn" id="sortBtn" aria-haspopup="listbox" aria-expanded="false"><span id="sortLabel">Tövsiyə olunan sıralama</span><svg viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg></button>
-          <div class="sortlist hide" id="sortList" role="listbox" aria-label="Sıralama"></div>
-        </div>
       </div>
     </div>
+
+    <div class="chips hide" id="chips"></div>
 
     <div class="shop" id="shop">
       <aside class="filters" id="filters">
         <h3>Filtrlər <button id="clearF">Təmizlə</button></h3>
-        <label>Kateqoriya <select id="fCategory"><option value="">Hamısı</option></select></label>
-        <label>Marka <select id="fBrand"><option value="">Hamısı</option></select></label>
-        <label>Cinsiyyət <select id="fGender"><option value="">Hamısı</option></select></label>
-        <label id="ageWrap" class="hide">Yaş aralığı <select id="fAge"><option value="">Hamısı</option></select></label>
-        <label id="sizeWrap">Ölçü <select id="fSize"><option value="">Hamısı</option></select></label>
-        <label>Rəng <select id="fColor"><option value="">Hamısı</option></select></label>
-        <label>Boyut <select id="fSizeClass"><option value="">Hamısı</option></select></label>
-        <label>Material <select id="fMaterial"><option value="">Hamısı</option></select></label>
-        <label>Qiymət (AZN)
+        <div class="fl"><span class="fl-t"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Kateqoriya</span><div class="ms" id="fCategory"></div></div>
+        <div class="fl"><span class="fl-t"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg>Marka</span><div class="ms" id="fBrand"></div></div>
+        <div class="fl"><span class="fl-t"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6"/><circle cx="17.5" cy="9" r="2.5"/><path d="M18 14c2.5.3 4 2 4 4"/></svg>Cinsiyyət</span><div class="ms" id="fGender"></div></div>
+        <div class="fl hide" id="ageWrap"><span class="fl-t"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Yaş aralığı</span><div class="ms" id="fAge"></div></div>
+        <div class="fl" id="sizeWrap"><span class="fl-t"><svg viewBox="0 0 24 24"><path d="M3 17L17 3l4 4L7 21z"/><path d="M8 12l2 2M11 9l2 2M14 6l2 2"/></svg>Ölçü</span><div class="ms" id="fSize"></div></div>
+        <div class="fl"><span class="fl-t"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2s0-2 1.5-2h2a3 3 0 0 0 3-3c0-6-3.6-11-8-11z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.5" r="1"/></svg>Rəng</span><div class="ms" id="fColor"></div></div>
+        <div class="fl"><span class="fl-t"><svg viewBox="0 0 24 24"><path d="M3 4h2l3 11h10l2-8H7"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>Boyut</span><div class="ms" id="fSizeClass"></div></div>
+        <div class="fl"><span class="fl-t"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Material</span><div class="ms" id="fMaterial"></div></div>
+        <label><span class="pr-t"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg>Qiymət (AZN)</span>
           <div class="price-row"><input id="fMin" type="number" min="0" placeholder="Min"><input id="fMax" type="number" min="0" placeholder="Max"></div>
         </label>
       </aside>
       <div>
+        <div class="sortbox" id="sortBox" style="margin-bottom:14px">
+          <button type="button" class="sortbtn" id="sortBtn" aria-haspopup="listbox" aria-expanded="false"><span id="sortLabel">Tövsiyə olunan sıralama</span><svg viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg></button>
+          <div class="sortlist hide" id="sortList" role="listbox" aria-label="Sıralama"></div>
+        </div>
         <div class="products" id="products"></div>
         <div class="empty hide" id="empty"></div>
         <button class="more hide" id="moreBtn">Daha çox göstər</button>
@@ -672,14 +921,50 @@ const DEPTS=[
  {n:'Digər',i:'<path d="M5.5 12h.01M12 12h.01M18.5 12h.01" stroke-width="3.4"/>'}
 ];
 
+
+/* ---------- çoxlu seçimli filtr xanası (bir neçə dəyər eyni anda: "Qara|Ağ") ---------- */
+function closeAllMs(){$$('.ms-p').forEach(x=>x.classList.add('hide'))}
+function msInit(el){
+  el._o=[];el._s=[];
+  el.innerHTML='<button type="button" class="ms-b"><span class="ms-t">Hamısı</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><div class="ms-p hide"></div>';
+  const b=el.querySelector('.ms-b'),pn=el.querySelector('.ms-p');
+  const title=()=>{el.querySelector('.ms-t').textContent=el._s.length?(el._s.length>2?el._s.length+' seçildi':el._s.join(', ')):'Hamısı';b.classList.toggle('on',el._s.length>0)};
+  const draw=()=>{
+    pn.innerHTML=el._o.length?el._o.map(v=>'<label class="ms-i"><input type="checkbox" value="'+esc(v)+'"'+(el._s.includes(v)?' checked':'')+'><span>'+esc(v)+'</span></label>').join(''):'<div class="ms-e">Seçim yoxdur</div>';
+    title();
+  };
+  Object.defineProperty(el,'value',{
+    get(){return el._s.join('|')},
+    set(v){const want=String(v||'').split('|').map(x=>x.trim().toLocaleLowerCase('az')).filter(Boolean);el._s=el._o.filter(o=>want.includes(o.toLocaleLowerCase('az')));draw()}
+  });
+  el.setOptions=(vals,keep)=>{
+    const same=JSON.stringify(vals)===JSON.stringify(el._o);
+    const old=keep?el._s:[];el._o=[...vals];el._s=old.filter(x=>el._o.includes(x));
+    if(!same||old.length!==el._s.length)draw();else title();
+  };
+  el.addOption=v=>{v=String(v||'').trim();if(!v)return;if(!el._o.some(o=>o.toLowerCase()===v.toLowerCase())){el._o.push(v);draw()}};
+  b.onclick=e=>{e.stopPropagation();const open=pn.classList.contains('hide');closeAllMs();pn.classList.toggle('hide',!open)};
+  pn.addEventListener('change',e=>{
+    if(!e.target.matches('input'))return;
+    el._s=[...pn.querySelectorAll('input:checked')].map(i=>i.value);
+    title();
+    el.dispatchEvent(new Event('change'));
+  });
+  draw();
+}
+['fCategory','fBrand','fGender','fAge','fSize','fColor','fSizeClass','fMaterial'].forEach(id=>msInit($('#'+id)));
+document.addEventListener('click',e=>{if(!e.target.closest('.ms'))closeAllMs()});
 /* ---------- vəziyyət ---------- */
 const PAGE=24;
-const EMPTY_F={q:'',category:'',store_category:'',brand:'',gender:'',age:'',size:'',color:'',material:'',size_class:'',price_min:'',price_max:''};
+const EMPTY_F={q:'',sale:'',category:'',store_category:'',department:'',subcategory:'',brand:'',gender:'',age:'',size:'',color:'',material:'',size_class:'',price_min:'',price_max:''};
 let F={...EMPTY_F}, showAll=false, SORT='';
 let ALLCATS=[];
 const foldJs=x=>String(x||'').trim().toLocaleLowerCase('az');
 /* satıcının özü yazdığı (standart siyahıda olmayan) kateqoriyalar */
-const customCats=()=>{const std=new Set((OPT.categories||[]).map(foldJs));return ALLCATS.filter(c=>!std.has(foldJs(c)))};
+const extraCats=()=>{const std=new Set((OPT.categories||[]).map(foldJs));return ALLCATS.filter(c=>!std.has(foldJs(c)))};
+const inMenu=c=>Object.values(MENU).some(gs=>gs.some(g=>foldJs(g.t)===foldJs(c)));
+/* "Digər" altında yalnız menyuda yeri olmayan (köhnə) kateqoriyalar qalır */
+const customCats=()=>extraCats().filter(c=>!inMenu(c));
 let OPT={categories:[],genders:[],age_groups:[],clothing_sizes:[],shoe_sizes:[],colors:[],size_classes:[]};
 let list=[],total=0,loadSeq=0;
 const cache={};
@@ -691,22 +976,22 @@ let resFlag=false,popping=false,loadingMore=false,IO=null;
 const snap=()=>({F:{...F},showAll,sort:SORT});
 
 /* ---------- seçim siyahıları ---------- */
-function fillSelect(sel,values,keep){
-  const el=$(sel),old=keep?el.value:'';
-  el.innerHTML='<option value="">Hamısı</option>'+values.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');
-  if(old&&values.includes(old))el.value=old;
-}
+function fillSelect(sel,values,keep){$(sel).setOptions(values,keep)}
 function sizeValues(){
-  if(F.category==='Ayaqqabı')return OPT.shoe_sizes;
-  if(F.category==='Geyim')return OPT.clothing_sizes;
+  const cs=String(F.category||'').split('|').filter(Boolean);
+  if(cs.length&&cs.every(c=>c==='Ayaqqabı'))return OPT.shoe_sizes;
+  if(cs.length&&cs.every(c=>c==='Geyim'))return OPT.clothing_sizes;
   return [...OPT.clothing_sizes,...OPT.shoe_sizes];
 }
-const isKid=()=>F.gender==='Qız'||F.gender==='Oğlan';
+const KIDG=['Qız','Oğlan'];
+const gSel=()=>String(F.gender||'').split('|').filter(Boolean);
+const hasKid=()=>gSel().some(g=>KIDG.includes(g));
+const isKid=()=>gSel().length>0&&gSel().every(g=>KIDG.includes(g));
 function syncFilterUI(){
-  $('#ageWrap').classList.toggle('hide',!isKid());
+  $('#ageWrap').classList.toggle('hide',!hasKid());
   $('#sizeWrap').classList.toggle('hide',isKid());
-  if(!isKid()){F.age='';$('#fAge').value=''}
-  else{F.size='';$('#fSize').value=''}
+  if(!hasKid()){F.age='';$('#fAge').value=''}
+  if(isKid()){F.size='';$('#fSize').value=''}
   fillSelect('#fSize',sizeValues(),true);
   F.size=$('#fSize').value;
 }
@@ -715,14 +1000,15 @@ async function loadBrandMaterial(want){
     const f=await getJSON('/api/filters'+(F.category?'?category='+encodeURIComponent(F.category):''));
     fillSelect('#fBrand',f.brands||[],true);
     fillSelect('#fMaterial',f.materials||[],true);
+    if(Array.isArray(f.menu))mergeMenu(f.menu);
     if(Array.isArray(f.categories)){
       ALLCATS=f.categories;
-      customCats().forEach(c=>addOpt('fCategory',c));
+      extraCats().forEach(c=>addOpt('fCategory',c));
       if(!$('#megaPanel').classList.contains('hide'))renderMega();
     }
     if(want){
-      if(want.brand&&(f.brands||[]).includes(want.brand))$('#fBrand').value=want.brand;
-      if(want.material&&(f.materials||[]).includes(want.material))$('#fMaterial').value=want.material;
+      if(want.brand)$('#fBrand').value=want.brand;
+      if(want.material)$('#fMaterial').value=want.material;
     }
     F.brand=$('#fBrand').value;F.material=$('#fMaterial').value;
   }catch(e){}
@@ -740,7 +1026,7 @@ async function loadOptions(){
 }
 
 /* ---------- nav və ikonlar ---------- */
-$('#cats').insertAdjacentHTML('beforeend',DEPTS.map(d=>'<a data-dept="'+esc(d.n)+'">'+esc(d.n)+'</a>').join(''));
+$('#cats').insertAdjacentHTML('beforeend',DEPTS.map(d=>'<a data-dept="'+esc(d.n)+'">'+esc(d.n)+'</a>').join('')+'<a class="sale-link" data-sale>Endirimlər</a>');
 $('#deptRow').innerHTML=DEPTS.map(d=>'<button class="dept" data-dept="'+esc(d.n)+'"><i><svg viewBox="0 0 24 24">'+d.i+'</svg></i>'+esc(d.n)+'</button>').join('');
 
 /* ---------- rejim: ana səhifə / nəticələr ---------- */
@@ -751,10 +1037,13 @@ function applyMode(){
   $('#shop').classList.toggle('searching',res);
   $('#fToggle').classList.toggle('show',res);
   if(!res)$('#filters').classList.remove('open');
-  const parts=[F.store_category,F.category].filter(Boolean).join(' › ');
-  $('#prodTitle').textContent='ELFA · '+(parts||'Bütün məhsullar');
+  const segs=[F.department||F.store_category,F.category,F.subcategory].filter(Boolean).map(x=>String(x).replace(/\|/g,', '));
+  if(!segs.length)segs.push(F.sale?'Endirimlər':'Bütün məhsullar');
+  $('#prodTitle').innerHTML='<svg class="bc-h" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>ELFA</span>'+segs.map(x=>'<i>›</i><span>'+esc(x)+'</span>').join('');
+  renderChips();
   renderSort();
-  $$('#cats a').forEach(a=>a.classList.toggle('active',!!F.store_category&&a.dataset.dept===F.store_category));
+  const sd=F.department||F.store_category;
+  $$('#cats a').forEach(a=>a.classList.toggle('active',!!sd&&a.dataset.dept===sd));
   $$('#bnav [data-bn]').forEach(b=>b.classList.toggle('on',b.dataset.bn==='home'&&!res));
   /* brauzerin "Geri" düyməsi üçün tarixçə: nəticələr səhifəsi ayrıca addım sayılır */
   if(!popping){
@@ -781,11 +1070,11 @@ function cardHtml(p){
   const msg=encodeURIComponent('Salam, ELFA-da "'+p.name+'" məhsulu ilə maraqlanıram.');
   const href=wa?wa+'?text='+msg:(p.store_phone?telHref(p.store_phone):'');
   const contact=href?'<a class="ccontact" href="'+esc(href)+'"'+(wa?' target="_blank" rel="noopener noreferrer"':'')+' title="Satıcıya yaz" aria-label="Satıcıya yaz">'+ICON_CHAT+'</a>':'';
-  const sub=[p.category,p.gender].filter(Boolean).join(' · ')||p.store_name||'';
-  const out=p.stock<=0?'<span class="sbadge">Stokda yoxdur</span>':(p.stock<=3?'<span class="sbadge low">Son '+esc(p.stock)+' ədəd</span>':(p.on_home?'<span class="sbadge pick">★ Seçilmiş</span>':''));
+  const sub=[p.subcategory||p.category,p.gender].filter(Boolean).join(' · ')||p.store_name||'';
+  const out=(disc(p)?'<span class="dbadge">-'+disc(p)+'%</span>':'')+(p.stock<=0?'<span class="sbadge">Stokda yoxdur</span>':(p.stock<=3?'<span class="sbadge low">Son '+esc(p.stock)+' ədəd</span>':(p.on_home?'<span class="sbadge pick">★ Seçilmiş</span>':'')));
   return '<article class="pcard" data-pid="'+esc(p.id)+'">'+photoHtml(p,!!safeVideo(p.video_url)).replace('</div>',out+'</div>')+
     '<button class="heart'+(fav?' on':'')+'" data-heart="'+esc(p.id)+'" aria-label="Sevimlilər">'+(fav?'♥':'♡')+'</button>'+
-    '<div class="pinfo"><div class="pname">'+esc(p.name)+'</div><div class="psub">'+esc(sub)+'</div><div class="prow"><span class="price">'+money(p.price)+'</span>'+contact+'</div></div></article>';
+    '<div class="pinfo"><div class="pname">'+esc(p.name)+'</div><div class="psub">'+esc(sub)+'</div>'+dotsHtml(p)+'<div class="prow">'+priceBox(p)+contact+'</div></div></article>';
 }
 async function loadProducts(reset){
   if(!inResults()){applyMode();return}
@@ -807,7 +1096,10 @@ async function loadProducts(reset){
     const e=$('#empty');
     if(!list.length){
       e.classList.remove('hide');
-      e.textContent=activeCount()?'Bu seçimlərə uyğun məhsul tapılmadı. Filtrləri dəyişin.':'Hələ məhsul yoxdur. Satıcılar təsdiqləndikdən sonra məhsullar burada görünəcək.';
+      if(activeCount()){
+        e.classList.add('nores');
+        e.innerHTML='<svg class="bag" viewBox="0 0 24 24"><path d="M6 8h12l1 12H5z"/><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="#243B36" stroke-width="1.8"/></svg><b>Bu seçimlərə uyğun məhsul tapılmadı.</b>Filtrləri dəyişin.';
+      }else{e.classList.remove('nores');e.textContent='Hələ məhsul yoxdur. Satıcılar təsdiqləndikdən sonra məhsullar burada görünəcək.'}
     }else e.classList.add('hide');
     const hasMore=total!==null?list.length<total:rows.length===PAGE;
     $('#moreBtn').classList.toggle('hide',!hasMore);
@@ -854,7 +1146,7 @@ Object.keys(FMAP).forEach(id=>{
   $('#'+id).addEventListener('change',async()=>{
     F[FMAP[id]]=$('#'+id).value.trim();
     if(id==='fGender')syncFilterUI();
-    if(id==='fCategory'){syncFilterUI();await loadBrandMaterial()}
+    if(id==='fCategory'){F.subcategory='';syncFilterUI();await loadBrandMaterial()}
     loadProducts(true);
   });
 });
@@ -862,8 +1154,8 @@ Object.keys(FMAP).forEach(id=>{
   clearTimeout(ft);ft=setTimeout(()=>{F[FMAP[id]]=$('#'+id).value.trim();loadProducts(true)},500);
 }));
 $('#clearF').onclick=async()=>{
-  const q=F.q,sc=F.store_category;
-  F={...EMPTY_F,q,store_category:sc};
+  const q=F.q,sc=F.store_category,dp=F.department;
+  F={...EMPTY_F,q,store_category:sc,department:dp};
   Object.keys(FMAP).forEach(id=>$('#'+id).value='');
   syncFilterUI();await loadBrandMaterial();loadProducts(true);
 };
@@ -872,7 +1164,7 @@ $('#fToggle').onclick=()=>$('#filters').classList.toggle('open');
 /* axtarış */
 let st;
 function resetPanel(){
-  ['category','store_category','brand','gender','age','size','color','material','size_class','price_min','price_max'].forEach(k=>F[k]='');
+  ['category','store_category','department','subcategory','brand','gender','age','size','color','material','size_class','price_min','price_max','sale'].forEach(k=>F[k]='');
   Object.keys(FMAP).forEach(id=>$('#'+id).value='');
   syncFilterUI();loadBrandMaterial();
 }
@@ -882,16 +1174,17 @@ function runSearch(){
   const nextQ=$('#q').value.trim();
   if(nextQ!==F.q){
     F.q=nextQ;
-    F.store_category='';
+    F.store_category='';F.department='';F.subcategory='';
     if(nextQ)showAll=true;
   }
   if(!F.q){resetPanel();showAll=false}
   if(wasHome&&inResults())window.scrollTo({top:0});
   loadProducts(true);
 }
-$('#q').addEventListener('input',()=>{clearTimeout(st);st=setTimeout(runSearch,350)});
-$('#sbtn').onclick=()=>{clearTimeout(st);runSearch()};
-$('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){clearTimeout(st);runSearch()}});
+$('#q').addEventListener('input',()=>{clearTimeout(st);st=setTimeout(runSearch,800);onQInput()});
+$('#sbtn').onclick=()=>{clearTimeout(st);saveQ($('#q').value);hideSug();runSearch()};
+$('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){clearTimeout(st);saveQ($('#q').value);hideSug();runSearch();$('#q').blur()}});
+$('#q').addEventListener('focus',()=>{const v=$('#q').value.trim();if(v)fetchSug(v);else showEmptySug()});
 $('#logo').onclick=clearAll;
 
 /* ---------- kateqoriya menyusu ---------- */
@@ -946,24 +1239,265 @@ const MENU={
  'Digər':[G('Digər məhsullar',['Digər'])]
 };
 let menuTab='Qadın';
+const STD_DEPTS=new Set(Object.keys(MENU));
+const AZM={'İ':'i','I':'i','ı':'i','Ə':'e','ə':'e','Ö':'o','ö':'o','Ü':'u','ü':'u','Ş':'s','ş':'s','Ç':'c','ç':'c','Ğ':'g','ğ':'g'};
+const fm=s=>String(s||'').trim().replace(/[İIıƏəÖöÜüŞşÇçĞğ]/g,c=>AZM[c]).toLowerCase().replace(/\s+/g,' ');
+/* satıcıların yazdığı yeni üst/kateqoriya/alt kateqoriyanı menyuya qoşur; artıq varsa heç nə etmir */
+function mergeMenu(items){
+  (items||[]).forEach(it=>{
+    const d=(it.department||'').trim(),c=(it.category||'').trim(),s=(it.subcategory||'').trim();
+    if(!d||!c)return;
+    let dk=Object.keys(MENU).find(k=>fm(k)===fm(d));
+    if(!dk){MENU[d]=[];dk=d}
+    let g=MENU[dk].find(x=>fm(x.t)===fm(c));
+    if(!g){g={t:c,i:[],x:[]};MENU[dk].push(g)}
+    if(s){
+      const xi=g.x.findIndex(v=>fm(v)===fm(s));
+      /* "Daha çox göstər"də gizli idisə, məhsulu olduğu üçün görünən siyahıya çıxarılır */
+      if(xi>=0)g.i.push(g.x.splice(xi,1)[0]);
+      else if(!g.i.some(v=>fm(v)===fm(s)))g.i.push(s);
+    }
+  });
+}
+/* menyuda basanda hansı filtr açılsın:
+   - kateqoriya (Geyim): həmin üst kateqoriyada bütün Geyim məhsulları (alt kateqoriyası olanlar da daxil)
+   - alt kateqoriya (Paltar): yalnız alt kateqoriyası Paltar olan məhsullar */
+function subPatch(sub,group){
+  if(customCats().some(c=>foldJs(c)===foldJs(sub)))return {category:sub};
+  if(!group)return {department:menuTab,category:sub};
+  return {department:menuTab,category:group,subcategory:sub};
+}
 function renderMega(){
   const side=Object.keys(MENU).map(k=>'<button type="button" class="mega-tab'+(k===menuTab?' on':'')+'" data-menu-tab="'+esc(k)+'">'+esc(k)+' <span>›</span></button>').join('');
   const link=(i,g)=>'<a href="#" data-subcat="'+esc(i)+'" data-group="'+esc(g)+'">'+esc(i)+'</a>';
-  /* "Digər" şöbəsində standart maddənin altına satıcıların yazdığı kateqoriyalar əlavə olunur */
-  const groups=(MENU[menuTab]||[]).map((g,idx)=>menuTab==='Digər'&&idx===0?{...g,i:[...g.i,...customCats()]}:g);
+  /* satıcı formundakı Kateqoriya siyahısı ilə eyni: bütün sözlər görünür, gizlədilən yoxdur */
+  const groups=MENU[menuTab]||[];
   const cols=groups.map(g=>{
-    const links=g.i.map(i=>link(i,g.t)).join('');
-    const extras=g.x.length?'<div class="mega-extra" hidden>'+g.x.map(i=>link(i,g.t)).join('')+'</div><button type="button" class="mega-more">Daha çox göstər ↓</button>':'';
-    return '<div class="mega-group"><h4><a href="#" data-subcat="'+esc(g.t)+'">'+esc(g.t)+' →</a></h4>'+links+extras+'</div>';
+    const links=[...g.i,...g.x].map(i=>link(i,g.t)).join('');
+    return '<div class="mega-group"><h4><a href="#" data-subcat="'+esc(g.t)+'">'+esc(g.t)+' →</a></h4>'+links+'</div>';
   }).join('');
   $('#megaList').innerHTML='<div class="mega-side">'+side+'</div><div class="mega-cols">'+cols+'</div>';
 }
 function toggleMega(force){
   const p=$('#megaPanel');
+  /* telefonda köhnə açılan panel yerinə tam ekran menyu açılır */
+  if(isPhone()){
+    p.classList.add('hide');
+    const ov=covEl();
+    const was=!ov.classList.contains('hide');
+    const open=force===undefined?!was:!!force;
+    if(open===was)return;
+    if(!open){covClose();return}
+    ov.classList.remove('hide');
+    document.body.style.overflow='hidden';
+    covG=0;renderCov();
+    /* telefonun/brauzerin Geri düyməsi tətbiqdən çıxmasın, yalnız menyunu bağlasın */
+    try{history.pushState({...(history.state||{modal:0,res:null}),cov:1},'')}catch(e){}
+    return;
+  }
   const open=force===undefined?p.classList.contains('hide'):!!force;
   p.classList.toggle('hide',!open);
   if(open)renderMega();
 }
+
+/* ---------- telefonda tam ekran kateqoriya menyusu (üstdə şöbələr, solda qruplar, sağda alt kateqoriyalar) ---------- */
+function isPhone(){return window.matchMedia('(max-width:800px)').matches}
+var covG=0;
+function covEl(){
+  let el=$('#catOv');
+  if(el)return el;
+  el=document.createElement('div');
+  el.id='catOv';el.className='cov hide';
+  el.innerHTML='<div class="cov-top"><span class="cov-logo">ELFA</span><button type="button" class="cov-x" data-cov-x aria-label="Bağla"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>'
+    +'<div class="cov-tabs" id="covTabs"></div>'
+    +'<div class="cov-body"><div class="cov-side" id="covSide"></div><div class="cov-grid" id="covGrid"></div></div>';
+  document.body.appendChild(el);
+  el.addEventListener('click',covClick);
+  return el;
+}
+
+/* ---------- alt kateqoriya ikonları (telefon kateqoriya görünüşü) ---------- */
+const CI={
+ dress:'<path d="M9 3l-1 5 2 3-4 10h12L14 11l2-3-1-5"/><path d="M9 3c1 1.5 5 1.5 6 0"/>',
+ tshirt:'<path d="M8 4L3 7l2 4 3-1v10h8V10l3 1 2-4-5-3c-1 2-7 2-8 0z"/>',
+ shirt:'<path d="M8 4L3 7l2 4 3-1v10h8V10l3 1 2-4-5-3-4 4z"/><path d="M12 8v12"/>',
+ pants:'<path d="M7 3h10l1 18h-5l-1-10-1 10H6z"/><path d="M7 7h10"/>',
+ jacket:'<path d="M8 3L3 6v14h5V8l4 3 4-3v12h5V6l-5-3-4 4z"/><path d="M12 11v9"/>',
+ skirt:'<path d="M8 4h8l4 16H4z"/><path d="M8 4v3h8V4"/>',
+ shorts:'<path d="M6 5h12l1 12h-5l-2-5-2 5H5z"/>',
+ sweater:'<path d="M8 4L3 8l2 4 3-1v9h8v-9l3 1 2-4-5-4c-1 2-7 2-8 0z"/><path d="M8 16h8"/>',
+ suit:'<path d="M9 3l3 5 3-5 5 3-2 5v10H6V11L4 6z"/><path d="M12 8v13"/>',
+ bag:'<path d="M5 8h14l1 13H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+ backpack:'<rect x="6" y="6" width="12" height="15" rx="4"/><path d="M9 6V4a3 3 0 0 1 6 0v2M9 14h6"/>',
+ wallet:'<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M16 14.5h2"/>',
+ suitcase:'<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V5h6v3M4 13h16"/>',
+ laptopbag:'<rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 7V4h6v3M8 13h8"/>',
+ sneaker:'<path d="M3 15c0-3 2-4 4-5l2 2 4-2c3 1 6 2 7 5v2H3z"/><path d="M3 17h18M10 12l1 2"/>',
+ heel:'<path d="M4 8c3 0 5 2 6 4l8 2c2 .5 3 2 2 4h-3l-1-2-4-.5v6H9V12C7 11 5 10 4 8z"/>',
+ boot:'<path d="M8 3h6v8l5 3c1 .6 1.5 2 1 4H5V3z"/><path d="M8 7h6"/>',
+ sandal:'<path d="M3 17h18"/><path d="M5 17c0-3 2-5 4-6l3 2 5 1c2 .5 3 2 3 3"/><path d="M9 11l1 6M13 13l1 4"/>',
+ sock:'<path d="M9 3h7v9l4 3c.8 3-1 6-4 6-3 0-4-2-5-4L9 12z"/><path d="M9 7h7"/>',
+ pajama:'<path d="M8 3L4 6l1 5 3-1v4h8v-4l3 1 1-5-4-3-4 3z"/><path d="M8 14l-1 7h3l2-5 2 5h3l-1-7"/>',
+ lingerie:'<path d="M4 5c0 6 3 8 8 8s8-2 8-8c-2 2-4 3-5 1-1-1-2-1-3 0-1 2-3 1-5-1z"/><path d="M12 13v4"/>',
+ belt:'<rect x="2" y="9" width="20" height="6" rx="2"/><rect x="9" y="8" width="6" height="8" rx="1.5"/><path d="M12 10.5v3"/>',
+ scarf:'<path d="M5 4c4 3 10 3 14 0v6c-4 3-10 3-14 0z"/><path d="M8 12l-1 8h4l1-7M15 12l1 8h-3"/>',
+ hair:'<circle cx="12" cy="9" r="4"/><path d="M9 14l-3 6M15 14l3 6M7 9H3M21 9h-4"/>',
+ gem:'<path d="M6 4h12l3 5-9 11L3 9z"/><path d="M3 9h18M9 4l-2 5 5 11 5-11-2-5"/>',
+ watch:'<rect x="7" y="7" width="10" height="10" rx="3"/><path d="M9 7l1-4h4l1 4M9 17l1 4h4l1-4M12 10v2.5l2 1"/>',
+ glasses:'<circle cx="7" cy="14" r="4"/><circle cx="17" cy="14" r="4"/><path d="M11 14h2M3 14L5 7M21 14l-2-7"/>',
+ lipstick:'<rect x="8" y="12" width="8" height="9" rx="1"/><path d="M9 12V9h6v3M10 9l1-6 3 2v4"/>',
+ jar:'<rect x="5" y="9" width="14" height="11" rx="3"/><path d="M6 9V6h12v3M8 14h8"/>',
+ bottle:'<path d="M10 3h4v3l2 3v11a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V9l2-3z"/><path d="M8 13h8"/>',
+ spray:'<rect x="7" y="9" width="8" height="12" rx="2"/><path d="M9 9V6h4l2-2h3M18 7h2M18 10h2"/>',
+ nail:'<rect x="8" y="12" width="8" height="9" rx="2"/><path d="M10 12V8h4v4M11 8V4h2v4"/>',
+ dryer:'<path d="M3 8c0-2 2-3 5-3h7c3 0 6 2 6 5s-3 4-6 4H9L6 19H3z"/><path d="M8 5v8"/>',
+ razor:'<path d="M5 20L16 5l3 2-9 14z"/><path d="M14 7l3 2M7 17l3 2"/>',
+ baby:'<circle cx="12" cy="7" r="3.5"/><path d="M6 21v-5c0-3 2-5 6-5s6 2 6 5v5"/><path d="M10 7h.01M14 7h.01"/>',
+ onesie:'<path d="M8 3l-4 3 1 4 3-1v4l-1 7h4l1-4 1 4h4l-1-7V9l3 1 1-4-4-3c-1 2-7 2-8 0z"/>',
+ stroller:'<path d="M4 6h3l2 9h10"/><path d="M8 11h11a6 6 0 0 0-6-6V11"/><circle cx="9" cy="19" r="1.7"/><circle cx="17" cy="19" r="1.7"/>',
+ blocks:'<rect x="3" y="12" width="8" height="8" rx="1"/><rect x="13" y="12" width="8" height="8" rx="1"/><rect x="8" y="4" width="8" height="8" rx="1"/>',
+ doll:'<circle cx="12" cy="5.5" r="2.7"/><path d="M9 21l1-6-3-3 2-3h6l2 3-3 3 1 6M7 12l-3 1M17 12l3 1"/>',
+ teddy:'<circle cx="12" cy="13" r="7"/><circle cx="6.5" cy="6.5" r="2.3"/><circle cx="17.5" cy="6.5" r="2.3"/><path d="M10 13h.01M14 13h.01M11 16c.7.6 1.3.6 2 0"/>',
+ pregnant:'<circle cx="11" cy="4.5" r="2"/><path d="M10 8c-2 2-1 5 0 7l-1 6h3l1-4c3-1 4-4 2-6-1-2-3-3-5-3z"/>',
+ pot:'<path d="M4 9h16v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M2 9h20M9 6h6M2 13h2M20 13h2"/>',
+ teapot:'<path d="M6 9h10v7a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4z"/><path d="M16 11h2a2 2 0 0 1 0 4h-2M6 12H4l-1-3M9 9V6h4v3"/>',
+ utensils:'<path d="M6 3v7c0 1 1 2 2 2v9M10 3v7c0 1-1 2-2 2M8 3v5M17 21V3c-3 1-4 5-4 8h4"/>',
+ box:'<path d="M3 8l9-5 9 5v9l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v9"/>',
+ appliance:'<rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="14" r="4"/><path d="M8 6.5h.01M11 6.5h5"/>',
+ bed:'<path d="M3 19V6M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-8v6"/><circle cx="6.5" cy="11" r="2"/>',
+ blanket:'<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 11c3 2 5-2 9 0s6 0 9-1M3 15c3 2 5-2 9 0s6 0 9-1"/>',
+ rug:'<rect x="3" y="7" width="18" height="10" rx="1"/><path d="M6 7v10M18 7v10M3 12h18"/>',
+ curtain:'<path d="M3 4h18M5 4c0 6 1 12-1 16h5c-2-4-1-10-1-16M19 4c0 6-1 12 1 16h-5c2-4 1-10 1-16"/>',
+ towel:'<path d="M7 3h10v14H7zM7 17c0 2 1 3 2 4h6c1-1 2-2 2-4M7 7h10M7 11h10"/>',
+ pillow:'<path d="M4 7c5 2 11 2 16 0v10c-5-2-11-2-16 0z"/><path d="M4 7l1-2M20 7l-1-2"/>',
+ vase:'<path d="M9 3h6M10 3v4c-3 2-5 5-5 8a6 6 0 0 0 6 6h2a6 6 0 0 0 6-6c0-3-2-6-5-8V3"/>',
+ candle:'<rect x="7" y="11" width="10" height="10" rx="1.5"/><path d="M12 11V8M12 3c2 2 2 4 0 5-2-1-2-3 0-5z"/>',
+ frame:'<rect x="3" y="4" width="18" height="16" rx="1.5"/><rect x="6.5" y="7.5" width="11" height="9"/><path d="M8 15l3-3 2 2 2-2 2 3"/>',
+ mirror:'<ellipse cx="12" cy="10" rx="6" ry="7.5"/><path d="M12 17.5V21M8 21h8"/>',
+ brush:'<path d="M12 3v9M9 12h6l1 4H8zM8 16l-1 5M12 16v5M16 16l1 5"/>',
+ mop:'<path d="M14 3l-3 11M7 14h8l2 6H5z"/><path d="M8 17v3M11 17v3M14 17v3"/>',
+ basket:'<path d="M3 9h18l-2 11H5z"/><path d="M8 9l3-5M16 9l-3-5M9 13v4M12 13v4M15 13v4"/>',
+ phone:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
+ shield:'<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+ phonecase:'<rect x="6" y="3" width="12" height="18" rx="3"/><circle cx="9.5" cy="7" r="1.5"/><path d="M9 14h6"/>',
+ plug:'<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>',
+ battery:'<rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 10v4M8 12h4l-1.5 3M10 9l-.5 3"/>',
+ cable:'<path d="M6 3v4M10 3v4M5 7h6v3a3 3 0 0 1-6 0zM8 13v3a4 4 0 0 0 4 4h4M16 18h5v-4"/>',
+ laptop:'<rect x="5" y="5" width="14" height="10" rx="1.5"/><path d="M2 19h20l-2-4H4z"/>',
+ keyboard:'<rect x="2" y="7" width="20" height="11" rx="2"/><path d="M6 11h.01M10 11h.01M14 11h.01M18 11h.01M7 15h10"/>',
+ mouse:'<rect x="6" y="3" width="12" height="18" rx="6"/><path d="M12 3v7M6 10h12"/>',
+ monitor:'<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/>',
+ tablet:'<rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M11 18h2"/>',
+ headphones:'<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="7" rx="1.5"/><rect x="17" y="14" width="4" height="7" rx="1.5"/>',
+ speaker:'<rect x="5" y="2.5" width="14" height="19" rx="3"/><circle cx="12" cy="15" r="3.5"/><circle cx="12" cy="7" r="1.2"/>',
+ mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/>',
+ smartwatch:'<rect x="7" y="7" width="10" height="10" rx="3"/><path d="M9 7l1-4h4l1 4M9 17l1 4h4l1-4M12 10v3h2"/>',
+ band:'<path d="M8 3h8v18H8z"/><rect x="8" y="9" width="8" height="6" rx="1.5"/>',
+ home:'<path d="M3 11l9-8 9 8M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>'
+};
+/* qaydalar fm() ilə sadələşdirilmiş (ə→e, ö→o, ü→u, ş→s, ç→c, ı→i) ada tətbiq olunur */
+const CI_RULES=[
+ [/hundurdaban/,'heel'],[/babet|sandalet/,'sandal'],[/cekme|\bbot\b/,'boot'],[/ayaqqabi/,'sneaker'],
+ [/corab/,'sock'],[/pijama|gece geyimi/,'pajama'],[/alt paltari|korset|kombinezon/,'lingerie'],
+ [/cins salvar|salvar/,'pants'],[/etek/,'skirt'],[/\bsort\b/,'shorts'],[/sviter/,'sweater'],[/kostyum/,'suit'],
+ [/godekce/,'jacket'],[/t-shirt|idman geyimi/,'tshirt'],[/koynek/,'shirt'],[/paltar|hamile geyimi/,'dress'],
+ [/hamile|emizdirme/,'pregnant'],[/sirt canta/,'backpack'],[/seyahet canta/,'suitcase'],[/noutbuk canta/,'laptopbag'],
+ [/pulqabi/,'wallet'],[/canta/,'bag'],
+ [/kemer/,'belt'],[/serf/,'scarf'],[/sac aksesuar/,'hair'],[/bezek|aksesuar/,'gem'],
+ [/^saat$/,'watch'],[/agilli saat/,'smartwatch'],[/eynek/,'glasses'],[/dodaq|makiyaj|pudra|tonal|^tus$/,'lipstick'],
+ [/dirnaq/,'nail'],[/^fen$|duzlesdirici/,'dryer'],[/sampun|sac yagi/,'bottle'],[/sac maskasi|maska|serum|krem|gunesden|temizleyici/,'jar'],
+ [/deriye qulluq|sac baximi/,'jar'],[/teras/,'razor'],[/dezodorant|etir|etri|parfum/,'spray'],
+ [/beden|tulum|belek/,'onesie'],[/qidalanma|gigiyena/,'baby'],[/araba/,'stroller'],
+ [/konstruktor|tehsil/,'blocks'],[/kukla/,'doll'],[/oyuncaq/,'teddy'],
+ [/qab-qacaq|saxlama qab/,'pot'],[/caydan/,'teapot'],[/metbex alet/,'utensils'],[/meiset/,'appliance'],
+ [/yataq dest/,'bed'],[/yorgan/,'blanket'],[/xalca/,'rug'],[/perde/,'curtain'],[/desmal/,'towel'],[/yastiq/,'pillow'],
+ [/vaza/,'vase'],[/^sam$/,'candle'],[/cercive|divar dekor/,'frame'],[/guzgu/,'mirror'],
+ [/temizlik|supurge/,'brush'],[/^mop$/,'mop'],[/sebet/,'basket'],
+ [/smartfon/,'phone'],[/qoruyucu suse/,'shield'],[/telefon qabi/,'phonecase'],[/adapter/,'plug'],[/powerbank/,'battery'],[/kabel/,'cable'],
+ [/noutbuk/,'laptop'],[/klaviatura/,'keyboard'],[/sican/,'mouse'],[/monitor/,'monitor'],[/planset/,'tablet'],
+ [/qulaqliq/,'headphones'],[/dinamik/,'speaker'],[/mikrofon/,'mic'],[/agilli qolbaq/,'band'],[/agilli ev/,'home'],
+ [/geyim/,'tshirt'],[/^diger$/,'box']
+];
+function catIcon(name){
+  const k=fm(name);
+  const hit=CI_RULES.find(r=>r[0].test(k));
+  return hit&&CI[hit[1]]?'<svg viewBox="0 0 24 24" aria-hidden="true">'+CI[hit[1]]+'</svg>':'';
+}
+function covGroups(){
+  /* "Digər" şöbəsində satıcıların özü yazdığı kateqoriyalar da görünür */
+  return MENU[menuTab]||[];
+}
+let CATIMG=null,catImgLoading=false;
+function loadCatImgs(){
+  if(CATIMG||catImgLoading)return;
+  catImgLoading=true;
+  getJSON('/api/category-images').then(d=>{
+    CATIMG={};
+    Object.keys(d||{}).forEach(k=>{const u=safeUrl(d[k]);if(u)CATIMG[k.split('|').map(fm).join('|')]=u});
+    const ov=$('#catOv');if(ov&&!ov.classList.contains('hide'))renderCov();
+  }).catch(()=>{CATIMG={}});
+}
+function covPic(i,g){
+  const u=CATIMG&&CATIMG[[menuTab,g?g.t:'',i].map(fm).join('|')];
+  const ic=catIcon(i)||esc(String(i).trim().charAt(0).toUpperCase());
+  return u?ic+'<img class="cov-ph" src="'+esc(u)+'" alt="" loading="lazy" onerror="this.remove()">':ic;
+}
+function renderCov(){
+  loadCatImgs();
+  const tabs=$('#covTabs');
+  tabs.innerHTML=Object.keys(MENU).map(k=>'<button type="button" class="cov-tab'+(k===menuTab?' on':'')+'" data-cov-tab="'+esc(k)+'">'+esc(k)+'</button>').join('');
+  const gs=covGroups();
+  if(covG>=gs.length)covG=0;
+  $('#covSide').innerHTML=gs.map((g,n)=>'<button type="button" class="cov-g'+(n===covG?' on':'')+'" data-cov-g="'+n+'">'+esc(g.t)+'</button>').join('');
+  const g=gs[covG];
+  const all='<button type="button" class="cov-it cov-all" data-sub="'+esc(g?g.t:'')+'" data-grp=""><b class="cov-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></b><span>Hamısını gör</span></button>';
+  $('#covGrid').innerHTML=g?[...g.i,...g.x].map(i=>'<button type="button" class="cov-it" data-sub="'+esc(i)+'" data-grp="'+esc(g.t)+'"><b class="cov-ic">'+covPic(i,g)+'</b><span>'+esc(i)+'</span></button>').join('')+all:'';
+  $('#covGrid').scrollTop=0;
+  const on=tabs.querySelector('.on');
+  if(on)tabs.scrollLeft=on.offsetLeft-(tabs.clientWidth-on.offsetWidth)/2;
+}
+function covHide(){
+  const ov=$('#catOv');
+  if(ov)ov.classList.add('hide');
+  document.body.style.overflow='';
+}
+function covClose(){
+  const ov=$('#catOv');
+  if(!ov||ov.classList.contains('hide'))return;
+  covHide();
+  if(history.state&&history.state.cov)history.back();
+}
+/* Geri düyməsi: tarixçədəki menyu yazısı artıq silinib, menyunu bağlamaq kifayətdir */
+window.addEventListener('popstate',()=>{const ov=$('#catOv');if(ov&&!ov.classList.contains('hide'))covHide()});
+function covClick(e){
+  e.stopPropagation();/* menyunun içində basanda "kənara basıldı" sayılmasın */
+  if(e.target.closest('[data-cov-x]')){toggleMega(false);return}
+  const t=e.target.closest('[data-cov-tab]');
+  if(t){menuTab=t.dataset.covTab;covG=0;renderCov();return}
+  const g=e.target.closest('[data-cov-g]');
+  if(g){covG=+g.dataset.covG;renderCov();return}
+  const it=e.target.closest('[data-sub]');
+  if(it)goSub(it.dataset.sub,it.dataset.grp||'');
+}
+/* alt kateqoriyaya basanda: real kateqoriyadırsa filtr, deyilsə axtarış sözü (köhnə menyu ilə eyni qayda) */
+function goSub(sub,group){
+  const patch=subPatch(sub,group);
+  const hadCov=!!(history.state&&history.state.cov);
+  covHide();
+  if(hadCov){
+    /* əvvəlcə menyunun tarixçə yazısını geri qaytarırıq, sonra nəticələr yeni yazı kimi açılır */
+    let done=false;
+    const run=()=>{if(done)return;done=true;openResults(patch)};
+    window.addEventListener('popstate',run,{once:true});
+    setTimeout(run,350);
+    history.back();
+  }else openResults(patch);
+}
+/* ekran böyüyəndə (telefon yan çevriləndə, kompüter) tam ekran menyu bağlansın */
+window.addEventListener('resize',()=>{
+  const ov=$('#catOv');
+  if(ov&&!ov.classList.contains('hide')&&!isPhone())covClose();
+});
 $('#megaBtn').onclick=e=>{e.stopPropagation();toggleMega()};
 $('#megaList').addEventListener('click',e=>{
   const tab=e.target.closest('[data-menu-tab]');
@@ -981,23 +1515,20 @@ $('#megaList').addEventListener('click',e=>{
   /* Menyu maddəsi serverdəki real kateqoriyadırsa filtr kimi, deyilsə axtarış sözü kimi işləyir.
      Əks halda "Paltar", "Şampun" kimi maddələr həmişə boş nəticə verərdi. */
   const sub=a.dataset.subcat,group=a.dataset.group||'';
-  const custom=customCats().includes(sub);
-  const patch=custom?{category:sub}:{store_category:menuTab};
-  if(custom){/* satıcının özü yazdığı kateqoriya: birbaşa filtr */}
-  else if(OPT.categories.includes(sub))patch.category=sub;
-  else{
-    if(group&&OPT.categories.includes(group))patch.category=group;
-    patch.q=sub;
-  }
+  const patch=subPatch(sub,group);
   toggleMega(false);
   openResults(patch);
 });
 /* composedPath: tab-a basanda siyahı yenidən çəkilir və element DOM-dan çıxır; closest() onu tapmır və menyu bağlanırdı */
 document.addEventListener('click',e=>{if(!e.composedPath().includes($('#catnav')))toggleMega(false)});
 $('#cats').addEventListener('click',e=>{
+  if(e.target.closest('[data-sale]')){e.preventDefault();toggleMega(false);openResults({sale:'1'});return}
   const d=e.target.closest('[data-dept]');
   if(!d)return;
   e.preventDefault();
+  const isOpen=isPhone()?false:!$('#megaPanel').classList.contains('hide');
+  /* eyni kateqoriyaya ikinci dəfə basanda menyu bağlanır */
+  if(isOpen&&menuTab===d.dataset.dept){toggleMega(false);return}
   menuTab=d.dataset.dept;
   toggleMega(true);
 });
@@ -1039,15 +1570,21 @@ function renderView(){
   if(v.bind)v.bind();
 }
 /* "Geri" və bağlama düymələri brauzerin tarixçəsi ilə işləyir: popstate hadisəsi pəncərəni özü bağlayır/dəyişir */
-/* tam ekran məhsul səhifəsi saytın başlığının (və menyunun) altından açılır, başlıq həmişə görünür */
+/* Tam ekran məhsul səhifəsi: səhifə yuxarı qaytarılır ki, üst zolaq, axtarış və kateqoriya menyusu həmişə görünsün.
+   Bağlananda səhifə əvvəlki yerinə qayıdır. */
+let prevScroll=0;
 function positionOv(){
   const ov=$('#ov'),full=ov.classList.contains('full')&&ov.classList.contains('open');
+  const was=document.body.classList.contains('pfull');
   if(full){
+    if(!was)prevScroll=window.scrollY;
+    window.scrollTo(0,0);
     const top=Math.max(0,$('header').getBoundingClientRect().bottom,$('#catnav').getBoundingClientRect().bottom);
     ov.style.top=top+'px';
   }else ov.style.top='';
   document.body.style.overflow=full?'hidden':'';
   document.body.classList.toggle('pfull',full);
+  if(!full&&was)window.scrollTo(0,prevScroll);
 }
 window.addEventListener('resize',()=>{if($('#ov').classList.contains('open'))positionOv()});
 function closeModalDom(){stack=[];$('#ov').classList.remove('open','full');$('.modal').classList.remove('full');$('#mb').innerHTML='';positionOv();renderRecent()}
@@ -1056,9 +1593,13 @@ function dropModals(){if(!stack.length)return;closeModalDom();history.replaceSta
 function closeAll(){if(stack.length)history.go(-stack.length);else closeModalDom()}
 $('#mx').onclick=closeAll;
 $('#ov').onclick=e=>{if(e.target.id==='ov')closeAll()};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){toggleMega(false);toggleSort(false);closeAll()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(closeLb())return;hideSug();toggleMega(false);toggleSort(false);closeAll()}});
 function shared(e){
   if(e.target.closest('.ccontact'))return true;
+  const sh=e.target.closest('[data-share]');
+  if(sh){e.stopPropagation();const kv=sh.dataset.share.split(':');shareIt(kv[0],kv[1]);return true}
+  const fo=e.target.closest('[data-follow]');
+  if(fo){e.stopPropagation();toggleFollow(fo.dataset.follow);return true}
   const h=e.target.closest('[data-heart]');
   if(h){e.stopPropagation();toggleFav(h.dataset.heart);return true}
   const s=e.target.closest('[data-store]');
@@ -1069,6 +1610,9 @@ function shared(e){
 }
 $('#mb').addEventListener('click',e=>{
   if(e.target.closest('[data-back]'))return history.back();
+  const cr=e.target.closest('[data-crumb]');
+  if(cr){try{openResults(JSON.parse(cr.dataset.crumb))}catch(_){}return}
+  if(e.target.closest('[data-home-crumb]')){clearAll();return}
   const inf=e.target.closest('[data-info]');
   if(inf){view(()=>({html:'<h3>'+esc(inf.dataset.info)+'</h3><p>'+esc(INFO[inf.dataset.info])+'</p>'}));return}
   if(e.target.closest('[data-act=allStores]')){view(allStoresView);return}
@@ -1085,13 +1629,14 @@ $('main').addEventListener('click',e=>{
   const ct=e.target.closest('[data-cat]');
   if(ct){openResults({category:ct.dataset.cat});return}
   const d=e.target.closest('[data-dept]');
-  if(d){openResults({store_category:d.dataset.dept});return}
+  if(d){openResults({department:d.dataset.dept});return}
   const a=e.target.closest('[data-act]');
   if(!a)return;
   const act=a.dataset.act;
   if(act==='showAll')openResults({},true);
+  else if(act==='sale')openResults({sale:'1'});
   else if(act==='allStores')view(allStoresView);
-  else if(act==='scrollFeat')$('#featSec').scrollIntoView({behavior:'smooth'});
+  else if(act==='scrollFeat')($('#featSec').classList.contains('hide')?$('#newSec'):$('#featSec')).scrollIntoView({behavior:'smooth'});
   else if(act==='scrollTiles')$('#tilesSec').scrollIntoView({behavior:'smooth'});
 });
 $$('[data-info]').forEach(a=>a.onclick=()=>view(()=>({html:'<h3>'+esc(a.dataset.info)+'</h3><p>'+esc(INFO[a.dataset.info])+'</p>'})));
@@ -1115,9 +1660,15 @@ const PFOOT='<footer><div class="footer-inner"><div><div class="footer-logo">ELF
 function contactHtml(p){
   const msg=encodeURIComponent('Salam, ELFA-da "'+p.name+'" məhsulu ilə maraqlanıram.');
   const wa=safeUrl(p.store_whatsapp_url);
-  const parts=(wa?'<a class="btn wa" href="'+esc(wa)+'?text='+msg+'" target="_blank" rel="noopener noreferrer">'+ICON_WA+'<span>Satıcıya yaz (WhatsApp)</span></a>':'')+
+  const parts=(wa?'<a class="btn wa" data-wa="'+esc(wa)+'" href="'+esc(wa)+'?text='+msg+'" target="_blank" rel="noopener noreferrer">'+ICON_WA+'<span>Satıcıya yaz (WhatsApp)</span></a>':'')+
     (p.store_phone?'<a class="btn alt" href="'+esc(telHref(p.store_phone))+'">'+ICON_PHONE+'<span>'+esc(fmtPhone(p.store_phone))+'</span></a>':'');
   return parts||'<p style="margin-top:10px">Satıcının əlaqə məlumatı əlavə olunmayıb.</p>';
+}
+/* ad: satıcının seçdiyi sayda ilk sözlər qalın, qalanı sadə */
+function nameHtml(p){
+  const n=Math.max(0,parseInt(p.name_bold,10)||0),w=String(p.name||'').trim().split(/\s+/).filter(Boolean);
+  if(!n||n>=w.length)return esc(w.join(' '));
+  return '<b>'+esc(w.slice(0,n).join(' '))+'</b> <span class="pd-nr">'+esc(w.slice(n).join(' '))+'</span>';
 }
 function productView(id){
   return()=>{
@@ -1126,29 +1677,39 @@ function productView(id){
     pushRecent(p);
     const fav=favs.includes(String(p.id));
     const vid=safeVideo(p.video_url);
-    const imgs=((p.images&&p.images.length)?p.images:[p.image_url]).map(safeUrl).filter(Boolean).slice(0,5);
-    const media=imgs.map(u=>({t:'i',u})).concat(vid?[{t:'v',u:vid}]:[]);
-    const rows=[['Kateqoriya',p.category],['Cinsiyyət',p.gender],['Yaş aralığı',p.age_group],['Ölçü',(p.sizes||[]).join(', ')],['Rəng',p.color],['Boyut',p.size_class],['Ölçülər',p.dimensions],['Material',p.material]]
-      .filter(r=>r[1]);
+    const hasVar=!!(p.variants&&p.variants.length);
+    const hasSzStock=!!(p.size_stock&&p.size_stock.length);
+    const baseImgs=((p.images&&p.images.length)?p.images:[p.image_url]).map(safeUrl).filter(Boolean).slice(0,5);
+    /* rəngin öz şəkli varsa o göstərilir, yoxdursa məhsulun ümumi şəkilləri */
+    const mediaFor=k=>{
+      const vi=hasVar&&p.variants[k]?(p.variants[k].images||[]).map(safeUrl).filter(Boolean).slice(0,5):[];
+      return (vi.length?vi:baseImgs).map(u=>({t:'i',u})).concat(vid?[{t:'v',u:vid}]:[]);
+    };
+    let media=mediaFor(0);
+    const rows=[['Yaş aralığı',p.age_group],['Ölçü',(p.sizes||[]).join(', ')],['Rəng',p.color]]
+      .filter(r=>r[1]&&r[0]!=='Rəng'&&r[0]!=='Ölçü');
     const inStock=p.stock>0;
-    const thumbs=media.length>1?'<div class="pd-thumbs">'+media.map((m,i)=>'<button type="button" class="pd-th'+(m.t==='v'?' v':'')+(i===0?' on':'')+'" data-gi="'+i+'" aria-label="'+(m.t==='v'?'Video':'Şəkil '+(i+1))+'">'+(m.t==='i'?'<img src="'+esc(m.u)+'" alt="">':'')+'</button>').join('')+'</div>':'';
-    const nav=media.length>1?'<button type="button" class="pd-nav l" data-pd="-1" aria-label="Əvvəlki">‹</button><button type="button" class="pd-nav r" data-pd="1" aria-label="Növbəti">›</button><span class="pd-count" id="pdCount"></span>':'';
+    const thumbs0=media.length>1?'<div class="pd-thumbs">'+media.map((m,i)=>'<button type="button" class="pd-th'+(m.t==='v'?' v':'')+(i===0?' on':'')+'" data-gi="'+i+'" aria-label="'+(m.t==='v'?'Video':'Şəkil '+(i+1))+'">'+(m.t==='i'?'<img src="'+esc(m.u)+'" alt="">':'')+'</button>').join('')+'</div>':'';
+    const nav='<button type="button" class="pd-nav l" data-pd="-1" aria-label="Əvvəlki">‹</button><button type="button" class="pd-nav r" data-pd="1" aria-label="Növbəti">›</button><span class="pd-count" id="pdCount"></span>';
     return {full:true,html:
-      '<div class="pdp"><div class="pd"><div class="pd-gal"><div class="pd-main"><div class="pd-stage" id="pdStage"></div>'+nav+'</div>'+thumbs+'</div>'+
+      '<div class="pdp">'+crumbs(p)+'<div class="pd"><div class="pd-gal"><div class="pd-main"><div class="pd-stage" id="pdStage"></div>'+nav+'</div><div id="pdThumbs"></div></div>'+
       '<div class="pd-info">'+
-        (p.brand?'<span class="pd-brand">'+esc(p.brand)+'</span>':'')+
-        '<h2>'+esc(p.name)+'</h2>'+
-        '<div class="pd-price">'+money(p.price)+'</div>'+
-        '<span class="pd-stock'+(inStock?'':' out')+'">'+(inStock?'Stokda var • '+esc(p.stock)+' ədəd':'Stokda yoxdur')+'</span>'+
+        '<div class="pd-title"><h2>'+nameHtml(p)+'</h2></div>'+
+        '<div class="pd-price'+(disc(p)?' sale':'')+'">'+money(p.price)+(disc(p)?'<s class="oldp big">'+money(p.old_price)+'</s><span class="dpill">-'+disc(p)+'%</span>':'')+'</div>'+
+        '<span class="pd-stock'+(inStock?'':' out')+'" id="pdStock">'+(inStock?'Stokda var • '+esc(p.stock)+' ədəd':'Stokda yoxdur')+'</span>'+((hasVar||hasSzStock||p.color||(p.sizes||[]).length)?'<div class="pd-var" id="pdVar"></div>':'')+
         (p.description?'<p class="pd-desc">'+esc(p.description)+'</p>':'')+
         (rows.length?'<div class="pd-specs">'+rows.map(r=>'<div class="pd-spec"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>').join('')+'</div>':'')+
         '<div class="pd-store" data-store="'+esc(p.store_id)+'"><div class="av">'+esc(initials(p.store_name))+'</div><div><b>'+esc(p.store_name)+'</b><small>'+esc(p.store_city||'Mağazaya bax')+'</small></div><i>›</i></div>'+
-        '<div class="pd-cta">'+contactHtml(p)+'<button class="btn out'+(fav?' on':'')+'" id="favInDetail">'+favLabel(fav)+'</button></div>'+
-      '</div></div><div id="pdMore"></div></div>'+PFOOT,
+        '<div class="pd-cta">'+contactHtml(p)+'<button class="btn out'+(fav?' on':'')+'" id="favInDetail">'+favLabel(fav)+'</button><button class="btn out" type="button" data-share="p:'+esc(p.id)+'">'+ICON_SHARE+'<span>Paylaş</span></button></div>'+
+      '</div></div><div id="pdMore"></div></div>'+stickyBar(p)+PFOOT,
       bind(){
         loadMoreLikeThis(p);
         let i=0;
         const stage=$('#pdStage');
+        const drawThumbs=()=>{
+          $('#pdThumbs').innerHTML=media.length>1?'<div class="pd-thumbs">'+media.map((m,k)=>'<button type="button" class="pd-th'+(m.t==='v'?' v':'')+(k===i?' on':'')+'" data-gi="'+k+'" aria-label="'+(m.t==='v'?'Video':'Şəkil '+(k+1))+'">'+(m.t==='i'?'<img src="'+esc(m.u)+'" alt="">':'')+'</button>').join('')+'</div>':'';
+          $$('.pd-nav,.pd-count').forEach(b=>b.classList.toggle('hide',media.length<2));
+        };
         const show=n=>{
           if(!media.length){stage.innerHTML='<div class="pd-ph">ELFA</div>';return}
           i=(n+media.length)%media.length;
@@ -1159,8 +1720,13 @@ function productView(id){
           $$('.pd-th').forEach((b,k)=>b.classList.toggle('on',k===i));
           const c=$('#pdCount');if(c)c.textContent=(i+1)+' / '+media.length;
         };
-        show(0);
-        $$('.pd-th').forEach(b=>b.onclick=e=>{e.stopPropagation();show(+b.dataset.gi)});
+        /* rəng dəyişəndə həmin rəngin şəkilləri açılır */
+        let curColor=-1;
+        const setColor=k=>{if(k===curColor)return;curColor=k;media=mediaFor(k);i=0;drawThumbs();show(0)};
+        setColor(0);
+        if(hasVar)initVariants(p,setColor);else initPlain(p);
+        stage.addEventListener('click',e=>{if(e.target.tagName==='IMG')openLightbox(e.target.currentSrc||e.target.src)});
+        $('#pdThumbs').addEventListener('click',e=>{const b=e.target.closest('.pd-th');if(b){e.stopPropagation();show(+b.dataset.gi)}});
         $$('.pd-nav').forEach(b=>b.onclick=e=>{e.stopPropagation();show(i+(+b.dataset.pd))});
         let x0=null;
         stage.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
@@ -1213,6 +1779,7 @@ async function loadStores(){
   sc.innerHTML=STORES.map(storeCard).join('');
   tl.innerHTML=STORES.map(storeTile).join('');
   updateArrows();
+  renderFollowSec();
 }
 const allStoresView=()=>({
   html:'<h3>Bütün mağazalar</h3>'+(STORES.length?'<div class="grid3">'+STORES.map(storeCard).join('')+'</div>':'<p>Hələ təsdiqlənmiş mağaza yoxdur.</p>')
@@ -1227,7 +1794,7 @@ function storeView(id){
         (s.products||[]).forEach(p=>{cache[p.id]=p});
         const wa=safeUrl(s.whatsapp_url),ig=safeUrl(s.instagram_url),tk=safeUrl(s.tiktok_url);
         box.innerHTML=
-          '<div class="storehead">'+logoHtml(s)+'<div><h3 style="margin:0">'+esc(s.store_name)+'</h3><p>'+esc([s.category,s.city].filter(Boolean).join(' · '))+'</p></div></div>'+
+          '<div class="storehead">'+logoHtml(s)+'<div><h3 style="margin:0">'+esc(s.store_name)+'</h3><p>'+esc([s.category,s.city].filter(Boolean).join(' · '))+'</p></div><div class="storebtns"><button type="button" class="folbtn'+(isFol(s.id)?' on':'')+'" data-follow="'+esc(s.id)+'">'+folLabel(isFol(s.id))+'</button><button type="button" class="folbtn ghost" data-share="s:'+esc(s.id)+'">Paylaş</button></div></div>'+
           (s.about?'<p style="margin-top:10px">'+esc(s.about)+'</p>':'')+
           (s.address?'<p style="margin-top:6px">📍 '+esc(s.address)+'</p>':'')+
           '<div class="soc">'+
@@ -1268,31 +1835,34 @@ $('#favBtn').onclick=()=>view(()=>({
 
 /* ---------- ana səhifənin məhsulları ---------- */
 async function loadHome(){
-  const box=$('#homeProducts'),em=$('#homeEmpty');
-  box.innerHTML=skel(6);
-  try{
-    let r=await fetch('/api/products?home=1&limit=12');
-    let rows=r.ok?await r.json():[];
-    if(rows.length){
-      $('#homeTitle').textContent='Seçdiyimiz məhsullar';
-      $('#homeSub').textContent='ELFA-nın və mağazaların ana səhifə üçün seçdiyi məhsullar';
-    }else{
-      r=await fetch('/api/products?limit=12');rows=r.ok?await r.json():[];
-      $('#homeTitle').textContent='Yeni məhsullar';
-      $('#homeSub').textContent='ELFA-ya ən son əlavə olunanlar';
-    }
-    rows.forEach(p=>{cache[p.id]=p});
-    box.innerHTML=rows.map(cardHtml).join('');
-    em.classList.toggle('hide',rows.length>0);
-    if(!rows.length)em.textContent='Hələ məhsul yoxdur. Satıcılar təsdiqləndikdən sonra məhsullar burada görünəcək.';
-  }catch(e){
-    em.classList.remove('hide');em.textContent='Məhsulları yükləmək mümkün olmadı. Bir az sonra yenidən cəhd edin.';
+  const fbox=$('#homeProducts'),fem=$('#homeEmpty'),nbox=$('#newProducts'),nem=$('#newEmpty');
+  fbox.innerHTML=skel(6);nbox.innerHTML=skel(6);
+  /* "Seçdiyimiz məhsullar" və "Yeni məhsullar" ayrı bölmələrdir: biri digərini gizlətmir */
+  const get=async u=>{try{const r=await fetch(u);return r.ok?await r.json():null}catch(e){return null}};
+  const [picked,fresh,onsale]=await Promise.all([get('/api/products?home=1&limit=12'),get('/api/products?limit=12'),get('/api/products?sale=1&sort=discount&limit=6')]);
+  if(picked===null&&fresh===null){
+    $('#featSec').classList.add('hide');
+    nbox.innerHTML='';nem.classList.remove('hide');
+    nem.textContent='Məhsulları yükləmək mümkün olmadı. Bir az sonra yenidən cəhd edin.';
+    return;
   }
+  const pk=picked||[],nw=fresh||[];
+  const sl=onsale||[];
+  [...pk,...nw,...sl].forEach(p=>{cache[p.id]=p});
+  $('#saleSec').classList.toggle('hide',!sl.length);
+  $('#saleProducts').innerHTML=sl.map(cardHtml).join('');
+  /* seçilmiş məhsul yoxdursa həmin bölmə gizlənir */
+  $('#featSec').classList.toggle('hide',!pk.length);
+  fbox.innerHTML=pk.map(cardHtml).join('');
+  fem.classList.add('hide');
+  nbox.innerHTML=nw.map(cardHtml).join('');
+  nem.classList.toggle('hide',nw.length>0);
+  if(!nw.length)nem.textContent='Hələ məhsul yoxdur. Satıcılar təsdiqləndikdən sonra məhsullar burada görünəcək.';
 }
 
 /* ---------- başlanğıc ---------- */
 /* ---------- sıralama menyusu ---------- */
-const SORTS=[['','Tövsiyə olunan sıralama'],['price_asc','Ən aşağı qiymət'],['price_desc','Ən yüksək qiymət'],['newest','Ən yenilər']];
+const SORTS=[['','Tövsiyə olunan sıralama'],['price_asc','Ən aşağı qiymət'],['price_desc','Ən yüksək qiymət'],['newest','Ən yenilər'],['discount','Ən böyük endirim']];
 const ICON_CHECK='<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 function renderSort(){
   const cur=SORTS.find(x=>x[0]===SORT)||SORTS[0];
@@ -1318,14 +1888,10 @@ document.addEventListener('click',e=>{if(!e.target.closest('#sortBox'))toggleSor
 /* ---------- yeni funksiyalar ---------- */
 const skel=n=>Array.from({length:n},()=>'<div class="pcard sk"><div class="photo"></div><div class="pinfo"><div class="sk-l"></div><div class="sk-l s"></div></div></div>').join('');
 
-function addOpt(id,v){
-  v=String(v||'').trim();if(!v)return;
-  const el=$('#'+id);
-  if(![...el.options].some(o=>o.value.toLowerCase()===v.toLowerCase()))el.insertAdjacentHTML('beforeend','<option value="'+esc(v)+'">'+esc(v)+'</option>');
-}
-const ensureOpt=(id,v)=>{if(['fCategory','fColor','fSizeClass'].includes(id))addOpt(id,v)};
+function addOpt(id,v){$('#'+id).addOption(v)}
+const ensureOpt=(id,v)=>{if(['fCategory','fColor','fSizeClass'].includes(id))String(v||'').split('|').forEach(x=>addOpt(id,x))};
 /* satıcıların özü yazdığı kateqoriya/rəng/boyut filtrlərdə də görünsün */
-function mergeFilterValues(rows){rows.forEach(p=>{addOpt('fCategory',p.category);addOpt('fColor',p.color);addOpt('fSizeClass',p.size_class)})}
+function mergeFilterValues(rows){rows.forEach(p=>{addOpt('fCategory',p.category);addOpt('fColor',p.color);(p.colors||[]).forEach(c=>addOpt('fColor',c));addOpt('fSizeClass',p.size_class)})}
 
 const RKEY='elfa_recent';
 function pushRecent(p){
@@ -1366,12 +1932,12 @@ const heartBtn=p=>'<button type="button" class="hrt'+(favs.includes(String(p.id)
 const miniCard=p=>{
   const u=safeUrl(p.image_url);
   return '<article class="mcard" data-pid="'+esc(p.id)+'"><div class="mph">'+(u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'')+'</div>'+
-    '<div class="mrow"><div class="mtx"><div class="mname">'+esc(p.name)+'</div><div class="mcat">'+esc(p.category||p.store_name||'')+'</div></div>'+heartBtn(p)+'</div>'+
-    '<div class="mprice">'+money(p.price)+'</div></article>';
+    '<div class="mrow"><div class="mtx"><div class="mname">'+esc(p.name)+'</div><div class="mcat">'+esc(p.subcategory||p.category||p.store_name||'')+'</div></div>'+heartBtn(p)+'</div>'+
+    mprice(p)+'</article>';
 };
 const sideCard=p=>{
   const u=safeUrl(p.image_url);
-  return '<article class="hcard" data-pid="'+esc(p.id)+'"><div class="htx"><div class="mname">'+esc(p.name)+'</div><div class="mcat">'+esc(p.category||p.store_name||'')+'</div><div class="mprice">'+money(p.price)+'</div></div>'+
+  return '<article class="hcard" data-pid="'+esc(p.id)+'"><div class="htx"><div class="mname">'+esc(p.name)+'</div><div class="mcat">'+esc(p.subcategory||p.category||p.store_name||'')+'</div><div class="mprice">'+money(p.price)+'</div></div>'+
     '<div class="him">'+(u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'')+'</div>'+heartBtn(p)+'</article>';
 };
 const storeMini=s=>'<div class="sc2" data-store="'+esc(s.id)+'"><div class="sc2top">'+logoHtml(s)+'<div class="sc2tx"><b>'+esc(s.store_name)+'</b><small>'+esc(s.category||'')+'</small>'+(s.city?'<small>'+ICON_PIN+esc(s.city)+'</small>':'')+'</div></div><span class="sc2btn">Mağazaya bax →</span></div>';
@@ -1412,7 +1978,7 @@ $('#bnav').addEventListener('click',e=>{
   const b=e.target.closest('[data-bn]');if(!b)return;
   const k=b.dataset.bn;
   if(k==='home'){if(inResults()||stack.length)clearAll();else window.scrollTo({top:0,behavior:'smooth'})}
-  else if(k==='cats'){window.scrollTo({top:0});toggleMega(true)}
+  else if(k==='cats'){e.stopPropagation();window.scrollTo({top:0});toggleMega(true)}
   else if(k==='search'){window.scrollTo({top:0});$('#q').focus()}
   else if(k==='fav')$('#favBtn').click();
 });
@@ -1452,6 +2018,228 @@ window.addEventListener('popstate',e=>{
   }finally{popping=false}
 });
 
+const COLOR_HEX={'Lacivərd':'#000352','Meşə yaşılı':'#3B6633','Narıncı':'#FF6700','Parlaq qızılı':'#FFD700','Metal qızıl':'#D4AF37','Nanə-firuzəyi':'#1CFFC7','Qara':'#1E1E1E','Ağ':'#FFFFFF','Qırmızı':'#C73E1D','Mavi':'#2F6FB3','Yaşıl':'#2E7D4F','Sarı':'#E9B949','Çəhrayı':'#E88FB0','Boz':'#8C8C8C','Qəhvəyi':'#7A5230','Bej':'#D8C3A5'};
+const RAINBOW='url(data:image/png;base64,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) center/cover no-repeat';
+const colorHex=c=>c==='Rəngarəng'?RAINBOW:(COLOR_HEX[c]||'#CFCABD');
+const dotsHtml=p=>(p.colors&&p.colors.length>1)?'<div class="cdots">'+p.colors.slice(0,5).map(c=>'<i title="'+esc(c)+'" style="background:'+colorHex(c)+'"></i>').join('')+(p.colors.length>5?'<em>+'+(p.colors.length-5)+'</em>':'')+'</div>':'';
+
+/* ölçü sıralaması: əvvəl rəqəmlər (artan), sonra XS..XXL, sonra qalanı əlifba ilə */
+const SIZE_ORDER=['XXXS','XXS','XS','S','M','L','XL','XXL','2XL','XXXL','3XL','4XL','5XL'];
+function sizeCmp(a,b){
+  a=String(a);b=String(b);
+  const da=/^\d/.test(a),db=/^\d/.test(b);
+  if(da&&db){const d=parseFloat(a.replace(',','.'))-parseFloat(b.replace(',','.'));return d||a.localeCompare(b,undefined,{numeric:true})}
+  if(da!==db)return da?-1:1;
+  const ia=SIZE_ORDER.indexOf(a),ib=SIZE_ORDER.indexOf(b);
+  if(ia>=0&&ib>=0)return ia-ib;
+  if((ia>=0)!==(ib>=0))return ia>=0?-1:1;
+  return a.localeCompare(b,undefined,{numeric:true});
+}
+
+/* məhsul səhifəsi: rəng seçəndə ölçülər dəyişir, o rəngdə olmayan ölçünün üstündə ✕ görünür, hər ölçünün altında stok sayı yazılır */
+function initVariants(p,onColor){
+  const box=$('#pdVar');if(!box)return;
+  const V=p.variants;
+  const all=[];
+  V.forEach(v=>(v.sizes||[]).forEach(s=>{if(!all.includes(s.size))all.push(s.size)}));
+  all.sort(sizeCmp);
+  const vstock=v=>(v.sizes&&v.sizes.length)?v.sizes.reduce((a,s)=>a+s.stock,0):(+v.stock||0);
+  let ci=Math.max(0,V.findIndex(v=>vstock(v)>0)),sz='';
+  function draw(){
+    const v=V[ci],has=all.length>0&&(v.sizes||[]).length>0;
+    const avail=s=>{const f=(v.sizes||[]).find(q=>q.size===s);return f?f.stock:0};
+    const shown=all;
+    if(onColor)onColor(ci);
+    if(sz&&avail(sz)<=0)sz='';
+    box.innerHTML='<div><div class="pv-l">Rəng: <b>'+esc(v.color)+'</b></div><div class="pv-row">'+
+      V.map((q,k)=>'<button type="button" class="pd-col'+(k===ci?' on':'')+(vstock(q)<=0?' out':'')+'" data-vc="'+k+'"><i style="background:'+colorHex(q.color)+'"></i>'+esc(q.color)+'</button>').join('')+'</div></div>'+
+      (has?'<div><div class="pv-l">Ölçü: <b>'+(sz?esc(sz):'seçin')+'</b></div><div class="pv-row">'+
+        shown.map(s=>{const n=avail(s);return '<button type="button" class="pd-sz'+(n<=0?' oos':'')+(s===sz?' on':'')+'" data-vs="'+esc(s)+'"'+(n<=0?' title="Bu rəngdə yoxdur"':'')+'>'+esc(s)+'<small>'+(n>0?n+' ədəd':'yoxdur')+'</small></button>'}).join('')+'</div></div>':'');
+    const n=has?(sz?avail(sz):vstock(v)):vstock(v),st=$('#pdStock');
+    if(st){st.className='pd-stock'+(n>0?'':' out');st.textContent=n>0?'Stokda var • '+n+' ədəd':'Stokda yoxdur'}
+    const msg=encodeURIComponent('Salam, ELFA-da "'+p.name+'" məhsulu ilə maraqlanıram. Rəng: '+v.color+(sz?', Ölçü: '+sz:'')+'.');
+    $$('[data-wa]').forEach(a=>{a.href=a.dataset.wa+'?text='+msg});
+  }
+  box.onclick=e=>{
+    const c=e.target.closest('[data-vc]');
+    if(c){ci=+c.dataset.vc;draw();return}
+    const s=e.target.closest('[data-vs]');
+    if(!s)return;
+    if(s.classList.contains('oos')){toast('Bu rəngdə '+s.dataset.vs+' ölçüsü yoxdur');return}
+    sz=sz===s.dataset.vs?'':s.dataset.vs;draw();
+  };
+  draw();
+}
+
+/* variantı olmayan məhsul: rəng və ölçü eyni görünüşdə; hər ölçünün altında stok sayı, stoku 0 olan ölçü ✕ ilə */
+function initPlain(p){
+  const box=$('#pdVar');if(!box)return;
+  const cols=(p.colors&&p.colors.length?p.colors:String(p.color||'').split(',')).map(x=>String(x).trim()).filter(Boolean);
+  /* size_stock varsa hər ölçünün stoku bilinir; yoxdursa yalnız ölçü adları göstərilir */
+  const items=(p.size_stock&&p.size_stock.length)
+    ?p.size_stock.map(z=>({s:String(z.size),n:Math.max(0,+z.stock||0)}))
+    :(p.sizes||[]).filter(Boolean).map(s=>({s:String(s),n:null}));
+  items.sort((a,b)=>sizeCmp(a.s,b.s));
+  const find=s=>items.find(x=>x.s===s);
+  let sz='';
+  function draw(){
+    box.innerHTML=(cols.length?'<div><div class="pv-l">Rəng: <b>'+esc(cols.join(', '))+'</b></div><div class="pv-row">'+cols.map(c=>'<span class="pd-col on"><i style="background:'+colorHex(c)+'"></i>'+esc(c)+'</span>').join('')+'</div></div>':'')+
+      (items.length?'<div><div class="pv-l">Ölçü: <b>'+(sz?esc(sz):'seçin')+'</b></div><div class="pv-row">'+items.map(x=>{
+        const out=x.n!==null&&x.n<=0;
+        return '<button type="button" class="pd-sz'+(out?' oos':'')+(x.s===sz?' on':'')+'" data-vs="'+esc(x.s)+'"'+(out?' title="Stokda yoxdur"':'')+'>'+esc(x.s)+(x.n===null?'':'<small>'+(x.n>0?x.n+' ədəd':'yoxdur')+'</small>')+'</button>';
+      }).join('')+'</div></div>':'');
+    const cur=sz?find(sz):null,st=$('#pdStock');
+    if(st&&cur&&cur.n!==null){st.className='pd-stock'+(cur.n>0?'':' out');st.textContent=cur.n>0?'Stokda var • '+cur.n+' ədəd':'Stokda yoxdur'}
+    else if(st){const t=+p.stock>0;st.className='pd-stock'+(t?'':' out');st.textContent=t?'Stokda var • '+p.stock+' ədəd':'Stokda yoxdur'}
+    const msg=encodeURIComponent('Salam, ELFA-da "'+p.name+'" məhsulu ilə maraqlanıram.'+(cols.length?' Rəng: '+cols.join(', ')+'.':'')+(sz?' Ölçü: '+sz+'.':''));
+    $$('[data-wa]').forEach(a=>{a.href=a.dataset.wa+'?text='+msg});
+  }
+  box.onclick=e=>{
+    const b=e.target.closest('[data-vs]');if(!b)return;
+    if(b.classList.contains('oos')){toast(b.dataset.vs+' ölçüsü stokda yoxdur');return}
+    sz=sz===b.dataset.vs?'':b.dataset.vs;draw();
+  };
+  draw();
+}
+
+/* ============ Mərhələ 1: yeni funksiyalar ============ */
+const disc=p=>(+p.old_price>+p.price&&+p.old_price>0)?Math.round((1-p.price/p.old_price)*100):0;
+const priceBox=p=>'<div class="pwrap'+(disc(p)?' sale':'')+'"><span class="price">'+money(p.price)+'</span>'+(disc(p)?'<s class="oldp">'+money(p.old_price)+'</s>':'')+'</div>';
+const mprice=p=>'<div class="mprice'+(disc(p)?' sale':'')+'">'+money(p.price)+(disc(p)?' <s class="oldp">'+money(p.old_price)+'</s>':'')+'</div>';
+const ICON_SHARE='<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
+
+/* --- axtarış təklifləri --- */
+const SQ='elfa_qs',POP=['Paltar','Ətir','Çanta','Ayaqqabı','Saat','Qulaqlıq'];
+const SG_SEARCH='<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>';
+const SG_CLOCK='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+const SG_TAG='<svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg>';
+let sugT,sugSeq=0;
+const recentQs=()=>LS.g(SQ,[]);
+function saveQ(q){q=String(q||'').trim();if(q.length<2)return;LS.s(SQ,[q,...recentQs().filter(x=>fm(x)!==fm(q))].slice(0,6))}
+function hideSug(){sugSeq++;const el=$('#sug');if(el)el.classList.add('hide')}
+function drawSug(html){const el=$('#sug');el.innerHTML=html;el.classList.toggle('hide',!html)}
+function showEmptySug(){
+  const r=recentQs();
+  drawSug((r.length?'<div class="sug-h">Son axtarışlar <button type="button" data-sclear>Təmizlə</button></div>'+r.map(x=>'<button type="button" class="sg-it" data-sq="'+esc(x)+'">'+SG_CLOCK+'<span class="tx">'+esc(x)+'</span></button>').join(''):'')+
+    '<div class="sug-h">Populyar axtarışlar</div><div class="sg-pop">'+POP.map(x=>'<button type="button" data-sq="'+esc(x)+'">'+esc(x)+'</button>').join('')+'</div>');
+}
+function onQInput(){
+  const v=$('#q').value.trim();
+  clearTimeout(sugT);
+  if(!v){showEmptySug();return}
+  if(v.length<2){hideSug();return}
+  sugT=setTimeout(()=>fetchSug(v),180);
+}
+async function fetchSug(q){
+  const seq=++sugSeq;
+  let d;
+  try{d=await getJSON('/api/suggest?q='+encodeURIComponent(q))}catch(e){return}
+  if(seq!==sugSeq||$('#q').value.trim()!==q)return;
+  const main='<button type="button" class="sg-it sg-main" data-sq="'+esc(q)+'">'+SG_SEARCH+'<span class="tx">“'+esc(q)+'” üzrə bütün nəticələr</span></button>';
+  const cats=(d.categories||[]).map(c=>'<button type="button" class="sg-it" data-scat="'+esc(c)+'">'+SG_TAG+'<span class="tx">'+esc(c)+'<small>Kateqoriya</small></span></button>').join('');
+  const sts=(d.stores||[]).map(s=>{const u=safeUrl(s.logo_url);return '<button type="button" class="sg-it" data-sstore="'+esc(s.id)+'"><span class="sg-lg">'+(u?'<img src="'+esc(u)+'" alt="" onerror="this.remove()">':esc(initials(s.store_name)))+'</span><span class="tx">'+esc(s.store_name)+'<small>Mağaza'+(s.category?' · '+esc(s.category):'')+'</small></span></button>'}).join('');
+  const prs=(d.products||[]).map(p=>{const u=safeUrl(p.image_url);return '<button type="button" class="sg-it" data-spid="'+esc(p.id)+'"><span class="sg-th">'+(u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.remove()">':'')+'</span><span class="tx">'+esc(p.name)+'<small>'+esc(p.category||'')+'</small></span><b class="pr">'+money(p.price)+'</b></button>'}).join('');
+  const none=(!cats&&!sts&&!prs)?'<div class="sg-none">Uyğun təklif tapılmadı. Enter basıb axtarın.</div>':'';
+  drawSug(main+cats+sts+prs+none);
+}
+$('#sug').addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b)return;
+  e.stopPropagation();
+  if(b.hasAttribute('data-sclear')){LS.s(SQ,[]);showEmptySug();return}
+  hideSug();clearTimeout(st);
+  if(b.hasAttribute('data-sq')){const v=b.dataset.sq;$('#q').value=v;saveQ(v);clearTimeout(st);runSearch();$('#q').blur()}
+  else if(b.hasAttribute('data-scat')){clearTimeout(st);openResults({category:b.dataset.scat});$('#q').blur()}
+  else if(b.hasAttribute('data-sstore')){view(storeView(b.dataset.sstore));$('#q').blur()}
+  else if(b.hasAttribute('data-spid')){
+    const id=b.dataset.spid;$('#q').blur();
+    try{if(!cache[id])cache[id]=await getJSON('/api/products/'+encodeURIComponent(id));view(productView(id))}
+    catch(_){toast('Məhsul tapılmadı')}
+  }
+});
+document.addEventListener('click',e=>{if(!e.target.closest('.search'))hideSug()});
+
+/* --- aktiv filtr çipləri --- */
+function renderChips(){
+  const box=$('#chips');if(!box)return;
+  const out=[];
+  const add=(k,l,v)=>out.push('<span class="chip">'+esc(l)+'</span>');
+  if(F.q)add('q','“'+F.q+'”');
+  if(F.sale)add('sale','Endirimdə');
+  if(F.department)add('department',F.department);else if(F.store_category)add('store_category',F.store_category);
+  const pre={age:'Yaş: ',size:'Ölçü: ',color:'Rəng: ',size_class:'Boyut: ',material:'Material: '};
+  ['category','subcategory','brand','gender','age','size','color','size_class','material'].forEach(k=>{if(F[k])String(F[k]).split('|').filter(Boolean).forEach(v=>add(k,(pre[k]||'')+v,v))});
+  if(F.price_min)add('price_min','Min '+F.price_min+' AZN');
+  if(F.price_max)add('price_max','Max '+F.price_max+' AZN');
+  box.innerHTML=out.join('');
+  box.classList.toggle('hide',!out.length||!inResults());
+}
+/* --- paylaş (link) və mağaza izləmə --- */
+async function shareIt(kind,id){
+  const url=location.origin+'/?'+(kind==='p'?'p=':'s=')+encodeURIComponent(id);
+  const title=kind==='p'?((cache[id]&&cache[id].name)||'ELFA məhsulu'):((STORES.find(s=>String(s.id)===String(id))||{}).store_name||'ELFA mağazası');
+  try{if(navigator.share){await navigator.share({title:title+' — ELFA',url});return}}
+  catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(url);toast('Link kopyalandı')}
+  catch(e){window.prompt('Linki kopyalayın:',url)}
+}
+let follows=LS.g('elfa_follow',[]).map(String);
+const isFol=id=>follows.includes(String(id));
+const folLabel=on=>on?'✓ İzlənilir':'+ İzlə';
+function renderFollowSec(){
+  const sec=$('#followSec');if(!sec)return;
+  const l=STORES.filter(s=>isFol(s.id));
+  sec.classList.toggle('hide',!l.length);
+  $('#followRow').innerHTML=l.map(storeCard).join('');
+}
+function toggleFollow(id){
+  id=String(id);
+  if(isFol(id)){follows=follows.filter(x=>x!==id);toast('İzləmə dayandırıldı')}
+  else{follows.push(id);toast('Mağaza izlənilir')}
+  LS.s('elfa_follow',follows);
+  $$('[data-follow]').forEach(b=>{if(b.dataset.follow===id){const on=isFol(id);b.classList.toggle('on',on);b.textContent=folLabel(on)}});
+  renderFollowSec();
+}
+
+/* --- məhsul səhifəsi əlavələri --- */
+function crumbs(p){
+  const d=p.department||p.store_category||'';
+  const a=(t,o)=>'<a data-crumb="'+esc(JSON.stringify(o))+'">'+esc(t)+'</a>';
+  const parts=[];
+  if(d)parts.push(a(d,{department:d}));
+  if(p.category)parts.push(a(p.category,d?{department:d,category:p.category}:{category:p.category}));
+  if(p.subcategory)parts.push(a(p.subcategory,{department:d,category:p.category,subcategory:p.subcategory}));
+  if(!parts.length)return '';
+  return '<nav class="crumbs" aria-label="Yol"><a data-home-crumb>Ana səhifə</a>'+parts.map(x=>'<i>›</i>'+x).join('')+'</nav>';
+}
+function stickyBar(p){
+  const msg=encodeURIComponent('Salam, ELFA-da "'+p.name+'" məhsulu ilə maraqlanıram.');
+  const wa=safeUrl(p.store_whatsapp_url);
+  const main=wa?'<a class="pb-main" data-wa="'+esc(wa)+'" href="'+esc(wa)+'?text='+msg+'" target="_blank" rel="noopener noreferrer">'+ICON_WA+'<span>Satıcıya yaz</span></a>':'';
+  const tel=p.store_phone?'<a class="pb-tel" href="'+esc(telHref(p.store_phone))+'" aria-label="Zəng et">'+ICON_PHONE+'</a>':'';
+  if(!main&&!tel)return '';
+  return '<div class="pd-bar"><div class="pb-price">'+money(p.price)+'</div>'+main+tel+'</div>';
+}
+function openLightbox(src){
+  if(!src||$('#lb'))return;
+  const d=document.createElement('div');
+  d.id='lb';d.className='lb';
+  d.innerHTML='<img src="'+esc(src)+'" alt=""><button type="button" aria-label="Bağla">×</button>';
+  d.onclick=closeLb;
+  document.body.appendChild(d);
+}
+function closeLb(){const d=$('#lb');if(!d)return false;d.remove();return true}
+
+/* --- paylaşılan linklər: /?p=ID  /?s=ID  /?q=söz --- */
+function deepLink(){
+  const u=new URLSearchParams(location.search);
+  const p=u.get('p'),s=u.get('s'),q=u.get('q');
+  if(!p&&!s&&!q)return;
+  try{history.replaceState({modal:0,res:null},'',location.pathname)}catch(e){}
+  if(q){$('#q').value=q;runSearch();return}
+  if(s){view(storeView(s));return}
+  getJSON('/api/products/'+encodeURIComponent(p)).then(x=>{cache[x.id]=x;view(productView(x.id))}).catch(()=>toast('Məhsul tapılmadı'));
+}
+
 /* ---------- başlanğıc ---------- */
 (async function init(){
   history.replaceState({modal:0,res:null},'');
@@ -1462,7 +2250,13 @@ window.addEventListener('popstate',e=>{
   loadCatRows();
   renderRecent();
   loadOptions();
+  deepLink();
 })();
+
+/* tətbiq kimi quraşdırma (service worker) */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})});
+}
 </script>
 </body>
 </html>
